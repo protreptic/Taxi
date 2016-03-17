@@ -28,17 +28,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 public class MainActivity extends AppCompatActivity {
 
     public interface TaxikService {
 
-        @GET("query_cities")
+        @POST("query_cities")
         Call<Cities> queryCities();
 
-        @GET("submit_phone_number")
-        Call<SubmitPhoneNumberRequest> querySubmitPhoneNumber();
+        @POST("submit_phone_number")
+        Call<SubmitPhoneNumberResponse> querySubmitPhoneNumber(@Body SubmitPhoneNumberRequest request);
 
     }
 
@@ -273,7 +274,9 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        callQueryCities = retrofit.create(TaxikService.class).queryCities();
+        TaxikService taxikService = retrofit.create(TaxikService.class);
+
+        callQueryCities = taxikService.queryCities();
         callQueryCities.enqueue(new Callback<Cities>() {
 
             @Override
@@ -285,6 +288,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Cities> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Update cities error", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        SubmitPhoneNumberRequest request = new SubmitPhoneNumberRequest("+79167749891", "");
+
+        Call<SubmitPhoneNumberResponse> callQuerySubmitPhoneNumber = taxikService.querySubmitPhoneNumber(request);
+        callQuerySubmitPhoneNumber.enqueue(new Callback<SubmitPhoneNumberResponse>() {
+
+            @Override
+            public void onResponse(Call<SubmitPhoneNumberResponse> call, Response<SubmitPhoneNumberResponse> response) {
+                response.body();
+            }
+
+            @Override
+            public void onFailure(Call<SubmitPhoneNumberResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Call QuerySubmitPhoneNumber error", Toast.LENGTH_LONG).show();
             }
         });
     }
