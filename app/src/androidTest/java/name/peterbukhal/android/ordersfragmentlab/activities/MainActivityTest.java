@@ -1,20 +1,21 @@
 package name.peterbukhal.android.ordersfragmentlab.activities;
 
-import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import name.peterbukhal.android.ordersfragmentlab.R;
+import name.peterbukhal.android.ordersfragmentlab.fragments.OrdersFragment;
 
 /**
  * Created on 18/03/16 18:37 by
  *
  * @author Peter Bukhal (petr@taxik.ru)
  */
-@RunWith(AndroidJUnit4.class)
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mMainActivity;
@@ -42,6 +43,16 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertTrue(mMainActivity instanceof AppCompatActivity);
     }
 
+    @Test
+    public void testMainActivity_fragment_content_notnull() {
+        assertNotNull(mMainActivity.findViewById(R.id.fragmentContent));
+
+        Fragment fragment = mMainActivity.getSupportFragmentManager().findFragmentByTag(OrdersFragment.FRAGMENT_TAG_ORDERS);
+
+        assertNotNull(fragment);
+        assertTrue(fragment instanceof OrdersFragment);
+    }
+    
     @After
     public void tearDown() throws Exception {
         super.tearDown();

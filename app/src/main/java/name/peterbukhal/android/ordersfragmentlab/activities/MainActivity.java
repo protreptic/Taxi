@@ -1,280 +1,33 @@
 package name.peterbukhal.android.ordersfragmentlab.activities;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import name.peterbukhal.android.ordersfragmentlab.R;
+import name.peterbukhal.android.ordersfragmentlab.fragments.OrdersFragment;
+import name.peterbukhal.android.ordersfragmentlab.model.Cities;
+import name.peterbukhal.android.ordersfragmentlab.model.City;
+import name.peterbukhal.android.ordersfragmentlab.model.api.json.TaxikGson;
+import name.peterbukhal.android.ordersfragmentlab.model.api.request.SubmitPhoneNumberRequest;
+import name.peterbukhal.android.ordersfragmentlab.model.api.request.SubmitSmsCodeRequest;
+import name.peterbukhal.android.ordersfragmentlab.model.api.response.SubmitPhoneNumberResponse;
+import name.peterbukhal.android.ordersfragmentlab.model.api.response.SubmitSmsCodeResponse;
+import name.peterbukhal.android.ordersfragmentlab.service.TaxikService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
 
 public class MainActivity extends AppCompatActivity {
 
-    public interface TaxikService {
-
-        @POST("query_cities")
-        Call<Cities> queryCities();
-
-        @POST("submit_phone_number")
-        Call<SubmitPhoneNumberResponse> querySubmitPhoneNumber(@Body SubmitPhoneNumberRequest request);
-
-    }
-
-    public static class SubmitPhoneNumberRequest {
-
-        private String phoneNumber;
-        private String promoCode;
-
-        public SubmitPhoneNumberRequest(String phoneNumber, String promoCode) {
-            this.phoneNumber = phoneNumber;
-            this.promoCode = promoCode;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public String getPromoCode() {
-            return promoCode;
-        }
-
-    }
-
-    public static class SubmitPhoneNumberResponse implements Parcelable {
-
-        private Boolean status;
-        private Integer smsCodeLength;
-        private String smsCode;
-        private Integer retryDelay;
-
-        public SubmitPhoneNumberResponse(Boolean status, Integer smsCodeLength, String smsCode, Integer retryDelay) {
-            this.status = status;
-            this.smsCodeLength = smsCodeLength;
-            this.smsCode = smsCode;
-            this.retryDelay = retryDelay;
-        }
-
-        protected SubmitPhoneNumberResponse(Parcel in) {
-            smsCode = in.readString();
-        }
-
-        public static final Creator<SubmitPhoneNumberResponse> CREATOR = new Creator<SubmitPhoneNumberResponse>() {
-
-            @Override
-            public SubmitPhoneNumberResponse createFromParcel(Parcel in) {
-                return new SubmitPhoneNumberResponse(in);
-            }
-
-            @Override
-            public SubmitPhoneNumberResponse[] newArray(int size) {
-                return new SubmitPhoneNumberResponse[size];
-            }
-        };
-
-        public Boolean getStatus() {
-            return status;
-        }
-
-        public Integer getSmsCodeLength() {
-            return smsCodeLength;
-        }
-
-        public String getSmsCode() {
-            return smsCode;
-        }
-
-        public Integer getRetryDelay() {
-            return retryDelay;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(smsCode);
-        }
-
-        public void setStatus(Boolean status) {
-            this.status = status;
-        }
-
-        public void setSmsCodeLength(Integer smsCodeLength) {
-            this.smsCodeLength = smsCodeLength;
-        }
-
-        public void setSmsCode(String smsCode) {
-            this.smsCode = smsCode;
-        }
-
-        public void setRetryDelay(Integer retryDelay) {
-            this.retryDelay = retryDelay;
-        }
-    }
-
-    public static class SubmitPhoneNumberResponse1 {
-
-        private String name;
-        private Integer source;
-        private Integer smsCode;
-        private String phoneNumber;
-        private String promoCode;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Integer getSource() {
-            return source;
-        }
-
-        public void setSource(Integer source) {
-            this.source = source;
-        }
-
-        public Integer getSmsCode() {
-            return smsCode;
-        }
-
-        public void setSmsCode(Integer smsCode) {
-            this.smsCode = smsCode;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-
-        public String getPromoCode() {
-            return promoCode;
-        }
-
-        public void setPromoCode(String promoCode) {
-            this.promoCode = promoCode;
-        }
-
-    }
-
-    public static class SubmitPhoneNumberResponseJsonDeserializer implements JsonDeserializer<SubmitPhoneNumberResponse> {
-
-        @Override
-        public SubmitPhoneNumberResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            SubmitPhoneNumberResponse submitPhoneNumberResponse = new SubmitPhoneNumberResponse();
-            submitPhoneNumberResponse.setName(json.getAsJsonObject().get("name").getAsString());
-            submitPhoneNumberResponse.setPhoneNumber(json.getAsJsonObject().get("phone_number").getAsString());
-            submitPhoneNumberResponse.setSource(json.getAsJsonObject().get("source").getAsInt());
-            submitPhoneNumberResponse.setPromoCode(json.getAsJsonObject().get("promo_code").getAsString());
-            submitPhoneNumberResponse.setSmsCode(json.getAsJsonObject().get("sms_code").getAsInt());
-
-            return submitPhoneNumberResponse;
-        }
-    }
-
-    public static class SubmitPhoneNumberRequestJsonDeserializer implements JsonDeserializer<SubmitPhoneNumberRequest> {
-
-        @Override
-        public SubmitPhoneNumberRequest deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            String phoneNumber = json.getAsJsonObject().get("phone_number").getAsString();
-            String promoCode = json.getAsJsonObject().get("promo_code").getAsString();
-
-            return new SubmitPhoneNumberRequest(phoneNumber, promoCode);
-        }
-    }
-
-    public static class City {
-
-        private Long id;
-        private String name;
-
-        public City(Long id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-    }
-
-    public static class CityJsonDeserializer implements JsonDeserializer<City> {
-
-        @Override
-        public City deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            Long id = json.getAsJsonObject().get("city_id").getAsLong();
-            String name = json.getAsJsonObject().get("city_name").getAsString();
-
-            return new City(id, name);
-        }
-    }
-
-    public static class Cities {
-
-        private List<City> cities;
-
-        public Cities(List<City> cities) {
-            this.cities = new ArrayList<>(cities);
-        }
-
-        public List<City> getCities() {
-            return new ArrayList<>(cities);
-        }
-
-    }
-
-    public static class CitiesJsonDeserializer implements JsonDeserializer<Cities> {
-
-        @Override
-        public Cities deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            List<City> cities = new ArrayList<>();
-
-            for (int count = 0; count < json.getAsJsonObject().getAsJsonArray("cities").size(); count++) {
-                cities.add(context.<City>deserialize(json.getAsJsonObject().getAsJsonArray("cities").get(count), City.class));
-            }
-
-            return new Cities(cities);
-        }
-    }
-
-    private Call<Cities> callQueryCities;
     private Cities cities = new Cities(Collections.<City>emptyList());
 
     private class CitiesAdapter extends BaseAdapter {
@@ -324,70 +77,62 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private CitiesAdapter citiesAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-        citiesAdapter = new CitiesAdapter();
+        final TaxikService taxikService = TaxikGson.service();
 
-        ListView citiesView = (ListView) findViewById(R.id.cities);
-        citiesView.setAdapter(citiesAdapter);
+        String token = getSharedPreferences("main", Context.MODE_PRIVATE).getString("token", "");
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Cities.class, new CitiesJsonDeserializer())
-                .registerTypeAdapter(City.class, new CityJsonDeserializer())
-                .registerTypeAdapter(SubmitPhoneNumberRequest.class, new SubmitPhoneNumberRequestJsonDeserializer())
-                .registerTypeAdapter(SubmitPhoneNumberResponse.class, new SubmitPhoneNumberResponseJsonDeserializer())
-                .serializeNulls()
-                .create();
+        if (token.isEmpty()) {
+            SubmitPhoneNumberRequest request = new SubmitPhoneNumberRequest("+79167749891", "");
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://beta.taxistock.ru/taxik/api/client/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+            Call<SubmitPhoneNumberResponse> callQuerySubmitPhoneNumber = taxikService.querySubmitPhoneNumber(request);
+            callQuerySubmitPhoneNumber.enqueue(new Callback<SubmitPhoneNumberResponse>() {
 
-        TaxikService taxikService = retrofit.create(TaxikService.class);
+                @Override
+                public void onResponse(Call<SubmitPhoneNumberResponse> call, Response<SubmitPhoneNumberResponse> response) {
+                    SubmitPhoneNumberResponse s = response.body();
 
-        callQueryCities = taxikService.queryCities();
-        callQueryCities.enqueue(new Callback<Cities>() {
+                    Call<SubmitSmsCodeResponse> callSubmitSmsCode = taxikService.querySubmitSmsCode(new SubmitSmsCodeRequest("", 1, Integer.valueOf(s.getSmsCode()), "+79167749891", null));
+                    callSubmitSmsCode.enqueue(new Callback<SubmitSmsCodeResponse>() {
 
-            @Override
-            public void onResponse(Call<Cities> call, Response<Cities> response) {
-                cities = response.body();
-                citiesAdapter.notifyDataSetChanged();
-            }
+                        @Override
+                        public void onResponse(Call<SubmitSmsCodeResponse> call, Response<SubmitSmsCodeResponse> response) {
+                            getSharedPreferences("main", Context.MODE_PRIVATE)
+                                    .edit()
+                                    .putString("token", response.body().getToken())
+                                    .apply();
 
-            @Override
-            public void onFailure(Call<Cities> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Update cities error", Toast.LENGTH_LONG).show();
-            }
-        });
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragmentContent, OrdersFragment.newInstance())
+                                    .commit();
 
-        SubmitPhoneNumberRequest request = new SubmitPhoneNumberRequest("+79167749891", "");
+                            Toast.makeText(getApplicationContext(), "New token obtained", Toast.LENGTH_LONG).show();
+                        }
 
-        Call<SubmitPhoneNumberResponse> callQuerySubmitPhoneNumber = taxikService.querySubmitPhoneNumber(request);
-        callQuerySubmitPhoneNumber.enqueue(new Callback<SubmitPhoneNumberResponse>() {
+                        @Override
+                        public void onFailure(Call<SubmitSmsCodeResponse> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "Call querySubmitSmsCode error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
 
-            @Override
-            public void onResponse(Call<SubmitPhoneNumberResponse> call, Response<SubmitPhoneNumberResponse> response) {
-                response.body();
-            }
-
-            @Override
-            public void onFailure(Call<SubmitPhoneNumberResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Call QuerySubmitPhoneNumber error", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<SubmitPhoneNumberResponse> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "Call QuerySubmitPhoneNumber error", Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContent, OrdersFragment.newInstance(), OrdersFragment.FRAGMENT_TAG_ORDERS)
+                    .commit();
+        }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        callQueryCities.cancel();
-    }
 }
