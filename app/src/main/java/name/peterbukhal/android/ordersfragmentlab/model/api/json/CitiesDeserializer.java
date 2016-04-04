@@ -11,9 +11,11 @@ import java.util.List;
 
 import name.peterbukhal.android.ordersfragmentlab.model.Cities;
 import name.peterbukhal.android.ordersfragmentlab.model.City;
+import name.peterbukhal.android.ordersfragmentlab.model.impl.CityImpl;
 
 /**
- * Created by petronic on 21.03.16.
+ * Created by
+ *      petronic on 21.03.16.
  */
 public class CitiesDeserializer implements JsonDeserializer<Cities> {
 
@@ -22,7 +24,7 @@ public class CitiesDeserializer implements JsonDeserializer<Cities> {
         List<City> cities = new ArrayList<>();
 
         for (int count = 0; count < json.getAsJsonObject().getAsJsonArray("cities").size(); count++) {
-            cities.add(context.<City>deserialize(json.getAsJsonObject().getAsJsonArray("cities").get(count), City.class));
+            cities.add(context.<CityImpl>deserialize(json.getAsJsonObject().getAsJsonArray("cities").get(count), City.class));
         }
 
         return new Cities(cities);

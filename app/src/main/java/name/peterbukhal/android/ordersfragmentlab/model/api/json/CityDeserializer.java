@@ -9,6 +9,7 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 
 import name.peterbukhal.android.ordersfragmentlab.model.City;
+import name.peterbukhal.android.ordersfragmentlab.model.impl.CityImpl;
 
 /**
  * Created by
@@ -23,6 +24,6 @@ public class CityDeserializer implements JsonDeserializer<City> {
         Long id = object.get("city_id").getAsLong();
         String name = object.get("city_name").getAsString();
 
-        return new City(id, name);
+        return new CityImpl(id, name);
     }
 }

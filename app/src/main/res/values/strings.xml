@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">OrdersFragmentLab</string>
+    <string name="active_orders">АКТИВНЫЕ</string>
+    <string name="canceled_orders">ОТМЕНЕННЫЕ</string>
+    <string name="finished_orders">ЗАВЕРШЕННЫЕ</string>
 </resources>

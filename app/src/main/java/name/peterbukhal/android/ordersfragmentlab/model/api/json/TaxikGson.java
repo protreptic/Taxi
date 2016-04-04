@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import name.peterbukhal.android.ordersfragmentlab.model.Cities;
-import name.peterbukhal.android.ordersfragmentlab.model.City;
 import name.peterbukhal.android.ordersfragmentlab.model.Order;
+import name.peterbukhal.android.ordersfragmentlab.model.impl.CityImpl;
+import name.peterbukhal.android.ordersfragmentlab.model.impl.OrderImpl;
 import name.peterbukhal.android.ordersfragmentlab.model.Orders;
 import name.peterbukhal.android.ordersfragmentlab.model.api.Error;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.QueryOrdersRequest;
@@ -31,8 +32,8 @@ public final class TaxikGson {
                 .registerTypeAdapter(Error.class, new ErrorDeserializer())
                 .registerTypeAdapter(Cities.class, new CitiesSerializer())
                 .registerTypeAdapter(Cities.class, new CitiesDeserializer())
-                .registerTypeAdapter(City.class, new CitySerializer())
-                .registerTypeAdapter(City.class, new CityDeserializer())
+                .registerTypeAdapter(CityImpl.class, new CitySerializer())
+                .registerTypeAdapter(CityImpl.class, new CityDeserializer())
                 .registerTypeAdapter(SubmitPhoneNumberRequest.class, new SubmitPhoneNumberRequestSerializer())
                 .registerTypeAdapter(SubmitPhoneNumberRequest.class, new SubmitPhoneNumberRequestDeserializer())
                 .registerTypeAdapter(SubmitPhoneNumberResponse.class, new SubmitPhoneNumberResponseSerializer())
@@ -41,7 +42,7 @@ public final class TaxikGson {
                 .registerTypeAdapter(SubmitSmsCodeRequest.class, new SubmitSmsCodeRequestDeserializer())
                 .registerTypeAdapter(SubmitSmsCodeResponse.class, new SubmitSmsCodeResponseSerializer())
                 .registerTypeAdapter(SubmitSmsCodeResponse.class, new SubmitSmsCodeResponseDeserializer())
-                .registerTypeAdapter(QueryOrdersRequest.class, new QueryOrdersRequestSerializer())
+//                .registerTypeAdapter(QueryOrdersRequest.class, new QueryOrdersRequestSerializer())
                 .registerTypeAdapter(Orders.class, new OrdersDeserializer())
                 .registerTypeAdapter(Order.class, new OrderDeserializer())
                 .serializeNulls()

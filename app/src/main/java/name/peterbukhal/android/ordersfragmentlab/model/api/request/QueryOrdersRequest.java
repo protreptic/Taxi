@@ -9,12 +9,12 @@ import android.os.Parcelable;
  */
 public class QueryOrdersRequest implements Parcelable {
 
-    public enum RequestOrderType {
+    public enum OrderType {
         ALL(0), ACTIVE(1), CANCELED(2), FINISHED(3);
 
         int value;
 
-        RequestOrderType(int value) {
+        OrderType(int value) {
             this.value = value;
         }
 
@@ -27,11 +27,11 @@ public class QueryOrdersRequest implements Parcelable {
     private String token;
     private Integer offset;
     private Integer count;
-    private RequestOrderType type;
+    private OrderType type;
 
     public QueryOrdersRequest() {}
 
-    public QueryOrdersRequest(String token, Integer offset, Integer count, RequestOrderType type) {
+    public QueryOrdersRequest(String token, Integer offset, Integer count, OrderType type) {
         this.token = token;
         this.offset = offset;
         this.count = count;
@@ -78,11 +78,11 @@ public class QueryOrdersRequest implements Parcelable {
         this.count = count;
     }
 
-    public RequestOrderType getType() {
+    public OrderType getType() {
         return type;
     }
 
-    public void setType(RequestOrderType type) {
+    public void setType(OrderType type) {
         this.type = type;
     }
 

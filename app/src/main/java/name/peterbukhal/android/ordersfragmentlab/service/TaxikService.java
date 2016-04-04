@@ -10,7 +10,7 @@ import name.peterbukhal.android.ordersfragmentlab.model.api.request.SubmitPromoC
 import name.peterbukhal.android.ordersfragmentlab.model.api.response.SubmitPromoCodeResponse;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.SubmitSmsCodeRequest;
 import name.peterbukhal.android.ordersfragmentlab.model.api.response.SubmitSmsCodeResponse;
-import name.peterbukhal.android.ordersfragmentlab.model.UserInfo;
+import name.peterbukhal.android.ordersfragmentlab.model.impl.UserInfoImpl;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -36,7 +36,7 @@ public interface TaxikService {
 
     // TODO Not implemented yet
     @POST("query_user_info")
-    Call<UserInfo> queryUserInfo(@Body QueryUserInfoRequest request);
+    Call<UserInfoImpl> queryUserInfo(@Body QueryUserInfoRequest request);
 
     @POST("query_orders")
     Call<Orders> queryOrders(@Body QueryOrdersRequest request);

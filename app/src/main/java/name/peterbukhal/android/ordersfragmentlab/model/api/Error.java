@@ -22,6 +22,7 @@ public class Error implements Parcelable {
     }
 
     protected Error(Parcel in) {
+        code = in.readInt();
         message = in.readString();
         messageHuman = in.readString();
     }
@@ -69,6 +70,7 @@ public class Error implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(code);
         dest.writeString(message);
         dest.writeString(messageHuman);
     }

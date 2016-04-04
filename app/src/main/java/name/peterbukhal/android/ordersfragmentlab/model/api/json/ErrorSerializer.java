@@ -10,9 +10,11 @@ import java.lang.reflect.Type;
 import name.peterbukhal.android.ordersfragmentlab.model.api.Error;
 
 /**
- * Created by petronic on 21.03.16.
+ * Created by
+ *      petronic on 21.03.16.
  */
 public class ErrorSerializer implements JsonSerializer<Error> {
+
     @Override
     public JsonElement serialize(Error src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();

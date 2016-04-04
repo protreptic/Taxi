@@ -9,6 +9,7 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 
 import name.peterbukhal.android.ordersfragmentlab.model.Order;
+import name.peterbukhal.android.ordersfragmentlab.model.impl.OrderImpl;
 
 /**
  * Created by
@@ -20,9 +21,11 @@ public class OrderDeserializer implements JsonDeserializer<Order> {
     public Order deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        Long id = object.get("order_id").getAsLong();
+        OrderImpl order = new OrderImpl();
+        order.setId(object.get("order_id").getAsLong());
+        order.setApproximatePrice(object.get("approximate_price").getAsLong());
 
-        return new Order(id);
+        return order;
     }
 
 }

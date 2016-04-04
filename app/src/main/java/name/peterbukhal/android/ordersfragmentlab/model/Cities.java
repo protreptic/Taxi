@@ -1,7 +1,10 @@
 package name.peterbukhal.android.ordersfragmentlab.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import name.peterbukhal.android.ordersfragmentlab.model.impl.CityImpl;
 
 /**
  * Created by
@@ -16,7 +19,7 @@ public class Cities {
     }
 
     public List<City> getCities() {
-        return new ArrayList<>(cities);
+        return Collections.unmodifiableList(cities);
     }
 
 }

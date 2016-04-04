@@ -3,20 +3,14 @@ package name.peterbukhal.android.ordersfragmentlab.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Collections;
 
 import name.peterbukhal.android.ordersfragmentlab.R;
 import name.peterbukhal.android.ordersfragmentlab.fragments.OrdersFragment;
-import name.peterbukhal.android.ordersfragmentlab.model.Cities;
-import name.peterbukhal.android.ordersfragmentlab.model.City;
+import name.peterbukhal.android.ordersfragmentlab.fragments.UserOrdersFragment;
+import name.peterbukhal.android.ordersfragmentlab.fragments.UserOrdersFragment2;
 import name.peterbukhal.android.ordersfragmentlab.model.api.json.TaxikGson;
+import name.peterbukhal.android.ordersfragmentlab.model.api.request.QueryOrdersRequest.OrderType;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.SubmitPhoneNumberRequest;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.SubmitSmsCodeRequest;
 import name.peterbukhal.android.ordersfragmentlab.model.api.response.SubmitPhoneNumberResponse;
@@ -27,55 +21,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Cities cities = new Cities(Collections.<City>emptyList());
-
-    private class CitiesAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return cities.getCities().size();
-        }
-
-        @Override
-        public City getItem(int position) {
-            return cities.getCities().get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            CityViewHolder holder;
-
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getApplicationContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
-
-                holder = new CityViewHolder();
-                holder.text1 = (TextView) convertView.findViewById(android.R.id.text1);
-                holder.text2 = (TextView) convertView.findViewById(android.R.id.text2);
-
-                convertView.setTag(holder);
-            } else {
-                holder = (CityViewHolder) convertView.getTag();
-            }
-
-            City city = getItem(position);
-
-            holder.text1.setText(String.valueOf(city.getId()));
-            holder.text2.setText(city.getName());
-
-            return convertView;
-        }
-
-        private class CityViewHolder {
-            TextView text1;
-            TextView text2;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
                             getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.fragmentContent, OrdersFragment.newInstance())
+                                    .replace(R.id.fragmentContent, OrdersFragment.newInstance(OrderType.ALL))
                                     .commit();
 
                             Toast.makeText(getApplicationContext(), "New token obtained", Toast.LENGTH_LONG).show();
@@ -130,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContent, OrdersFragment.newInstance(), OrdersFragment.FRAGMENT_TAG_ORDERS)
+                    .replace(R.id.fragmentContent, UserOrdersFragment2.newInstance(), OrdersFragment.FRAGMENT_TAG_ORDERS)
                     .commit();
         }
     }

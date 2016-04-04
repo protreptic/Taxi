@@ -29,7 +29,7 @@ public class OrdersDeserializer implements JsonDeserializer<Orders> {
             orders.add(context.<Order>deserialize(object.getAsJsonArray("orders").get(count), Order.class));
         }
 
-        return new Orders(orders, object.get("total_count").getAsLong());
+        return new Orders(orders);
     }
 
 }
