@@ -2,6 +2,7 @@ package name.peterbukhal.android.ordersfragmentlab.model.impl;
 
 import android.os.Parcel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,12 +20,19 @@ public class OrderImpl implements Order {
     private Long id;
     private List<RoutePoint> routePoints = Collections.emptyList();
     private Long approximatePrice;
+    private String phoneNumber;
+    private ProgressState progressState;
 
     public OrderImpl() {}
 
     protected OrderImpl(Parcel in) {
         id = in.readLong();
         approximatePrice = in.readLong();
+
+        List<RoutePoint> routePoints1 = new ArrayList<>();
+        in.readTypedList(routePoints1, RoutePointImpl.CREATOR);
+
+        routePoints = Collections.unmodifiableList(routePoints1);
     }
 
     public static final Creator<Order> CREATOR = new Creator<Order>() {
@@ -38,6 +46,7 @@ public class OrderImpl implements Order {
         public Order[] newArray(int size) {
             return new Order[size];
         }
+
     };
 
     @Override
@@ -45,9 +54,17 @@ public class OrderImpl implements Order {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public List<RoutePoint> getRoutePoints() {
         return Collections.unmodifiableList(routePoints);
+    }
+
+    public void setRoutePoints(List<RoutePoint> routePoints) {
+        this.routePoints = Collections.unmodifiableList(routePoints);
     }
 
     @Override
@@ -90,13 +107,21 @@ public class OrderImpl implements Order {
     }
 
     @Override
-    public Long getOrderProgress() {
-        return null;
+    public ProgressState getOrderProgress() {
+        return progressState;
+    }
+
+    public void setProgressState(ProgressState progressState) {
+        this.progressState = progressState;
     }
 
     @Override
     public String getPhoneNumber() {
-        return null;
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -113,9 +138,7 @@ public class OrderImpl implements Order {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeLong(approximatePrice);
+        dest.writeTypedList(routePoints);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

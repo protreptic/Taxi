@@ -12,6 +12,7 @@ import java.util.List;
 
 import name.peterbukhal.android.ordersfragmentlab.model.Order;
 import name.peterbukhal.android.ordersfragmentlab.model.Orders;
+import name.peterbukhal.android.ordersfragmentlab.model.impl.OrdersImpl;
 
 /**
  * Created by
@@ -21,7 +22,7 @@ public class OrdersDeserializer implements JsonDeserializer<Orders> {
 
     @Override
     public Orders deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject object = json.getAsJsonObject();
+        final JsonObject object = json.getAsJsonObject();
 
         List<Order> orders = new ArrayList<>();
 
@@ -29,7 +30,7 @@ public class OrdersDeserializer implements JsonDeserializer<Orders> {
             orders.add(context.<Order>deserialize(object.getAsJsonArray("orders").get(count), Order.class));
         }
 
-        return new Orders(orders);
+        return new OrdersImpl(orders);
     }
 
 }

@@ -10,6 +10,30 @@ import java.util.List;
  */
 public interface Order extends Parcelable {
 
+    enum ProgressState {
+
+        NOT_ACCEPTED(1),
+        ACCEPTED(2),
+        MOVING_TO_CLIENT(3),
+        WAITING_FOR_CLIENT(4),
+        IN_PROGRESS(5),
+        DONE(6),
+        CANCELED(7),
+        FAILED(8),
+        WAITING_FOR_PAYMENT(9);
+
+        private int value;
+
+        ProgressState(int value) {
+            this.value = value;
+        }
+
+        public static ProgressState valueOf(int value) {
+            return ProgressState.NOT_ACCEPTED;
+        }
+
+    }
+
     Long getId();
     List<RoutePoint> getRoutePoints();
     Long getApproximatePrice();
@@ -19,7 +43,8 @@ public interface Order extends Parcelable {
     Long getCreatedAt();
     String getCarName();
     DriverInfo getDriverInfo();
-    Long getOrderProgress();
+    ProgressState getOrderProgress();
     String getPhoneNumber();
     ClientRate getClientRate();
+
 }

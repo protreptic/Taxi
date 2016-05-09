@@ -21,7 +21,7 @@ import name.peterbukhal.android.ordersfragmentlab.model.Orders;
 import name.peterbukhal.android.ordersfragmentlab.model.api.json.TaxikGson;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.QueryOrdersRequest;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.QueryOrdersRequest.OrderType;
-import name.peterbukhal.android.ordersfragmentlab.service.TaxikService;
+import name.peterbukhal.android.ordersfragmentlab.model.impl.OrdersImpl;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,7 +49,7 @@ public class OrdersFragment extends Fragment {
     private OrderType mOrderType;
     private String mToken;
 
-    private Orders mOrders = new Orders(Collections.<Order>emptyList());
+    private Orders mOrders = new OrdersImpl(Collections.<Order>emptyList());
     private OrdersAdapter mOrdersAdapter = new OrdersAdapter();
 
     private class OrdersAdapter extends RecyclerView.Adapter<OrderViewHolder> {
@@ -64,7 +64,7 @@ public class OrdersFragment extends Fragment {
             final Order order = mOrders.getOrders().get(position);
 
             holder.text1.setText(String.valueOf(order));
-            holder.text2.setText("");
+            holder.text2.setText(String.valueOf(order.getId()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -114,17 +114,14 @@ public class OrdersFragment extends Fragment {
 
         if (contentView != null) {
             mRecyclerView = (RecyclerView) contentView.findViewById(R.id.recycler_view);
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(layoutManager);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-
-
                 }
+
             });
 
             mProgressBar = (ProgressBar) contentView.findViewById(R.id.progressBar);
@@ -141,7 +138,6 @@ public class OrdersFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         outState.putSerializable(ARG_ORDER_TYPE, mOrderType);
-
         outState.putString(EXTRA_TOKEN, mToken);
         outState.putParcelable(EXTRA_ORDERS, mOrders);
     }
@@ -159,26 +155,17 @@ public class OrdersFragment extends Fragment {
             mToken = getActivity().getSharedPreferences("main", Context.MODE_PRIVATE).getString("token", "");
 
             updateOrders();
-        } else {
-            mOrderType = OrderType.ALL;
-            mToken = getActivity().getSharedPreferences("main", Context.MODE_PRIVATE).getString("token", "");
-
-            updateOrders();
         }
 
         mRecyclerView.setAdapter(mOrdersAdapter);
     }
 
-    private int count = 25;
-    private int offset = 0;
-
     private void updateOrders() {
         mProgressBar.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
 
-        TaxikService taxikService = TaxikGson.service();
-
-        Call<Orders> request = taxikService.queryOrders(new QueryOrdersRequest(mToken, offset, count, mOrderType));
+        Call<Orders> request = TaxikGson.instance().service()
+                .queryOrders(new QueryOrdersRequest(mToken, 0, 5, mOrderType));
         request.enqueue(new Callback<Orders>() {
 
             @Override

@@ -1,30 +1,38 @@
-package name.peterbukhal.android.ordersfragmentlab.fragments;
+package name.peterbukhal.android.ordersfragmentlab.unused;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import name.peterbukhal.android.ordersfragmentlab.R;
+import name.peterbukhal.android.ordersfragmentlab.fragments.OrdersFragment;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.QueryOrdersRequest.OrderType;
-import name.peterbukhal.android.ordersfragmentlab.unused.Fragment1;
 
 /**
  * Created by
  *      petronic on 03.04.16.
  */
-public class UserOrdersFragment2 extends Fragment {
+public class UserOrdersFragment extends Fragment {
 
     public static Fragment newInstance() {
-        return new UserOrdersFragment2();
+        return new UserOrdersFragment();
     }
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
@@ -33,8 +41,6 @@ public class UserOrdersFragment2 extends Fragment {
 
         if (contentView != null) {
             viewPager = (ViewPager) contentView.findViewById(R.id.fragment_user_orders_pager);
-            viewPager.setOffscreenPageLimit(2);
-
             tabLayout = (TabLayout) contentView.findViewById(R.id.fragment_user_orders_pager_tabs);
         }
 
@@ -42,14 +48,16 @@ public class UserOrdersFragment2 extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
-        viewPager.setAdapter(new UserOrdersPagerAdapter());
+        UserOrdersPagerAdapter adapter = new UserOrdersPagerAdapter();
+
+        viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    public class UserOrdersPagerAdapter extends Fragment1 {
+    public class UserOrdersPagerAdapter extends FragmentPagerAdapter {
 
         public UserOrdersPagerAdapter() {
             super(getFragmentManager());

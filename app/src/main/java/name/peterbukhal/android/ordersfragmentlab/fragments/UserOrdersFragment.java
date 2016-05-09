@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 
 import name.peterbukhal.android.ordersfragmentlab.R;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.QueryOrdersRequest.OrderType;
+import name.peterbukhal.android.ordersfragmentlab.unused.Fragment1;
 
 /**
  * Created by
@@ -26,13 +26,6 @@ public class UserOrdersFragment extends Fragment {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +33,8 @@ public class UserOrdersFragment extends Fragment {
 
         if (contentView != null) {
             viewPager = (ViewPager) contentView.findViewById(R.id.fragment_user_orders_pager);
+            viewPager.setOffscreenPageLimit(2);
+
             tabLayout = (TabLayout) contentView.findViewById(R.id.fragment_user_orders_pager_tabs);
         }
 
@@ -47,16 +42,14 @@ public class UserOrdersFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        UserOrdersPagerAdapter adapter = new UserOrdersPagerAdapter();
-
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(new UserOrdersPagerAdapter());
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    public class UserOrdersPagerAdapter extends FragmentPagerAdapter {
+    public class UserOrdersPagerAdapter extends Fragment1 {
 
         public UserOrdersPagerAdapter() {
             super(getFragmentManager());

@@ -8,7 +8,6 @@ import android.widget.Toast;
 import name.peterbukhal.android.ordersfragmentlab.R;
 import name.peterbukhal.android.ordersfragmentlab.fragments.OrdersFragment;
 import name.peterbukhal.android.ordersfragmentlab.fragments.UserOrdersFragment;
-import name.peterbukhal.android.ordersfragmentlab.fragments.UserOrdersFragment2;
 import name.peterbukhal.android.ordersfragmentlab.model.api.json.TaxikGson;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.QueryOrdersRequest.OrderType;
 import name.peterbukhal.android.ordersfragmentlab.model.api.request.SubmitPhoneNumberRequest;
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        final TaxikService taxikService = TaxikGson.service();
+        final TaxikService taxikService = TaxikGson.instance().service();
 
         String token = getSharedPreferences("main", Context.MODE_PRIVATE).getString("token", "");
 
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragmentContent, UserOrdersFragment2.newInstance(), OrdersFragment.FRAGMENT_TAG_ORDERS)
+                    .replace(R.id.fragmentContent, UserOrdersFragment.newInstance(), OrdersFragment.FRAGMENT_TAG_ORDERS)
                     .commit();
         }
     }
