@@ -47,7 +47,7 @@ public abstract class Fragment1 extends PagerAdapter {
         Fragment fragment = mFragmentManager.findFragmentByTag(name);
         if (fragment != null) {
             mCurTransaction.remove(fragment);}
-        //    if (DEBUG) Log.v(TAG, "Attaching item #" + itemId + ": f=" + fragment);
+        //    if (DEBUG) Log.v(LOG_TAG, "Attaching item #" + itemId + ": f=" + fragment);
         //    mCurTransaction.attach(fragment);
         //} else {
             fragment = getItem(position);

@@ -29,7 +29,22 @@ public interface Order extends Parcelable {
         }
 
         public static ProgressState valueOf(int value) {
-            return ProgressState.NOT_ACCEPTED;
+            switch (value) {
+                case 1: return NOT_ACCEPTED;
+                case 2: return ACCEPTED;
+                case 3: return MOVING_TO_CLIENT;
+                case 4: return WAITING_FOR_CLIENT;
+                case 5: return IN_PROGRESS;
+                case 6: return DONE;
+                case 7: return CANCELED;
+                case 8: return FAILED;
+                case 9: return WAITING_FOR_PAYMENT;
+                default: throw new RuntimeException("Unknown order state");
+            }
+        }
+
+        public int getValue() {
+            return value;
         }
 
     }
@@ -46,5 +61,7 @@ public interface Order extends Parcelable {
     ProgressState getOrderProgress();
     String getPhoneNumber();
     ClientRate getClientRate();
+
+    Boolean isActive();
 
 }

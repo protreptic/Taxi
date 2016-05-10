@@ -27,12 +27,13 @@ public class OrderImpl implements Order {
 
     protected OrderImpl(Parcel in) {
         id = in.readLong();
-        approximatePrice = in.readLong();
+        //approximatePrice = in.readLong();
 
         List<RoutePoint> routePoints1 = new ArrayList<>();
         in.readTypedList(routePoints1, RoutePointImpl.CREATOR);
 
         routePoints = Collections.unmodifiableList(routePoints1);
+        progressState = (ProgressState) in.readSerializable();
     }
 
     public static final Creator<Order> CREATOR = new Creator<Order>() {
@@ -130,6 +131,24 @@ public class OrderImpl implements Order {
     }
 
     @Override
+    public Boolean isActive() {
+        switch (progressState) {
+            case NOT_ACCEPTED:
+            case ACCEPTED:
+            case MOVING_TO_CLIENT:
+            case WAITING_FOR_CLIENT:
+            case IN_PROGRESS:
+            case WAITING_FOR_PAYMENT:
+                return true;
+            case DONE:
+            case CANCELED:
+            case FAILED:
+                return false;
+            default: throw new RuntimeException("Unknown order state");
+        }
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -137,8 +156,30 @@ public class OrderImpl implements Order {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
-        dest.writeLong(approximatePrice);
+        //dest.writeLong(approximatePrice);
         dest.writeTypedList(routePoints);
+        dest.writeSerializable(progressState);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (!(o instanceof Order)) return false;
+
+        Order order = (Order) o;
+
+        if (!id.equals(order.getId())) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 37;
+
+        result = 37 * result + ((int) (id >>> 32));
+
+        return result;
     }
 
 }
