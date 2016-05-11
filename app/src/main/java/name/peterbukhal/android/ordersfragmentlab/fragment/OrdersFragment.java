@@ -68,8 +68,8 @@ public class OrdersFragment extends Fragment {
         public void onBindViewHolder(OrderViewHolder holder, int position) {
             final Order order = mOrders.getOrders().get(position);
 
-            holder.text1.setText(String.valueOf(order));
-            holder.text2.setText(String.valueOf(order.getId()) + " (" + order.getOrderProgress() + ")");
+            holder.text1.setText(String.valueOf(order.getId()));
+            holder.text2.setText(String.valueOf(order.getOrderProgress()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,6 +107,13 @@ public class OrdersFragment extends Fragment {
             text2 = (TextView) itemView.findViewById(android.R.id.text2);
         }
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
     }
 
     private ProgressBar mProgressBar;
@@ -147,13 +154,13 @@ public class OrdersFragment extends Fragment {
         outState.putParcelable(EXTRA_ORDERS, mOrders);
     }
 
-    private LocalBroadcastManager broadcastManager;
+    private LocalBroadcastManager mBroadcastManager;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        broadcastManager = LocalBroadcastManager.getInstance(getActivity());
+        mBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ORDER_TYPE)) {
             mOrderType = (OrderType) savedInstanceState.getSerializable(ARG_ORDER_TYPE);
@@ -162,11 +169,10 @@ public class OrdersFragment extends Fragment {
         } else if (getArguments() != null && getArguments().containsKey(ARG_ORDER_TYPE)) {
             mOrderType = (OrderType) getArguments().getSerializable(ARG_ORDER_TYPE);
             mToken = getActivity().getSharedPreferences("main", Context.MODE_PRIVATE).getString("token", "");
+            mRecyclerView.setAdapter(mOrdersAdapter);
 
             updateOrders();
         }
-
-        mRecyclerView.setAdapter(mOrdersAdapter);
     }
 
     private BroadcastReceiver orderStateChangedReceiver = new BroadcastReceiver() {
@@ -184,14 +190,14 @@ public class OrdersFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        broadcastManager.registerReceiver(orderStateChangedReceiver, new IntentFilter(OrderStateMonitoringService.ACTION_ORDER_STATE_CHANGED));
+        mBroadcastManager.registerReceiver(orderStateChangedReceiver, new IntentFilter(OrderStateMonitoringService.ACTION_ORDER_STATE_CHANGED));
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        broadcastManager.unregisterReceiver(orderStateChangedReceiver);
+        mBroadcastManager.unregisterReceiver(orderStateChangedReceiver);
     }
 
     private void updateOrders() {

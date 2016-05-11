@@ -1,20 +1,11 @@
 package name.peterbukhal.android.ordersfragmentlab.service.gcm;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.google.gson.TypeAdapter;
-
-import java.lang.reflect.Type;
 
 /**
  * Created by
@@ -28,42 +19,26 @@ public class TaxikGcmListenerService extends GcmListenerService {
             "name.peterbukhal.android.ordersfragmentlab.service.gcm.action.ACTION_GCM_NEW_MESSAGE";
     public static final String EXTRA_GCM_MESSAGE = "extra_gcm_message";
 
-    private Gson gson;
-
-    private static class TaxikGcmMessageSerializer implements JsonSerializer<TaxikGcmMessage> {
-
-        @Override
-        public JsonElement serialize(TaxikGcmMessage src, Type typeOfSrc, JsonSerializationContext context) {
-            return null;
-        }
-
-    }
-
-    private static class TaxikGcmMessageDeserializer implements JsonDeserializer<TaxikGcmMessage> {
-
-        @Override
-        public TaxikGcmMessage deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return null;
-        }
-
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        gson = new GsonBuilder()
-                .registerTypeAdapter(TaxikGcmMessage.class, new TaxikGcmMessageSerializer())
-                .registerTypeAdapter(TaxikGcmMessage.class, new TaxikGcmMessageDeserializer())
-                .serializeNulls()
-                .create();
-    }
+    private LocalBroadcastManager broadcastManager;
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        TaxikGcmMessage message = gson.fromJson("", TaxikGcmMessage.class);
+        TaxikGcmMessage message = new TaxikGcmMessage();
+        message.setEventId(data.getLong("event_id", 0));
+        message.setOrderId(data.getLong("order_id", 0));
+        message.setCityId(data.getLong("city_id", 0));
+        message.setBody(data.getString("body", ""));
 
         Log.d(LOG_TAG, "New message received from " + from + " with body:\n'" + message + "'.");
+
+        broadcastMessage(message);
+    }
+
+    private void broadcastMessage(TaxikGcmMessage message) {
+        Intent intent = new Intent(ACTION_GCM_NEW_MESSAGE);
+        intent.putExtra(EXTRA_GCM_MESSAGE, message);
+
+        broadcastManager.sendBroadcast(intent);
     }
 
     @Override

@@ -4,4 +4,12 @@
     <string name="canceled_orders">ОТМЕНЕННЫЕ</string>
     <string name="finished_orders">ЗАВЕРШЕННЫЕ</string>
     <string name="server_sender_id">393067706009</string>
+
+    <string name="new_user">Новый пользователь</string>
+    <string name="new_user_description">Добавить новую учетную запись</string>
+
+    <string name="label_login">логин</string>
+    <string name="label_password">пароль</string>
+    <string name="button_login">Войти</string>
+    <string name="error_message">Error</string>
 </resources>
