@@ -11,7 +11,8 @@ import java.lang.reflect.Type;
 import name.peterbukhal.android.taxi.client.server.api.json.Error;
 
 /**
- * Created by petronic on 21.03.16.
+ * Created by
+ *      petronic on 21.03.16.
  */
 public class ErrorDeserializer implements JsonDeserializer<Error> {
 
@@ -19,12 +20,10 @@ public class ErrorDeserializer implements JsonDeserializer<Error> {
     public Error deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        Error error = new Error();
-        error.setCode(object.get("code").getAsInt());
-        error.setMessage(object.get("message").getAsString());
-        error.setMessageHuman(object.get("message_human").getAsString());
-
-        return error;
+        return new Error(
+                object.get("code").getAsInt(),
+                object.get("message").getAsString(),
+                object.get("message_human").getAsString());
     }
 
 }

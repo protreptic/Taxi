@@ -21,11 +21,9 @@ public class PointDeserializer implements JsonDeserializer<Point> {
     public Point deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        PointImpl routePoint = new PointImpl();
-        routePoint.setLatitude(object.get("latitude").getAsDouble());
-        routePoint.setLongitude(object.get("longitude").getAsDouble());
-
-        return routePoint;
+        return new PointImpl(
+                object.get("latitude").getAsDouble(),
+                object.get("longitude").getAsDouble());
     }
 
 }

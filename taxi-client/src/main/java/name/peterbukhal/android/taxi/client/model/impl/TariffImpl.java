@@ -1,7 +1,6 @@
 package name.peterbukhal.android.taxi.client.model.impl;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import name.peterbukhal.android.taxi.client.model.Tariff;
 
@@ -9,14 +8,19 @@ import name.peterbukhal.android.taxi.client.model.Tariff;
  * Created by
  * petronic on 25.03.16.
  */
-public class TariffImpl implements Tariff, Parcelable {
+public final class TariffImpl implements Tariff {
 
-    private Long id;
-    private String name;
-    private Long rate;
-    private Long order;
+    private final Long id;
+    private final String name;
+    private final Long rate;
+    private final Long order;
 
-    public TariffImpl() {}
+    public TariffImpl(Long id, String name, Long rate, Long order) {
+        this.id = id;
+        this.name = name;
+        this.rate = rate;
+        this.order = order;
+    }
 
     protected TariffImpl(Parcel in) {
         id = in.readLong();
@@ -70,19 +74,4 @@ public class TariffImpl implements Tariff, Parcelable {
         dest.writeLong(order);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setRate(Long rate) {
-        this.rate = rate;
-    }
-
-    public void setOrder(Long order) {
-        this.order = order;
-    }
 }

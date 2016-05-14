@@ -7,13 +7,11 @@ import android.os.Parcelable;
  * Created by
  *      petronic on 21.03.16.
  */
-public class Error implements Parcelable {
+public final class Error implements Parcelable {
 
-    private Integer code;
-    private String message;
-    private String messageHuman;
-
-    public Error() {}
+    private final Integer code;
+    private final String message;
+    private final String messageHuman;
 
     public Error(Integer code, String message, String messageHuman) {
         this.code = code;
@@ -28,6 +26,7 @@ public class Error implements Parcelable {
     }
 
     public static final Creator<Error> CREATOR = new Creator<Error>() {
+
         @Override
         public Error createFromParcel(Parcel in) {
             return new Error(in);
@@ -37,30 +36,19 @@ public class Error implements Parcelable {
         public Error[] newArray(int size) {
             return new Error[size];
         }
+
     };
 
     public Integer getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public String getMessageHuman() {
         return messageHuman;
-    }
-
-    public void setMessageHuman(String messageHuman) {
-        this.messageHuman = messageHuman;
     }
 
     @Override
@@ -74,4 +62,5 @@ public class Error implements Parcelable {
         dest.writeString(message);
         dest.writeString(messageHuman);
     }
+
 }

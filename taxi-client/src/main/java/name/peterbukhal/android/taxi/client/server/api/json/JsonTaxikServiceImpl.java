@@ -5,14 +5,18 @@ import com.google.gson.GsonBuilder;
 
 import name.peterbukhal.android.taxi.client.model.Cities;
 import name.peterbukhal.android.taxi.client.model.City;
+import name.peterbukhal.android.taxi.client.model.Conditions;
 import name.peterbukhal.android.taxi.client.model.Order;
 import name.peterbukhal.android.taxi.client.model.Orders;
 import name.peterbukhal.android.taxi.client.model.Point;
 import name.peterbukhal.android.taxi.client.model.RoutePoint;
+import name.peterbukhal.android.taxi.client.model.Tariff;
 import name.peterbukhal.android.taxi.client.server.api.json.model.CitiesDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.CitiesSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.CityDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.CitySerializer;
+import name.peterbukhal.android.taxi.client.server.api.json.model.ConditionsDeserializer;
+import name.peterbukhal.android.taxi.client.server.api.json.model.ConditionsSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.ErrorDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.ErrorSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.OrderDeserializer;
@@ -21,6 +25,8 @@ import name.peterbukhal.android.taxi.client.server.api.json.model.PointDeseriali
 import name.peterbukhal.android.taxi.client.server.api.json.model.PointSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.RoutePointDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.RoutePointSerializer;
+import name.peterbukhal.android.taxi.client.server.api.json.model.TariffDeserializer;
+import name.peterbukhal.android.taxi.client.server.api.json.model.TariffSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrderDetailsRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrderDetailsRequestDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrderDetailsRequestSerializer;
@@ -29,6 +35,9 @@ import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersR
 import name.peterbukhal.android.taxi.client.server.api.json.request.RegisterDeviceRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.RegisterDeviceRequestDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.request.RegisterDeviceRequestSerializer;
+import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitOrderCreateRequest;
+import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitOrderCreateRequestDeserializer;
+import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitOrderCreateRequestSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitPhoneNumberRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitPhoneNumberRequestDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitPhoneNumberRequestSerializer;
@@ -44,6 +53,9 @@ import name.peterbukhal.android.taxi.client.server.api.json.request.UnregisterDe
 import name.peterbukhal.android.taxi.client.server.api.json.response.RegisterDeviceResponse;
 import name.peterbukhal.android.taxi.client.server.api.json.response.RegisterDeviceResponseDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.response.RegisterDeviceResponseSerializer;
+import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitOrderCreateResponse;
+import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitOrderCreateResponseDeserializer;
+import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitOrderCreateResponseSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitPhoneNumberResponse;
 import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitPhoneNumberResponseDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitPhoneNumberResponseSerializer;
@@ -105,6 +117,14 @@ public final class JsonTaxikServiceImpl {
                 .registerTypeAdapter(UnregisterDeviceRequest.class, new UnregisterDeviceRequestDeserializer())
                 .registerTypeAdapter(UnregisterDeviceResponse.class, new UnregisterDeviceResponseSerializer())
                 .registerTypeAdapter(UnregisterDeviceResponse.class, new UnregisterDeviceResponseDeserializer())
+                .registerTypeAdapter(Tariff.class, new TariffSerializer())
+                .registerTypeAdapter(Tariff.class, new TariffDeserializer())
+                .registerTypeAdapter(Conditions.class, new ConditionsSerializer())
+                .registerTypeAdapter(Conditions.class, new ConditionsDeserializer())
+                .registerTypeAdapter(SubmitOrderCreateRequest.class, new SubmitOrderCreateRequestSerializer())
+                .registerTypeAdapter(SubmitOrderCreateRequest.class, new SubmitOrderCreateRequestDeserializer())
+                .registerTypeAdapter(SubmitOrderCreateResponse.class, new SubmitOrderCreateResponseSerializer())
+                .registerTypeAdapter(SubmitOrderCreateResponse.class, new SubmitOrderCreateResponseDeserializer())
                 .serializeNulls()
                 .create();
 

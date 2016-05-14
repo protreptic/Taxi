@@ -8,10 +8,10 @@ import name.peterbukhal.android.taxi.client.model.City;
  * Created by
  *      petronic on 21.03.16.
  */
-public class CityImpl implements City {
+public final class CityImpl implements City {
 
-    private Long id;
-    private String name;
+    private final Long id;
+    private final String name;
 
     public CityImpl(Long id, String name) {
         this.id = id;

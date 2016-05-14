@@ -12,9 +12,9 @@ import name.peterbukhal.android.taxi.client.model.City;
  * Created by
  * petronic on 07.05.16.
  */
-public class CitiesImpl implements Cities {
+public final class CitiesImpl implements Cities {
 
-    private List<City> cities = Collections.emptyList();
+    private final List<City> cities;
 
     public CitiesImpl(List<City> cities) {
         this.cities = Collections.unmodifiableList(cities);

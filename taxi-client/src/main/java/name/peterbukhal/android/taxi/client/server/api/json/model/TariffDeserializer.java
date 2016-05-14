@@ -21,12 +21,10 @@ public class TariffDeserializer implements JsonDeserializer<Tariff> {
     public Tariff deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        TariffImpl tariff = new TariffImpl();
-        tariff.setId(object.get("tariff_id").getAsLong());
-        tariff.setName(object.get("tariff_name").getAsString());
-        tariff.setRate(object.get("tariff_rate").getAsLong());
-        tariff.setOrder(object.get("tariff_order").getAsLong());
-
-        return tariff;
+        return new TariffImpl(
+                object.get("tariff_id").getAsLong(),
+                object.get("tariff_name").getAsString(),
+                object.get("tariff_rate").getAsLong(),
+                object.get("tariff_order").getAsLong());
     }
 }

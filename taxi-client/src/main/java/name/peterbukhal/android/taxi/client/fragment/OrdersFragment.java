@@ -190,7 +190,8 @@ public class OrdersFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        mBroadcastManager.registerReceiver(orderStateChangedReceiver, new IntentFilter(OrderStateMonitoringService.ACTION_ORDER_STATE_CHANGED));
+        mBroadcastManager.registerReceiver(orderStateChangedReceiver,
+                new IntentFilter(OrderStateMonitoringService.ACTION_ORDER_STATE_CHANGED));
     }
 
     @Override

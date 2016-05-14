@@ -17,21 +17,20 @@ import java.io.IOException;
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 
 import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.EXTRA_ACCOUNT;
-import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.EXTRA_ACCOUNT_TOKEN;
 import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.PickUpAccountAdapter.ADD_ACCOUNT_ITEM_ID;
 
 /**
  * Created by
- * petronic on 23.04.16.
+ *      petronic on 23.04.16.
  */
 public class LauncherActivity extends AppCompatActivity {
 
     private TaxiAccountManager mAccountManager;
 
-    private void runApplication(Account account, String token) {
+    private void runApplication(Account account) {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra(EXTRA_ACCOUNT, account);
-        intent.putExtra(EXTRA_ACCOUNT_TOKEN, token);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         startActivity(intent);
     }
@@ -44,6 +43,7 @@ public class LauncherActivity extends AppCompatActivity {
 
             @Override
             public void run(AccountManagerFuture<Bundle> future) {
+                //noinspection TryWithIdenticalCatches
                 try {
                     Bundle bundle = future.getResult();
 
@@ -54,9 +54,8 @@ public class LauncherActivity extends AppCompatActivity {
                     } else {
                         String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
                         String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
-                        String accountToken = bundle.getString(AccountManager.KEY_AUTHTOKEN);
 
-                        runApplication(new Account(accountName, accountType), accountToken);
+                        runApplication(new Account(accountName, accountType));
                     }
                 } catch (OperationCanceledException e) {
                     pickUpAccountDialog();
@@ -74,6 +73,7 @@ public class LauncherActivity extends AppCompatActivity {
 
             @Override
             public void run(AccountManagerFuture<Bundle> future) {
+                //noinspection TryWithIdenticalCatches
                 try {
                     Bundle bundle = future.getResult();
 

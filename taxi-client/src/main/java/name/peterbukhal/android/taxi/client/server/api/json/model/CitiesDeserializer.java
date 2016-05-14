@@ -33,4 +33,5 @@ public class CitiesDeserializer implements JsonDeserializer<Cities> {
 
         return new CitiesImpl(cities);
     }
+
 }

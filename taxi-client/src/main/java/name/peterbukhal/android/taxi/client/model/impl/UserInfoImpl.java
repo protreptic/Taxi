@@ -1,7 +1,6 @@
 package name.peterbukhal.android.taxi.client.model.impl;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,7 @@ import name.peterbukhal.android.taxi.client.model.UserInfo;
  * Created by
  *      petronic on 21.03.16.
  */
-public class UserInfoImpl implements UserInfo, Parcelable {
+public final class UserInfoImpl implements UserInfo {
 
     private String name;
     private Long bonuses;

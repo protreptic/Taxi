@@ -1,12 +1,14 @@
 package name.peterbukhal.android.taxi.client.model;
 
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by
  * petronic on 25.03.16.
  */
-public interface UserInfo {
+public interface UserInfo extends Parcelable {
 
     String getName();
     Long getBonuses();

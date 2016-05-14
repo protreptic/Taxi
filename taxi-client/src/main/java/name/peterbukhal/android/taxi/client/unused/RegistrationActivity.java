@@ -1,12 +1,11 @@
-package name.peterbukhal.android.taxi.client.activity;
+package name.peterbukhal.android.taxi.client.unused;
 
 import android.accounts.Account;
-import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,16 +13,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import name.peterbukhal.android.taxi.client.R;
-import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 import name.peterbukhal.android.taxi.client.account.TaxiClientAccount;
+import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 
 /**
  * Created by
  * petronic on 23.04.16.
  */
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationActivity extends AccountAuthenticatorActivity {
 
-    private static final String LOG_TAG = "RegistrationActivity";
+    private static final String TAG = "AuthenticatorActivity";
 
     private TaxiAccountManager mAccountManager;
 
@@ -36,37 +35,9 @@ public class RegistrationActivity extends AppCompatActivity {
     private String mUserName;
     private String mPassword;
 
-    private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
-    private Bundle mResultBundle = null;
-
-    public final void setAccountAuthenticatorResult(Bundle result) {
-        mResultBundle = result;
-    }
-
-    public void finish() {
-        if (mAccountAuthenticatorResponse != null) {
-            if (mResultBundle != null) {
-                mAccountAuthenticatorResponse.onResult(mResultBundle);
-            } else {
-                mAccountAuthenticatorResponse.onError(
-                        AccountManager.ERROR_CODE_CANCELED, "canceled");
-            }
-            mAccountAuthenticatorResponse = null;
-        }
-
-        super.finish();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAccountAuthenticatorResponse =
-                getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
-
-        if (mAccountAuthenticatorResponse != null) {
-            mAccountAuthenticatorResponse.onRequestContinued();
-        }
 
         setContentView(R.layout.a_registration);
 
@@ -97,7 +68,6 @@ public class RegistrationActivity extends AppCompatActivity {
             mAccountManager.setPassword(account, mPassword);
         } else {
             mAccountManager.addAccountExplicitly(account, mPassword);
-            mAccountManager.setAuthToken(account, authToken);
         }
 
         Intent intent = new Intent();
@@ -106,7 +76,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
-
         finish();
     }
 
@@ -117,19 +86,28 @@ public class RegistrationActivity extends AppCompatActivity {
      *            authentication failed.
      */
     public void onAuthenticationResult(String authToken) {
-        if (!TextUtils.isEmpty(authToken)) {
+        boolean success = !TextUtils.isEmpty(authToken);
+        Log.i(TAG, "onAuthenticationResult(" + success + ")");
+
+        if (success) {
             finishLogin(authToken);
         } else {
+            Log.e(TAG, "onAuthenticationResult: failed to authenticate");
+
             mMessageTextView.setText(R.string.error_message);
 
             mLoginEditText.requestFocus();
             mPasswordEditText.setText("");
         }
 
+        // Our task is complete, so clear it out
         mAuthTask = null;
     }
 
     public void onAuthenticationCancel() {
+        Log.i(TAG, "onAuthenticationCancel()");
+
+        // Our task is complete, so clear it out
         mAuthTask = null;
     }
 
@@ -140,8 +118,8 @@ public class RegistrationActivity extends AppCompatActivity {
             try {
                 return "#";
             } catch (Exception e) {
-                Log.e(LOG_TAG, "RegistrationTask: failed to authenticate");
-                Log.i(LOG_TAG, e.toString());
+                Log.e(TAG, "RegistrationTask: failed to authenticate");
+                Log.i(TAG, e.toString());
 
                 return null;
             }

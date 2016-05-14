@@ -7,17 +7,20 @@ import name.peterbukhal.android.taxi.client.model.RoutePoint;
 
 /**
  * Created by
- * petronic on 07.05.16.
+ *      petronic on 07.05.16.
  */
-public class RoutePointImpl implements RoutePoint {
+public final class RoutePointImpl implements RoutePoint {
 
-    private Long type;
-    private String name;
-    private String address;
-    private Point point;
+    private final Long type;
+    private final String name;
+    private final String address;
+    private final Point point;
 
-    public RoutePointImpl() {
-
+    public RoutePointImpl(Long type, String name, String address, Point point) {
+        this.type = type;
+        this.name = name;
+        this.address = address;
+        this.point = point;
     }
 
     @Override
@@ -25,17 +28,9 @@ public class RoutePointImpl implements RoutePoint {
         return type;
     }
 
-    public void setType(Long type) {
-        this.type = type;
-    }
-
     @Override
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
@@ -43,17 +38,9 @@ public class RoutePointImpl implements RoutePoint {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     @Override
     public Point getPoint() {
         return point;
-    }
-
-    public void setPoint(Point point) {
-        this.point = point;
     }
 
     protected RoutePointImpl(Parcel parcel) {

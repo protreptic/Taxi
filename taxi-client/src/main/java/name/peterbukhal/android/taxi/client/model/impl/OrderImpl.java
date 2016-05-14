@@ -15,48 +15,46 @@ import name.peterbukhal.android.taxi.client.model.RoutePoint;
  * Created by
  *      petronic on 21.03.16.
  */
-public class OrderImpl implements Order {
+public final class OrderImpl implements Order {
 
-    private Long id;
-    private List<RoutePoint> routePoints = Collections.emptyList();
-    private Long approximatePrice;
-    private String phoneNumber;
-    private ProgressState progressState;
+    private final Long id;
+    private final List<RoutePoint> routePoints;
+    private final Long approximatePrice;
+    private final String phoneNumber;
+    private final ProgressState progressState;
 
-    public OrderImpl() {}
+    public OrderImpl(Long id, List<RoutePoint> routePoints, Long approximatePrice,
+                     String phoneNumber, ProgressState progressState) {
+        this.id = id;
+        this.routePoints = Collections.unmodifiableList(routePoints);
+        this.approximatePrice = approximatePrice;
+        this.phoneNumber = phoneNumber;
+        this.progressState = progressState;
+    }
+
+    public OrderImpl(Order order) {
+        this.id = order.getId();
+        this.routePoints = Collections.unmodifiableList(order.getRoutePoints());
+        this.approximatePrice = order.getApproximatePrice();
+        this.phoneNumber = order.getPhoneNumber();
+        this.progressState = order.getOrderProgress();
+    }
 
     protected OrderImpl(Parcel in) {
         id = in.readLong();
-        //approximatePrice = in.readLong();
+        approximatePrice = in.readLong();
 
         List<RoutePoint> routePoints1 = new ArrayList<>();
         in.readTypedList(routePoints1, RoutePointImpl.CREATOR);
 
         routePoints = Collections.unmodifiableList(routePoints1);
         progressState = (ProgressState) in.readSerializable();
+        phoneNumber = in.readString();
     }
-
-    public static final Creator<Order> CREATOR = new Creator<Order>() {
-
-        @Override
-        public Order createFromParcel(Parcel in) {
-            return new OrderImpl(in);
-        }
-
-        @Override
-        public Order[] newArray(int size) {
-            return new Order[size];
-        }
-
-    };
 
     @Override
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     @Override
@@ -64,17 +62,9 @@ public class OrderImpl implements Order {
         return Collections.unmodifiableList(routePoints);
     }
 
-    public void setRoutePoints(List<RoutePoint> routePoints) {
-        this.routePoints = Collections.unmodifiableList(routePoints);
-    }
-
     @Override
     public Long getApproximatePrice() {
         return approximatePrice;
-    }
-
-    public void setApproximatePrice(Long approximatePrice) {
-        this.approximatePrice = approximatePrice;
     }
 
     @Override
@@ -112,17 +102,9 @@ public class OrderImpl implements Order {
         return progressState;
     }
 
-    public void setProgressState(ProgressState progressState) {
-        this.progressState = progressState;
-    }
-
     @Override
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -159,7 +141,22 @@ public class OrderImpl implements Order {
         //dest.writeLong(approximatePrice);
         dest.writeTypedList(routePoints);
         dest.writeSerializable(progressState);
+        dest.writeString(phoneNumber);
     }
+
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
+
+        @Override
+        public Order createFromParcel(Parcel in) {
+            return new OrderImpl(in);
+        }
+
+        @Override
+        public Order[] newArray(int size) {
+            return new Order[size];
+        }
+
+    };
 
     @Override
     public boolean equals(Object o) {

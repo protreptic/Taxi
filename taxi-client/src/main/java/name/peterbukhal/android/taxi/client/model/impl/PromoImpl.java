@@ -6,17 +6,28 @@ import name.peterbukhal.android.taxi.client.model.Promo;
 
 /**
  * Created by
- * petronic on 25.03.16.
+ *      petronic on 25.03.16.
  */
-public class PromoImpl implements Promo {
+public final class PromoImpl implements Promo {
 
-    private String promoCode;
-    private Long inviteBonus;
-    private Long selfBonus;
-    private Long orderMinPrice;
-    private String appText;
-    private String socialText;
-    private String twitterText;
+    private final String promoCode;
+    private final Long inviteBonus;
+    private final Long selfBonus;
+    private final Long orderMinPrice;
+    private final String appText;
+    private final String socialText;
+    private final String twitterText;
+
+    public PromoImpl(String promoCode, Long inviteBonus, Long selfBonus, Long orderMinPrice,
+                     String appText, String socialText, String twitterText) {
+        this.promoCode = promoCode;
+        this.inviteBonus = inviteBonus;
+        this.selfBonus = selfBonus;
+        this.orderMinPrice = orderMinPrice;
+        this.appText = appText;
+        this.socialText = socialText;
+        this.twitterText = twitterText;
+    }
 
     protected PromoImpl(Parcel in) {
         promoCode = in.readString();
@@ -27,18 +38,6 @@ public class PromoImpl implements Promo {
         socialText = in.readString();
         twitterText = in.readString();
     }
-
-    public static final Creator<PromoImpl> CREATOR = new Creator<PromoImpl>() {
-        @Override
-        public PromoImpl createFromParcel(Parcel in) {
-            return new PromoImpl(in);
-        }
-
-        @Override
-        public PromoImpl[] newArray(int size) {
-            return new PromoImpl[size];
-        }
-    };
 
     @Override
     public String getPromoCode() {
@@ -90,4 +89,19 @@ public class PromoImpl implements Promo {
         dest.writeString(socialText);
         dest.writeString(twitterText);
     }
+
+    public static final Creator<Promo> CREATOR = new Creator<Promo>() {
+
+        @Override
+        public Promo createFromParcel(Parcel in) {
+            return new PromoImpl(in);
+        }
+
+        @Override
+        public Promo[] newArray(int size) {
+            return new Promo[size];
+        }
+
+    };
+
 }

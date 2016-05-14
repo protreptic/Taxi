@@ -6,21 +6,21 @@ import name.peterbukhal.android.taxi.client.model.ClientRate;
 
 /**
  * Created by
- * petronic on 10.05.16.
+ *      petronic on 10.05.16.
  */
-public class ClientRateImpl implements ClientRate {
+public final class ClientRateImpl implements ClientRate {
 
-    private Long rate;
-    private String comment;
-
-    public ClientRateImpl() {
-        rate = 0L;
-        comment = "";
-    }
+    private final Long rate;
+    private final String comment;
 
     public ClientRateImpl(Long rate, String comment) {
         this.rate = rate;
         this.comment = comment;
+    }
+
+    public ClientRateImpl(ClientRate clientRate) {
+        this.rate = clientRate.getRate();
+        this.comment = clientRate.getComment();
     }
 
     protected ClientRateImpl(Parcel parcel) {
@@ -33,17 +33,9 @@ public class ClientRateImpl implements ClientRate {
         return rate;
     }
 
-    public void setRate(Long rate) {
-        this.rate = rate;
-    }
-
     @Override
     public String getComment() {
         return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     @Override

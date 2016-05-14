@@ -18,12 +18,12 @@ import name.peterbukhal.android.taxi.client.model.impl.CityImpl;
 public class CityDeserializer implements JsonDeserializer<City> {
 
     @Override
-    public City deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public City deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         JsonObject object = new JsonObject();
 
-        Long id = object.get("city_id").getAsLong();
-        String name = object.get("city_name").getAsString();
-
-        return new CityImpl(id, name);
+        return new CityImpl(
+                object.get("city_id").getAsLong(),
+                object.get("city_name").getAsString());
     }
 }

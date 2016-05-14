@@ -26,14 +26,12 @@ public class OrderDeserializer implements JsonDeserializer<Order> {
     public Order deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        OrderImpl order = new OrderImpl();
-        order.setId(object.get("order_id").getAsLong());
-        //order.setApproximatePrice(object.get("approximate_price").getAsLong());
-        order.setRoutePoints(readRoutePoints(context, object));
-        order.setPhoneNumber(object.get("phone_number").getAsString());
-        order.setProgressState(Order.ProgressState.valueOf(object.get("order_progress").getAsInt()));
-
-        return order;
+        return new OrderImpl(
+                object.get("order_id").getAsLong(),
+                readRoutePoints(context, object),
+                object.get("approximate_price").getAsLong(),
+                object.get("phone_number").getAsString(),
+                Order.ProgressState.valueOf(object.get("order_progress").getAsInt()));
     }
 
     private List<RoutePoint> readRoutePoints(JsonDeserializationContext context, JsonObject jsonObject) {

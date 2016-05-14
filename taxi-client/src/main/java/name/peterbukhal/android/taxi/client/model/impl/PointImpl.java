@@ -8,13 +8,14 @@ import name.peterbukhal.android.taxi.client.model.Point;
  * Created by
  * petronic on 07.05.16.
  */
-public class PointImpl implements Point {
+public final class PointImpl implements Point {
 
-    private Double latitude;
-    private Double longitude;
+    private final Double latitude;
+    private final Double longitude;
 
-    public PointImpl() {
-
+    public PointImpl(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     protected PointImpl(Parcel parcel) {
@@ -27,17 +28,9 @@ public class PointImpl implements Point {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
     @Override
     public Double getLongitude() {
         return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
     }
 
     @Override

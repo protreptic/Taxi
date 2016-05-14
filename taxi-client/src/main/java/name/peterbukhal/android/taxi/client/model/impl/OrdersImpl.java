@@ -13,9 +13,9 @@ import name.peterbukhal.android.taxi.client.model.Orders;
  * Created by
  * petronic on 07.05.16.
  */
-public class OrdersImpl implements Orders {
+public final class OrdersImpl implements Orders {
 
-    private List<Order> orders = Collections.emptyList();
+    private final List<Order> orders;
 
     public OrdersImpl(List<Order> orders) {
         this.orders = Collections.unmodifiableList(orders);

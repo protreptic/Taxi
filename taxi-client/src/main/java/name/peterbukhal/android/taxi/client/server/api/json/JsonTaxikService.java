@@ -3,13 +3,16 @@ package name.peterbukhal.android.taxi.client.server.api.json;
 import name.peterbukhal.android.taxi.client.model.Cities;
 import name.peterbukhal.android.taxi.client.model.Order;
 import name.peterbukhal.android.taxi.client.model.Orders;
+import name.peterbukhal.android.taxi.client.model.UserInfo;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrderDetailsRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryUserInfoRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.RegisterDeviceRequest;
+import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitOrderCreateRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitPhoneNumberRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.UnregisterDeviceRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.response.RegisterDeviceResponse;
+import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitOrderCreateResponse;
 import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitPhoneNumberResponse;
 import name.peterbukhal.android.taxi.client.server.api.json.request.SubmitPromoCodeRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitPromoCodeResponse;
@@ -42,7 +45,7 @@ public interface JsonTaxikService {
 
     // TODO Not implemented yet
     @POST("query_user_info")
-    Call<UserInfoImpl> queryUserInfo(@Body QueryUserInfoRequest request);
+    Call<UserInfo> queryUserInfo(@Body QueryUserInfoRequest request);
 
     @POST("query_orders")
     Call<Orders> queryOrders(@Body QueryOrdersRequest request);
@@ -55,5 +58,8 @@ public interface JsonTaxikService {
 
     @POST("unregister_device")
     Call<UnregisterDeviceResponse> queryUnregisterDevice(@Body UnregisterDeviceRequest request);
+
+    @POST("submit_order_create")
+    Call<SubmitOrderCreateResponse> querySubmitOrderCreate(@Body SubmitOrderCreateRequest request);
 
 }

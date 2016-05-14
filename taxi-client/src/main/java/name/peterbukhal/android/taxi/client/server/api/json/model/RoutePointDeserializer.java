@@ -14,7 +14,7 @@ import name.peterbukhal.android.taxi.client.model.impl.RoutePointImpl;
 
 /**
  * Created by
- * petronic on 07.05.16.
+ *      petronic on 07.05.16.
  */
 public class RoutePointDeserializer implements JsonDeserializer<RoutePoint> {
 
@@ -22,13 +22,11 @@ public class RoutePointDeserializer implements JsonDeserializer<RoutePoint> {
     public RoutePoint deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        RoutePointImpl routePoint = new RoutePointImpl();
-        routePoint.setType(object.get("type").getAsLong());
-        routePoint.setName(object.get("name").getAsString());
-        routePoint.setAddress(object.get("address").getAsString());
-        routePoint.setPoint(context.<Point>deserialize(object.getAsJsonObject("point"), Point.class));
-
-        return routePoint;
+        return new RoutePointImpl(
+                object.get("type").getAsLong(),
+                object.get("name").getAsString(),
+                object.get("address").getAsString(),
+                context.<Point>deserialize(object.getAsJsonObject("point"), Point.class));
     }
 
 }
