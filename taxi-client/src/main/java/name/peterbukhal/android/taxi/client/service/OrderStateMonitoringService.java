@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 import name.peterbukhal.android.taxi.client.model.Order;
 import name.peterbukhal.android.taxi.client.model.Orders;
 import name.peterbukhal.android.taxi.client.server.api.json.JsonTaxikService;
@@ -34,29 +35,31 @@ public class OrderStateMonitoringService extends Service {
 
     private static final String LOG_TAG = "OrderStateMonitoring";
 
+    private TaxiAccountManager mAccountManager;
     private String token;
-    private JsonTaxikService taxikService;
-    private ScheduledExecutorService executorService;
-    private LocalBroadcastManager broadcastManager;
+    private JsonTaxikService mTaxikService;
+    private ScheduledExecutorService mExecutorService;
+    private LocalBroadcastManager mBroadcastManager;
 
-    private boolean isStopped;
+    private boolean mIsStopped;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        taxikService = JsonTaxikServiceImpl.instance().service();
-        executorService = Executors.newSingleThreadScheduledExecutor();
-        broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        mAccountManager = TaxiAccountManager.get(getApplicationContext());
+        mTaxikService = JsonTaxikServiceImpl.instance().service();
+        mExecutorService = Executors.newSingleThreadScheduledExecutor();
+        mBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
     }
 
     private final Map<Order, PriorityQueue<Order.ProgressState>> monitoringQueue = new HashMap<>();
 
     private void updateOrders() {
-        if (isStopped) return;
+        if (mIsStopped) return;
 
         final Call<Orders> request =
-                taxikService.queryOrders(
+                mTaxikService.queryOrders(
                         new QueryOrdersRequest(token, 0, 5, QueryOrdersRequest.OrderType.ACTIVE));
 
         request.enqueue(new Callback<Orders>() {
@@ -68,7 +71,7 @@ public class OrderStateMonitoringService extends Service {
                 if (activeOrders.isEmpty()) {
                     Log.d(LOG_TAG, "No active orders.");
 
-                    isStopped = true;
+                    mIsStopped = true;
                     stopSelf();
                 } else {
                     Log.d(LOG_TAG, activeOrders.size() + " active orders found.");
@@ -122,8 +125,8 @@ public class OrderStateMonitoringService extends Service {
                         }
                     }
 
-                    if (!isStopped) {
-                        executorService.schedule(new Runnable() {
+                    if (!mIsStopped) {
+                        mExecutorService.schedule(new Runnable() {
                             @Override
                             public void run() {
                                 updateOrders();
@@ -135,7 +138,7 @@ public class OrderStateMonitoringService extends Service {
 
             @Override
             public void onFailure(Call<Orders> call, Throwable t) {
-                isStopped = true;
+                mIsStopped = true;
                 stopSelf();
             }
 
@@ -151,7 +154,7 @@ public class OrderStateMonitoringService extends Service {
         Intent intent = new Intent(ACTION_ORDER_STATE_CHANGED);
         intent.putExtra(EXTRA_ORDER, order);
 
-        broadcastManager.sendBroadcast(intent);
+        mBroadcastManager.sendBroadcast(intent);
 
         Log.d(LOG_TAG, "Broadcast state for order " + order.getId() +
                 " (" + order.getOrderProgress() + ").");
@@ -172,9 +175,9 @@ public class OrderStateMonitoringService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        executorService.shutdown();
+        mExecutorService.shutdown();
 
-        isStopped = true;
+        mIsStopped = true;
         Log.d(LOG_TAG, "Service stopped.");
     }
 

@@ -1,5 +1,6 @@
 package name.peterbukhal.android.taxi.client.unused;
 
+import android.accounts.Account;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -20,8 +21,17 @@ import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersR
  */
 public class UserOrdersFragment extends Fragment {
 
-    public static Fragment newInstance() {
-        return new UserOrdersFragment();
+    public static final String FRAGMENT_TAG_USER_ORDERS = "fragment_tag_user_orders";
+    public static final String ARG_ACCOUNT = "arg_account";
+
+    public static Fragment newInstance(Account account) {
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(ARG_ACCOUNT, account);
+
+        Fragment fragment = new UserOrdersFragment();
+        fragment.setArguments(arguments);
+
+        return fragment;
     }
 
     private ViewPager viewPager;
@@ -47,14 +57,29 @@ public class UserOrdersFragment extends Fragment {
         return contentView;
     }
 
+    private Account mAccount;
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        UserOrdersPagerAdapter adapter = new UserOrdersPagerAdapter();
+        outState.putParcelable(ARG_ACCOUNT, mAccount);
+    }
 
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ACCOUNT)) {
+            mAccount = savedInstanceState.getParcelable(ARG_ACCOUNT);
+        } else if (getArguments() != null && getArguments().containsKey(ARG_ACCOUNT)) {
+            mAccount = getArguments().getParcelable(ARG_ACCOUNT);
+
+            UserOrdersPagerAdapter adapter = new UserOrdersPagerAdapter();
+
+            viewPager.setAdapter(adapter);
+            tabLayout.setupWithViewPager(viewPager);
+        }
     }
 
     public class UserOrdersPagerAdapter extends FragmentPagerAdapter {
@@ -67,11 +92,11 @@ public class UserOrdersFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return OrdersFragment.newInstance(OrderType.ACTIVE);
+                    return OrdersFragment.newInstance(mAccount, OrderType.ACTIVE);
                 case 1:
-                    return OrdersFragment.newInstance(OrderType.CANCELED);
+                    return OrdersFragment.newInstance(mAccount, OrderType.CANCELED);
                 case 2:
-                    return OrdersFragment.newInstance(OrderType.FINISHED);
+                    return OrdersFragment.newInstance(mAccount, OrderType.FINISHED);
                 default:
                     throw new RuntimeException();
             }

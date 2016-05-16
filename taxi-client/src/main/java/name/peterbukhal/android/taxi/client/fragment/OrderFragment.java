@@ -13,10 +13,11 @@ import name.peterbukhal.android.taxi.client.model.Order;
 
 /**
  * Created by
- * petronic on 03.04.16.
+ *      petronic on 03.04.16.
  */
 public class OrderFragment extends Fragment {
 
+    public static final String FRAGMENT_TAG_ORDER = "fragment_tag_order";
     public static final String ARG_ORDER = "arg_order";
 
     public static Fragment newInstance(Order order) {

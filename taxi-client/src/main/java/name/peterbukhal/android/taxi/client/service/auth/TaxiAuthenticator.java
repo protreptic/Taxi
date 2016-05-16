@@ -8,10 +8,12 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
 
+import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 import name.peterbukhal.android.taxi.client.activity.RegistrationActivity;
 import name.peterbukhal.android.taxi.client.server.api.json.JsonTaxikService;
 import name.peterbukhal.android.taxi.client.server.api.json.JsonTaxikServiceImpl;
@@ -28,12 +30,15 @@ import retrofit2.Response;
 public class TaxiAuthenticator extends AbstractAccountAuthenticator {
 
     public static final String LOG_TAG = "TaxiAuthenticator";
+
     private Context mContext;
+    private TaxiAccountManager mAccountManager;
 
     public TaxiAuthenticator(Context context) {
         super(context);
 
         mContext = context;
+        mAccountManager = TaxiAccountManager.get(context);
     }
 
     @Override
@@ -63,10 +68,9 @@ public class TaxiAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, final Account account,
                                String s, Bundle options) throws NetworkErrorException {
-        String token =
-                mContext.getSharedPreferences("main", Context.MODE_PRIVATE).getString("token", "#");
+        String token = mAccountManager.peekAuthToken(account);
 
-        if (!token.equals("#")) {
+        if (!TextUtils.isEmpty(token)) {
             Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
@@ -92,11 +96,6 @@ public class TaxiAuthenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
             result.putString(AccountManager.KEY_AUTHTOKEN, response2.body().getToken());
-
-            mContext.getSharedPreferences("main", Context.MODE_PRIVATE)
-                    .edit()
-                    .putString("token", response2.body().getToken())
-                    .apply();
 
             return result;
         } catch (IOException e) {

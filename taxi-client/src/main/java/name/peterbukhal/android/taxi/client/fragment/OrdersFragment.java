@@ -1,5 +1,6 @@
 package name.peterbukhal.android.taxi.client.fragment;
 
+import android.accounts.Account;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import java.util.Collections;
 
 import name.peterbukhal.android.taxi.client.R;
+import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 import name.peterbukhal.android.taxi.client.model.Order;
 import name.peterbukhal.android.taxi.client.model.Orders;
 import name.peterbukhal.android.taxi.client.server.api.json.JsonTaxikServiceImpl;
@@ -39,10 +41,12 @@ import retrofit2.Response;
 public class OrdersFragment extends Fragment {
 
     public static final String FRAGMENT_TAG_ORDERS = "fragment_tag_orders";
+    public static final String ARG_ACCOUNT = "arg_account";
     public static final String ARG_ORDER_TYPE = "arg_order_type";
 
-    public static Fragment newInstance(OrderType orderType) {
+    public static Fragment newInstance(Account account, OrderType orderType) {
         Bundle arguments = new Bundle();
+        arguments.putParcelable(ARG_ACCOUNT, account);
         arguments.putSerializable(ARG_ORDER_TYPE, orderType);
 
         Fragment fragment = new OrdersFragment();
@@ -51,6 +55,7 @@ public class OrdersFragment extends Fragment {
         return fragment;
     }
 
+    private Account mAccount;
     private OrderType mOrderType;
     private String mToken;
 
@@ -76,7 +81,7 @@ public class OrdersFragment extends Fragment {
                 public void onClick(View v) {
                     getFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragmentContent, OrderFragment.newInstance(order))
+                            .replace(R.id.main_content, OrderFragment.newInstance(order))
                             .addToBackStack(null)
                             .commit();
                 }
@@ -107,13 +112,6 @@ public class OrdersFragment extends Fragment {
             text2 = (TextView) itemView.findViewById(android.R.id.text2);
         }
 
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
     }
 
     private ProgressBar mProgressBar;
@@ -149,26 +147,31 @@ public class OrdersFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        outState.putParcelable(ARG_ACCOUNT, mAccount);
         outState.putSerializable(ARG_ORDER_TYPE, mOrderType);
         outState.putString(EXTRA_TOKEN, mToken);
         outState.putParcelable(EXTRA_ORDERS, mOrders);
     }
 
     private LocalBroadcastManager mBroadcastManager;
+    private TaxiAccountManager mAccountManager;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         mBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
+        mAccountManager = TaxiAccountManager.get(getActivity());
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ORDER_TYPE)) {
+            mAccount = savedInstanceState.getParcelable(ARG_ACCOUNT);
             mOrderType = (OrderType) savedInstanceState.getSerializable(ARG_ORDER_TYPE);
             mToken = savedInstanceState.getString(EXTRA_TOKEN);
             mOrders = savedInstanceState.getParcelable(EXTRA_ORDERS);
         } else if (getArguments() != null && getArguments().containsKey(ARG_ORDER_TYPE)) {
+            mAccount = getArguments().getParcelable(ARG_ACCOUNT);
             mOrderType = (OrderType) getArguments().getSerializable(ARG_ORDER_TYPE);
-            mToken = getActivity().getSharedPreferences("main", Context.MODE_PRIVATE).getString("token", "");
+            mToken = mAccountManager.peekAuthToken(mAccount);
             mRecyclerView.setAdapter(mOrdersAdapter);
 
             updateOrders();

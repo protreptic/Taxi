@@ -45,7 +45,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     @Test
     public void testMainActivity_fragment_content_notnull() {
-        assertNotNull(mMainActivity.findViewById(R.id.fragmentContent));
+        assertNotNull(mMainActivity.findViewById(R.id.main_content));
 
         Fragment fragment = mMainActivity.getSupportFragmentManager().findFragmentByTag(OrdersFragment.FRAGMENT_TAG_ORDERS);
 
