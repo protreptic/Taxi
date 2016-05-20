@@ -67,7 +67,7 @@ public class TaxiAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, final Account account,
-                               String s, Bundle options) throws NetworkErrorException {
+                               String authTokenType, Bundle options) throws NetworkErrorException {
         String token = mAccountManager.peekAuthToken(account);
 
         if (!TextUtils.isEmpty(token)) {
@@ -90,7 +90,9 @@ public class TaxiAuthenticator extends AbstractAccountAuthenticator {
                     taxikService.querySubmitSmsCode(
                             new SubmitSmsCodeRequest("", 1, Integer.valueOf(response1.body().getSmsCode()), account.name, null)).execute();
 
-            Log.d(LOG_TAG, "New token obtained");
+            Log.d(LOG_TAG, "New token obtained for user " + account.name);
+
+            mAccountManager.setAuthToken(account, response2.body().getToken());
 
             Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);

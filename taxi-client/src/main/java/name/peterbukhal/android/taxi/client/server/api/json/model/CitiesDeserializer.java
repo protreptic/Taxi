@@ -1,9 +1,9 @@
 package name.peterbukhal.android.taxi.client.server.api.json.model;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
@@ -14,6 +14,7 @@ import name.peterbukhal.android.taxi.client.model.Cities;
 import name.peterbukhal.android.taxi.client.model.City;
 import name.peterbukhal.android.taxi.client.model.impl.CitiesImpl;
 import name.peterbukhal.android.taxi.client.model.impl.CityImpl;
+import name.peterbukhal.android.taxi.client.model.impl.nil.NullCities;
 
 /**
  * Created by
@@ -22,16 +23,21 @@ import name.peterbukhal.android.taxi.client.model.impl.CityImpl;
 public class CitiesDeserializer implements JsonDeserializer<Cities> {
 
     @Override
-    public Cities deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        final JsonObject object = json.getAsJsonObject();
+    public Cities deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        JsonArray citiesArray = json.getAsJsonObject().getAsJsonArray("cities");
 
-        List<City> cities = new ArrayList<>();
+        if (citiesArray != null) {
+            List<City> cities = new ArrayList<>();
 
-        for (int count = 0; count < object.getAsJsonArray("cities").size(); count++) {
-            cities.add(context.<CityImpl>deserialize(object.getAsJsonArray("cities").get(count), City.class));
+            for (int count = 0; count < citiesArray.size(); count++) {
+                cities.add(context.<CityImpl>deserialize(citiesArray.get(count), City.class));
+            }
+
+            return new CitiesImpl(cities);
+        } else {
+            return new NullCities();
         }
-
-        return new CitiesImpl(cities);
     }
 
 }

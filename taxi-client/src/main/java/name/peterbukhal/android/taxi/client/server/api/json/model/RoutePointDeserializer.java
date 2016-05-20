@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 
 import name.peterbukhal.android.taxi.client.model.Point;
 import name.peterbukhal.android.taxi.client.model.RoutePoint;
+import name.peterbukhal.android.taxi.client.model.impl.nil.NullPoint;
 import name.peterbukhal.android.taxi.client.model.impl.RoutePointImpl;
 
 /**
@@ -19,14 +20,19 @@ import name.peterbukhal.android.taxi.client.model.impl.RoutePointImpl;
 public class RoutePointDeserializer implements JsonDeserializer<RoutePoint> {
 
     @Override
-    public RoutePoint deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public RoutePoint deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
+
+        Point point = object.getAsJsonObject("point") != null ?
+                context.<Point>deserialize(
+                        object.getAsJsonObject("point"), Point.class) : new NullPoint();
 
         return new RoutePointImpl(
                 object.get("type").getAsLong(),
                 object.get("name").getAsString(),
                 object.get("address").getAsString(),
-                context.<Point>deserialize(object.getAsJsonObject("point"), Point.class));
+                point);
     }
 
 }

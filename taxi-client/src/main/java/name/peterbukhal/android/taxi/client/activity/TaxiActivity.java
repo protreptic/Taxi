@@ -8,6 +8,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,10 +33,14 @@ import java.util.concurrent.TimeUnit;
 
 import name.peterbukhal.android.taxi.client.R;
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
+import name.peterbukhal.android.taxi.client.fragment.AboutFragment;
 import name.peterbukhal.android.taxi.client.fragment.CreateOrderFragment;
 import name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment;
 
 import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.EXTRA_ACCOUNT;
+import static name.peterbukhal.android.taxi.client.fragment.AboutFragment.FRAGMENT_TAG_ABOUT;
+import static name.peterbukhal.android.taxi.client.fragment.CreateOrderFragment.FRAGMENT_TAG_CREATE_ORDER;
+import static name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment.FRAGMENT_TAG_USER_ORDERS;
 
 /**
  * Created by
@@ -79,23 +84,33 @@ public abstract class TaxiActivity extends AppCompatActivity {
 
                         switch (identifier) {
                             case MENU_ITEM_CREATE_ORDER: {
-                                if (fragmentManager.findFragmentByTag(CreateOrderFragment.FRAGMENT_TAG_CREATE_ORDER) != null) break;
+                                if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_CREATE_ORDER) != null) break;
 
                                 fragmentManager
                                         .beginTransaction()
                                         .replace(R.id.main_content,
                                                 CreateOrderFragment.newInstance(mAccount),
-                                                CreateOrderFragment.FRAGMENT_TAG_CREATE_ORDER)
+                                                FRAGMENT_TAG_CREATE_ORDER)
                                         .commit();
                             } break;
                             case MENU_ITEM_ORDERS: {
-                                if (fragmentManager.findFragmentByTag(UserOrdersFragment.FRAGMENT_TAG_USER_ORDERS) != null) break;
+                                if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null) break;
 
                                 fragmentManager
                                         .beginTransaction()
                                         .replace(R.id.main_content,
                                                 UserOrdersFragment.newInstance(mAccount),
-                                                UserOrdersFragment.FRAGMENT_TAG_USER_ORDERS)
+                                                FRAGMENT_TAG_USER_ORDERS)
+                                        .commit();
+                            } break;
+                            case MENU_ITEM_ABOUT: {
+                                if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null) break;
+
+                                fragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.main_content,
+                                                AboutFragment.newInstance(),
+                                                FRAGMENT_TAG_ABOUT)
                                         .commit();
                             } break;
                             default: {
@@ -108,10 +123,13 @@ public abstract class TaxiActivity extends AppCompatActivity {
                 })
                 .withAccountHeader(generateAccountHeader())
                 .build();
+
+        mDrawer.setSelection(MENU_ITEM_CREATE_ORDER, true);
     }
 
     private static final int MENU_ITEM_CREATE_ORDER = 41231;
     private static final int MENU_ITEM_ORDERS = 41232;
+    private static final int MENU_ITEM_ABOUT = 41233;
 
     private List<IDrawerItem> generateDrawerItems() {
         List<IDrawerItem> items = new ArrayList<>();
@@ -124,6 +142,11 @@ public abstract class TaxiActivity extends AppCompatActivity {
         items.add(new PrimaryDrawerItem()
                 .withName("Заказы".toUpperCase())
                 .withIdentifier(MENU_ITEM_ORDERS)
+                .withIcon(android.R.drawable.ic_menu_agenda));
+
+        items.add(new PrimaryDrawerItem()
+                .withName("О приложении".toUpperCase())
+                .withIdentifier(MENU_ITEM_ABOUT)
                 .withIcon(android.R.drawable.ic_menu_agenda));
 
         return items;
@@ -159,11 +182,11 @@ public abstract class TaxiActivity extends AppCompatActivity {
                 .withProfiles(profiles)
                 .addProfiles(
                         new ProfileSettingDrawerItem()
-                                .withName("Add Account")
+                                .withName("Add account")
                                 .withIcon(android.R.drawable.ic_menu_add)
                                 .withIdentifier(ADD_ACCOUNT_ID),
                         new ProfileSettingDrawerItem()
-                                .withName("Manage Account")
+                                .withName("Manage accounts")
                                 .withIcon(android.R.drawable.ic_menu_preferences)
                                 .withIdentifier(MANAGE_ACCOUNTS)
                 )
@@ -196,10 +219,17 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                 });
                             } break;
                             case MANAGE_ACCOUNTS: {
+                                Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
+                                intent.putExtra(Settings.EXTRA_AUTHORITIES, new String[] {
+                                        "name.peterbukhal.android.taxi.client"
+                                });
 
+                                startActivity(intent);
                             } break;
                             default: {
-                                runApplication((Account) ((ProfileDrawerItem) profile).getTag());
+                                ProfileDrawerItem profileDrawerItem = (ProfileDrawerItem) profile;
+
+                                runApplication((Account) profileDrawerItem.getTag());
                             }
                         }
 

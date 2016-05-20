@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Created by
- * petronic on 25.03.16.
+ *      petronic on 25.03.16.
  */
 public interface UserInfo extends Parcelable {
 
@@ -21,5 +21,6 @@ public interface UserInfo extends Parcelable {
     String getFriendShareText();
     String getFriendShareUrl();
     Promo getPromo();
+    Boolean isNull();
 
 }

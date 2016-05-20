@@ -23,6 +23,20 @@ public final class RoutePointImpl implements RoutePoint {
         this.point = point;
     }
 
+    public RoutePointImpl(RoutePoint routePoint) {
+        this.type = routePoint.getType();
+        this.name = routePoint.getName();
+        this.address = routePoint.getAddress();
+        this.point = routePoint.getPoint();
+    }
+
+    protected RoutePointImpl(Parcel parcel) {
+        type = parcel.readLong();
+        name = parcel.readString();
+        address = parcel.readString();
+        point = parcel.readParcelable(Point.class.getClassLoader());
+    }
+
     @Override
     public Long getType() {
         return type;
@@ -43,11 +57,9 @@ public final class RoutePointImpl implements RoutePoint {
         return point;
     }
 
-    protected RoutePointImpl(Parcel parcel) {
-        type = parcel.readLong();
-        name = parcel.readString();
-        address = parcel.readString();
-        point = parcel.readParcelable(Point.class.getClassLoader());
+    @Override
+    public Boolean isNull() {
+        return false;
     }
 
     @Override

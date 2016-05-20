@@ -131,6 +131,11 @@ public final class OrderImpl implements Order {
     }
 
     @Override
+    public Boolean isNull() {
+        return false;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

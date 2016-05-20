@@ -10,7 +10,7 @@ import name.peterbukhal.android.taxi.client.model.City;
 
 /**
  * Created by
- * petronic on 07.05.16.
+ *      petronic on 07.05.16.
  */
 public final class CitiesImpl implements Cities {
 
@@ -20,6 +20,10 @@ public final class CitiesImpl implements Cities {
         this.cities = Collections.unmodifiableList(cities);
     }
 
+    public CitiesImpl(Cities cities) {
+        this.cities = Collections.unmodifiableList(cities.getCities());
+    }
+
     protected CitiesImpl(Parcel parcel) {
         this.cities = Collections.unmodifiableList(parcel.createTypedArrayList(CityImpl.CREATOR));
     }
@@ -27,6 +31,21 @@ public final class CitiesImpl implements Cities {
     @Override
     public List<City> getCities() {
         return Collections.unmodifiableList(cities);
+    }
+
+    @Override
+    public Boolean isNull() {
+        return false;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(cities);
     }
 
     public static final Creator<Cities> CREATOR = new Creator<Cities>() {
@@ -42,15 +61,5 @@ public final class CitiesImpl implements Cities {
         }
 
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(cities);
-    }
 
 }

@@ -63,5 +63,6 @@ public interface Order extends Parcelable {
     ClientRate getClientRate();
 
     Boolean isActive();
+    Boolean isNull();
 
 }

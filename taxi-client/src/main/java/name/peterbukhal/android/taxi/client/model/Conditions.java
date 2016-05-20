@@ -20,5 +20,6 @@ public interface Conditions extends Parcelable {
     Boolean getBonusPay();
     Boolean getYellowNumbers();
     Boolean getInAppPay();
+    Boolean isNull();
 
 }

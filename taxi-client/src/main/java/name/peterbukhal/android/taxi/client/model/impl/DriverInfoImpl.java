@@ -77,6 +77,11 @@ public final class DriverInfoImpl implements DriverInfo {
     }
 
     @Override
+    public Boolean isNull() {
+        return false;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

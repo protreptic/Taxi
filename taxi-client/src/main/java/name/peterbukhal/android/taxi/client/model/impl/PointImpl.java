@@ -6,7 +6,7 @@ import name.peterbukhal.android.taxi.client.model.Point;
 
 /**
  * Created by
- * petronic on 07.05.16.
+ *      petronic on 07.05.16.
  */
 public final class PointImpl implements Point {
 
@@ -16,6 +16,11 @@ public final class PointImpl implements Point {
     public PointImpl(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public PointImpl(Point point) {
+        this.latitude = point.getLatitude();
+        this.longitude = point.getLongitude();
     }
 
     protected PointImpl(Parcel parcel) {
@@ -31,6 +36,16 @@ public final class PointImpl implements Point {
     @Override
     public Double getLongitude() {
         return longitude;
+    }
+
+    @Override
+    public Boolean isNull() {
+        return false;
+    }
+
+    @Override
+    public Boolean isZero() {
+        return (latitude == 0.0D && longitude == 0.0D);
     }
 
     @Override

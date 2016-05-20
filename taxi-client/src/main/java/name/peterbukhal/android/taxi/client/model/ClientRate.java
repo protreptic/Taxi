@@ -10,5 +10,6 @@ public interface ClientRate extends Parcelable {
 
     Long getRate();
     String getComment();
+    Boolean isNull();
 
 }

@@ -2,7 +2,6 @@ package name.peterbukhal.android.taxi.client.model.impl;
 
 import android.os.Parcel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -17,17 +16,47 @@ import name.peterbukhal.android.taxi.client.model.UserInfo;
  */
 public final class UserInfoImpl implements UserInfo {
 
-    private String name;
-    private Long bonuses;
-    private String phoneNumber;
-    private Long bonusValid;
-    private Long bonusRate;
-    private Long friendBonusRate;
-    private Long clientRegisterPresent;
-    private List<Tariff> tariffs = new ArrayList<>();
-    private String friendShareText;
-    private String friendShareUrl;
-    private Promo promo;
+    private final String name;
+    private final Long bonuses;
+    private final String phoneNumber;
+    private final Long bonusValid;
+    private final Long bonusRate;
+    private final Long friendBonusRate;
+    private final Long clientRegisterPresent;
+    private final List<Tariff> tariffs;
+    private final String friendShareText;
+    private final String friendShareUrl;
+    private final Promo promo;
+
+    public UserInfoImpl(String name, Long bonuses, String phoneNumber, Long bonusValid, Long bonusRate,
+                        Long friendBonusRate, Long clientRegisterPresent, List<Tariff> tariffs,
+                        String friendShareText, String friendShareUrl, Promo promo) {
+        this.name = name;
+        this.bonuses = bonuses;
+        this.phoneNumber = phoneNumber;
+        this.bonusValid = bonusValid;
+        this.bonusRate = bonusRate;
+        this.friendBonusRate = friendBonusRate;
+        this.clientRegisterPresent = clientRegisterPresent;
+        this.tariffs = Collections.unmodifiableList(tariffs);
+        this.friendShareText = friendShareText;
+        this.friendShareUrl = friendShareUrl;
+        this.promo = promo;
+    }
+
+    public UserInfoImpl(UserInfo userInfo) {
+        this.name = userInfo.getName();
+        this.bonuses = userInfo.getBonuses();
+        this.phoneNumber = userInfo.getPhoneNumber();
+        this.bonusValid = userInfo.getBonusValid();
+        this.bonusRate = userInfo.getBonusRate();
+        this.friendBonusRate = userInfo.getFriendBonusRate();
+        this.clientRegisterPresent = userInfo.getClientRegisterPresent();
+        this.tariffs = Collections.unmodifiableList(userInfo.getTariffs());
+        this.friendShareText = userInfo.getFriendShareText();
+        this.friendShareUrl = userInfo.getFriendShareUrl();
+        this.promo = userInfo.getPromo();
+    }
 
     protected UserInfoImpl(Parcel in) {
         name = in.readString();
@@ -41,31 +70,6 @@ public final class UserInfoImpl implements UserInfo {
         friendShareText = in.readString();
         friendShareUrl = in.readString();
         promo = in.readParcelable(null);
-    }
-
-    public static final Creator<UserInfoImpl> CREATOR = new Creator<UserInfoImpl>() {
-        @Override
-        public UserInfoImpl createFromParcel(Parcel in) {
-            return new UserInfoImpl(in);
-        }
-
-        @Override
-        public UserInfoImpl[] newArray(int size) {
-            return new UserInfoImpl[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(phoneNumber);
-        dest.writeString(friendShareText);
-        dest.writeString(friendShareUrl);
     }
 
     @Override
@@ -122,4 +126,37 @@ public final class UserInfoImpl implements UserInfo {
     public Promo getPromo() {
         return promo;
     }
+
+    @Override
+    public Boolean isNull() {
+        return false;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(phoneNumber);
+        dest.writeString(friendShareText);
+        dest.writeString(friendShareUrl);
+    }
+
+    public static final Creator<UserInfoImpl> CREATOR = new Creator<UserInfoImpl>() {
+
+        @Override
+        public UserInfoImpl createFromParcel(Parcel in) {
+            return new UserInfoImpl(in);
+        }
+
+        @Override
+        public UserInfoImpl[] newArray(int size) {
+            return new UserInfoImpl[size];
+        }
+
+    };
+
 }

@@ -10,5 +10,12 @@ public interface City extends Parcelable {
 
     Long getId();
     String getName();
+    String getApiUrl();
+    Point getPoint();
+    SpnPoint getSpnPoint();
+    Boolean getTransfers();
+    String[] getInAppPayMethods();
+    Long getExperimentalEconomPlus();
+    Boolean isNull();
 
 }

@@ -12,5 +12,6 @@ public interface CarInfo extends Parcelable {
     String getColor();
     Long getCategory();
     String getNumber();
+    Boolean isNull();
 
 }

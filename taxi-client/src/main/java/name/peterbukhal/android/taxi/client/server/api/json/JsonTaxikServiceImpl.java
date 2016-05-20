@@ -10,6 +10,7 @@ import name.peterbukhal.android.taxi.client.model.Order;
 import name.peterbukhal.android.taxi.client.model.Orders;
 import name.peterbukhal.android.taxi.client.model.Point;
 import name.peterbukhal.android.taxi.client.model.RoutePoint;
+import name.peterbukhal.android.taxi.client.model.SpnPoint;
 import name.peterbukhal.android.taxi.client.model.Tariff;
 import name.peterbukhal.android.taxi.client.server.api.json.model.CitiesDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.CitiesSerializer;
@@ -25,6 +26,8 @@ import name.peterbukhal.android.taxi.client.server.api.json.model.PointDeseriali
 import name.peterbukhal.android.taxi.client.server.api.json.model.PointSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.RoutePointDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.RoutePointSerializer;
+import name.peterbukhal.android.taxi.client.server.api.json.model.SpnPointDeserializer;
+import name.peterbukhal.android.taxi.client.server.api.json.model.SpnPointSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.TariffDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.model.TariffSerializer;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrderDetailsRequest;
@@ -125,6 +128,8 @@ public final class JsonTaxikServiceImpl {
                 .registerTypeAdapter(SubmitOrderCreateRequest.class, new SubmitOrderCreateRequestDeserializer())
                 .registerTypeAdapter(SubmitOrderCreateResponse.class, new SubmitOrderCreateResponseSerializer())
                 .registerTypeAdapter(SubmitOrderCreateResponse.class, new SubmitOrderCreateResponseDeserializer())
+                .registerTypeAdapter(SpnPoint.class, new SpnPointSerializer())
+                .registerTypeAdapter(SpnPoint.class, new SpnPointDeserializer())
                 .serializeNulls()
                 .create();
 

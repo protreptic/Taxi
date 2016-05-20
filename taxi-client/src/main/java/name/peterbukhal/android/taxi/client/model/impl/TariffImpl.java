@@ -6,7 +6,7 @@ import name.peterbukhal.android.taxi.client.model.Tariff;
 
 /**
  * Created by
- * petronic on 25.03.16.
+ *      petronic on 25.03.16.
  */
 public final class TariffImpl implements Tariff {
 
@@ -22,24 +22,19 @@ public final class TariffImpl implements Tariff {
         this.order = order;
     }
 
+    public TariffImpl(Tariff tariff) {
+        this.id = tariff.getId();
+        this.name = tariff.getName();
+        this.rate = tariff.getRate();
+        this.order = tariff.getOrder();
+    }
+
     protected TariffImpl(Parcel in) {
         id = in.readLong();
         name = in.readString();
         rate = in.readLong();
         order = in.readLong();
     }
-
-    public static final Creator<TariffImpl> CREATOR = new Creator<TariffImpl>() {
-        @Override
-        public TariffImpl createFromParcel(Parcel in) {
-            return new TariffImpl(in);
-        }
-
-        @Override
-        public TariffImpl[] newArray(int size) {
-            return new TariffImpl[size];
-        }
-    };
 
     @Override
     public Long getId() {
@@ -62,6 +57,11 @@ public final class TariffImpl implements Tariff {
     }
 
     @Override
+    public Boolean isNull() {
+        return false;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -73,5 +73,19 @@ public final class TariffImpl implements Tariff {
         dest.writeLong(rate);
         dest.writeLong(order);
     }
+
+    public static final Creator<TariffImpl> CREATOR = new Creator<TariffImpl>() {
+
+        @Override
+        public TariffImpl createFromParcel(Parcel in) {
+            return new TariffImpl(in);
+        }
+
+        @Override
+        public TariffImpl[] newArray(int size) {
+            return new TariffImpl[size];
+        }
+
+    };
 
 }

@@ -11,5 +11,6 @@ import java.util.List;
 public interface Cities extends Parcelable {
 
     List<City> getCities();
+    Boolean isNull();
 
 }

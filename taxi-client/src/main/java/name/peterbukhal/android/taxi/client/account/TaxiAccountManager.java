@@ -163,6 +163,7 @@ public class TaxiAccountManager {
         }
 
         class AccountHolder {
+
             TextView name;
             TextView type;
 
@@ -170,6 +171,7 @@ public class TaxiAccountManager {
                 name = (TextView) view.findViewById(R.id.account_name);
                 type = (TextView) view.findViewById(R.id.account_type);
             }
+
         }
 
     }

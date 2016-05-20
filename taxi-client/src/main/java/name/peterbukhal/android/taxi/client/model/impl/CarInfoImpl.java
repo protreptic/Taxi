@@ -57,6 +57,11 @@ public final class CarInfoImpl implements CarInfo {
     }
 
     @Override
+    public Boolean isNull() {
+        return false;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

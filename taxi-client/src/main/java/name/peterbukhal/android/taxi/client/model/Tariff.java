@@ -4,7 +4,7 @@ import android.os.Parcelable;
 
 /**
  * Created by
- * petronic on 25.03.16.
+ *      petronic on 25.03.16.
  */
 public interface Tariff extends Parcelable {
 
@@ -12,5 +12,6 @@ public interface Tariff extends Parcelable {
     String getName();
     Long getRate();
     Long getOrder();
+    Boolean isNull();
 
 }

@@ -9,6 +9,9 @@ import java.util.List;
  *      petronic on 21.03.16.
  */
 public interface Orders extends Parcelable {
+
     List<Order> getOrders();
     Integer getTotalCount();
+    Boolean isNull();
+
 }

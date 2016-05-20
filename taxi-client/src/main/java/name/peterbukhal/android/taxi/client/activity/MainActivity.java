@@ -16,6 +16,7 @@ import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmRegistrationBroad
 import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmRegistrationService;
 import name.peterbukhal.android.taxi.client.service.ntp.NtpService;
 
+import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.EXTRA_ACCOUNT;
 import static name.peterbukhal.android.taxi.client.account.TaxiClientAccount.ACCOUNT_AUTHORITY;
 
 public class MainActivity extends TaxiActivity {
@@ -24,11 +25,24 @@ public class MainActivity extends TaxiActivity {
     private Account mAccount;
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(EXTRA_ACCOUNT, mAccount);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
-        mAccount = getIntent().getParcelableExtra(TaxiAccountManager.EXTRA_ACCOUNT);
+
+        if (savedInstanceState != null
+                && savedInstanceState.containsKey(EXTRA_ACCOUNT)) {
+            mAccount = savedInstanceState.getParcelable(EXTRA_ACCOUNT);
+        } else {
+            mAccount = getIntent().getParcelableExtra(EXTRA_ACCOUNT);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -48,8 +62,15 @@ public class MainActivity extends TaxiActivity {
         mBroadcastManager.registerReceiver(gcmNewMessageReceiver,
                 new IntentFilter(TaxiGcmListenerService.ACTION_GCM_NEW_MESSAGE));
 
+        /**
+         * Start NTP service.
+         */
         startService(new Intent(getApplicationContext(), NtpService.class));
-        startService(new Intent(getApplicationContext(), OrderStateMonitoringService.class));
+
+        Intent intent = new Intent(getApplicationContext(), OrderStateMonitoringService.class);
+        intent.putExtra(TaxiAccountManager.EXTRA_ACCOUNT, mAccount);
+
+        startService(intent);
     }
 
     @Override

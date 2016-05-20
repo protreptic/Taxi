@@ -11,7 +11,7 @@ import name.peterbukhal.android.taxi.client.model.Orders;
 
 /**
  * Created by
- * petronic on 07.05.16.
+ *      petronic on 07.05.16.
  */
 public final class OrdersImpl implements Orders {
 
@@ -21,21 +21,13 @@ public final class OrdersImpl implements Orders {
         this.orders = Collections.unmodifiableList(orders);
     }
 
+    public OrdersImpl(Orders orders) {
+        this.orders = Collections.unmodifiableList(orders.getOrders());
+    }
+
     protected OrdersImpl(Parcel parcel) {
         this.orders = Collections.unmodifiableList(parcel.createTypedArrayList(OrderImpl.CREATOR));
     }
-
-    public static final Parcelable.Creator<Orders> CREATOR = new Parcelable.Creator<Orders>() {
-        @Override
-        public Orders createFromParcel(Parcel in) {
-            return new OrdersImpl(in);
-        }
-
-        @Override
-        public Orders[] newArray(int size) {
-            return new Orders[size];
-        }
-    };
 
     public List<Order> getOrders() {
         return Collections.unmodifiableList(orders);
@@ -43,6 +35,11 @@ public final class OrdersImpl implements Orders {
 
     public Integer getTotalCount() {
         return orders.size();
+    }
+
+    @Override
+    public Boolean isNull() {
+        return false;
     }
 
     @Override
@@ -54,5 +51,19 @@ public final class OrdersImpl implements Orders {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(orders);
     }
+
+    public static final Parcelable.Creator<Orders> CREATOR = new Parcelable.Creator<Orders>() {
+
+        @Override
+        public Orders createFromParcel(Parcel in) {
+            return new OrdersImpl(in);
+        }
+
+        @Override
+        public Orders[] newArray(int size) {
+            return new Orders[size];
+        }
+
+    };
 
 }

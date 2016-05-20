@@ -29,6 +29,16 @@ public final class PromoImpl implements Promo {
         this.twitterText = twitterText;
     }
 
+    public PromoImpl(Promo promo) {
+        this.promoCode = promo.getPromoCode();
+        this.inviteBonus = promo.getInvitedBonus();
+        this.selfBonus = promo.getSelfBonus();
+        this.orderMinPrice = promo.getOrderMinPrice();
+        this.appText = promo.getAppText();
+        this.socialText = promo.getSocialText();
+        this.twitterText = promo.getTwitterText();
+    }
+
     protected PromoImpl(Parcel in) {
         promoCode = in.readString();
         inviteBonus = in.readLong();
@@ -72,6 +82,11 @@ public final class PromoImpl implements Promo {
     @Override
     public String getTwitterText() {
         return twitterText;
+    }
+
+    @Override
+    public Boolean isNull() {
+        return false;
     }
 
     @Override

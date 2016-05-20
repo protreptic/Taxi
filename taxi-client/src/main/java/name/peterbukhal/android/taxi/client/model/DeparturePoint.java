@@ -4,7 +4,10 @@ import android.os.Parcelable;
 
 /**
  * Created by
- * petronic on 09.05.16.
+ *      petronic on 09.05.16.
  */
 public interface DeparturePoint extends Parcelable {
+
+    Boolean isNull();
+
 }

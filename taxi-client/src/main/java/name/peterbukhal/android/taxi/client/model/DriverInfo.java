@@ -14,5 +14,6 @@ public interface DriverInfo extends Parcelable {
     Long getRatingCount();
     String getPhoneNumber();
     CarInfo getCarInfo();
+    Boolean isNull();
 
 }

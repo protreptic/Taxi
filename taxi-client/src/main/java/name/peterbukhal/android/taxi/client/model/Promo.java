@@ -4,7 +4,7 @@ import android.os.Parcelable;
 
 /**
  * Created by
- * petronic on 25.03.16.
+ *      petronic on 25.03.16.
  */
 public interface Promo extends Parcelable {
 
@@ -15,5 +15,6 @@ public interface Promo extends Parcelable {
     String getAppText();
     String getSocialText();
     String getTwitterText();
+    Boolean isNull();
 
 }

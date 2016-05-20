@@ -7,7 +7,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 /**
  * This class represents a NTP message, as specified in RFC 2030.  The message
  * format is compatible with all versions of NTP and SNTP.
@@ -251,8 +250,8 @@ public class NtpMessage implements Parcelable {
 	public NtpMessage() {
 		// Note that all the other member variables are already set with
 		// appropriate default values.
-		this.mode = 3;
-		this.transmitTimestamp = (System.currentTimeMillis()/1000.0) + 2208988800.0; 
+		mode = 3;
+		transmitTimestamp = (System.currentTimeMillis() / 1000.0) + 2208988800.0;
 	}
 
     protected NtpMessage(Parcel in) {

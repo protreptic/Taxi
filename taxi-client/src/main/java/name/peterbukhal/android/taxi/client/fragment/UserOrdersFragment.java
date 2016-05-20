@@ -33,8 +33,12 @@ public class UserOrdersFragment extends Fragment {
         return fragment;
     }
 
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
@@ -42,10 +46,11 @@ public class UserOrdersFragment extends Fragment {
         ViewGroup contentView = (ViewGroup) inflater.inflate(R.layout.f_user_orders, container, false);
 
         if (contentView != null) {
-            viewPager = (ViewPager) contentView.findViewById(R.id.fragment_user_orders_pager);
+            ViewPager viewPager = (ViewPager) contentView.findViewById(R.id.fragment_user_orders_pager);
             viewPager.setOffscreenPageLimit(2);
+            viewPager.setAdapter(new UserOrdersPagerAdapter());
 
-            tabLayout = (TabLayout) contentView.findViewById(R.id.fragment_user_orders_pager_tabs);
+            TabLayout tabLayout = (TabLayout) contentView.findViewById(R.id.fragment_user_orders_pager_tabs);
             tabLayout.setupWithViewPager(viewPager);
         }
 
@@ -69,8 +74,6 @@ public class UserOrdersFragment extends Fragment {
             mAccount = savedInstanceState.getParcelable(ARG_ACCOUNT);
         } else if (getArguments() != null && getArguments().containsKey(ARG_ACCOUNT)) {
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
-
-            viewPager.setAdapter(new UserOrdersPagerAdapter());
         }
     }
 

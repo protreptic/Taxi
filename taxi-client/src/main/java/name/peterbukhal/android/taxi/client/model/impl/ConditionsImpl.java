@@ -71,20 +71,6 @@ public final class ConditionsImpl implements Conditions {
         this.inAppPay = (Boolean) parcel.readValue(Boolean.class.getClassLoader());
     }
 
-    public static final Creator<Conditions> CREATOR = new Creator<Conditions>() {
-
-        @Override
-        public Conditions createFromParcel(Parcel in) {
-            return new ConditionsImpl(in);
-        }
-
-        @Override
-        public Conditions[] newArray(int size) {
-            return new Conditions[size];
-        }
-
-    };
-
     @Override
     public Long getCarCategory() {
         return carCategory;
@@ -120,6 +106,7 @@ public final class ConditionsImpl implements Conditions {
         return childSit;
     }
 
+    @Override
     public Boolean getPaymentSlip() {
         return paymentSlip;
     }
@@ -139,8 +126,14 @@ public final class ConditionsImpl implements Conditions {
         return yellowNumbers;
     }
 
+    @Override
     public Boolean getInAppPay() {
         return inAppPay;
+    }
+
+    @Override
+    public Boolean isNull() {
+        return false;
     }
 
     @Override
@@ -163,5 +156,19 @@ public final class ConditionsImpl implements Conditions {
         dest.writeValue(yellowNumbers);
         dest.writeValue(inAppPay);
     }
+
+    public static final Creator<Conditions> CREATOR = new Creator<Conditions>() {
+
+        @Override
+        public Conditions createFromParcel(Parcel in) {
+            return new ConditionsImpl(in);
+        }
+
+        @Override
+        public Conditions[] newArray(int size) {
+            return new Conditions[size];
+        }
+
+    };
 
 }

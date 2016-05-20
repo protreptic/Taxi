@@ -79,7 +79,8 @@ public class OrdersFragment extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getFragmentManager()
+                    getActivity()
+                            .getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.main_content, OrderFragment.newInstance(order))
                             .addToBackStack(null)

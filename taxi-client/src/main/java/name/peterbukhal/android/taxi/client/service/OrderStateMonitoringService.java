@@ -1,7 +1,7 @@
 package name.peterbukhal.android.taxi.client.service;
 
+import android.accounts.Account;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -36,7 +36,7 @@ public class OrderStateMonitoringService extends Service {
     private static final String LOG_TAG = "OrderStateMonitoring";
 
     private TaxiAccountManager mAccountManager;
-    private String token;
+    private String mToken;
     private JsonTaxikService mTaxikService;
     private ScheduledExecutorService mExecutorService;
     private LocalBroadcastManager mBroadcastManager;
@@ -60,7 +60,7 @@ public class OrderStateMonitoringService extends Service {
 
         final Call<Orders> request =
                 mTaxikService.queryOrders(
-                        new QueryOrdersRequest(token, 0, 5, QueryOrdersRequest.OrderType.ACTIVE));
+                        new QueryOrdersRequest(mToken, 0, 5, QueryOrdersRequest.OrderType.ACTIVE));
 
         request.enqueue(new Callback<Orders>() {
 
@@ -127,10 +127,12 @@ public class OrderStateMonitoringService extends Service {
 
                     if (!mIsStopped) {
                         mExecutorService.schedule(new Runnable() {
+
                             @Override
                             public void run() {
                                 updateOrders();
                             }
+
                         }, 30, TimeUnit.SECONDS);
                     }
                 }
@@ -162,11 +164,18 @@ public class OrderStateMonitoringService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        token = getSharedPreferences("main", Context.MODE_PRIVATE).getString("token", "");
+        if (intent.getExtras() != null
+                && intent.getExtras().containsKey(TaxiAccountManager.EXTRA_ACCOUNT)) {
+            mToken = mAccountManager.peekAuthToken(
+                    (Account) intent.getParcelableExtra(TaxiAccountManager.EXTRA_ACCOUNT));
 
-        updateOrders();
+            updateOrders();
 
-        Log.d(LOG_TAG, "Service started.");
+            Log.d(LOG_TAG, "Service started.");
+        } else {
+            Log.d(LOG_TAG, "Account not found.");
+            stopSelf();
+        }
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -176,7 +185,6 @@ public class OrderStateMonitoringService extends Service {
         super.onDestroy();
 
         mExecutorService.shutdown();
-
         mIsStopped = true;
         Log.d(LOG_TAG, "Service stopped.");
     }
