@@ -31,9 +31,9 @@ import retrofit2.Response;
  * Created by
  *      petronic on 09.05.16.
  */
-public class OrderStateMonitoringService extends Service {
+public class OrderMonitoringService extends Service {
 
-    private static final String LOG_TAG = "OrderStateMonitoring";
+    private static final String LOG_TAG = "OrderMonitoring";
 
     private TaxiAccountManager mAccountManager;
     private String mToken;
@@ -78,7 +78,6 @@ public class OrderStateMonitoringService extends Service {
 
                     for (Order order : activeOrders) {
                         synchronized (monitoringQueue) {
-                            if (order.isActive()) {
                                 if (monitoringQueue.containsKey(order)) {
                                     Order.ProgressState currentProgressState =
                                             monitoringQueue.get(order).peek();
@@ -115,13 +114,6 @@ public class OrderStateMonitoringService extends Service {
 
                                     broadcastOrderState(order);
                                 }
-                            } else {
-                                if (monitoringQueue.containsKey(order)) {
-                                    monitoringQueue.remove(order);
-
-                                    broadcastOrderState(order);
-                                }
-                            }
                         }
                     }
 
@@ -148,7 +140,7 @@ public class OrderStateMonitoringService extends Service {
     }
 
     public static final String ACTION_ORDER_STATE_CHANGED =
-            "name.peterbukhal.android.taxi.client.service.action.ACTION_ORDER_STATE_CHANGED";
+            "name.peterbukhal.android.taxi.client.service.action.ACTION_ORDER_STATUS_CHANGED";
 
     public static final String EXTRA_ORDER = "extra_order";
 

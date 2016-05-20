@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import name.peterbukhal.android.taxi.client.R;
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
+import name.peterbukhal.android.taxi.client.account.TaxiClientAccount;
 import name.peterbukhal.android.taxi.client.fragment.AboutFragment;
 import name.peterbukhal.android.taxi.client.fragment.CreateOrderFragment;
 import name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment;
@@ -76,55 +77,15 @@ public abstract class TaxiActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .withHasStableIds(true)
                 .withDrawerItems(generateDrawerItems())
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        Integer identifier = (int) drawerItem.getIdentifier();
-
-                        switch (identifier) {
-                            case MENU_ITEM_CREATE_ORDER: {
-                                if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_CREATE_ORDER) != null) break;
-
-                                fragmentManager
-                                        .beginTransaction()
-                                        .replace(R.id.main_content,
-                                                CreateOrderFragment.newInstance(mAccount),
-                                                FRAGMENT_TAG_CREATE_ORDER)
-                                        .commit();
-                            } break;
-                            case MENU_ITEM_ORDERS: {
-                                if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null) break;
-
-                                fragmentManager
-                                        .beginTransaction()
-                                        .replace(R.id.main_content,
-                                                UserOrdersFragment.newInstance(mAccount),
-                                                FRAGMENT_TAG_USER_ORDERS)
-                                        .commit();
-                            } break;
-                            case MENU_ITEM_ABOUT: {
-                                if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null) break;
-
-                                fragmentManager
-                                        .beginTransaction()
-                                        .replace(R.id.main_content,
-                                                AboutFragment.newInstance(),
-                                                FRAGMENT_TAG_ABOUT)
-                                        .commit();
-                            } break;
-                            default: {
-                                Toast.makeText(getApplicationContext(), drawerItem.toString(), Toast.LENGTH_SHORT).show();
-                            } break;
-                        }
-
-                        return false;
-                    }
-                })
+                .withOnDrawerItemClickListener(mDrawerItemClickListener)
                 .withAccountHeader(generateAccountHeader())
+                .withActionBarDrawerToggle(true)
+                .withActionBarDrawerToggleAnimated(true)
                 .build();
 
-        mDrawer.setSelection(MENU_ITEM_CREATE_ORDER, true);
+        if (savedInstanceState == null) {
+            mDrawer.setSelection(MENU_ITEM_CREATE_ORDER, true);
+        }
     }
 
     private static final int MENU_ITEM_CREATE_ORDER = 41231;
@@ -151,6 +112,54 @@ public abstract class TaxiActivity extends AppCompatActivity {
 
         return items;
     }
+
+    private Drawer.OnDrawerItemClickListener mDrawerItemClickListener = new Drawer.OnDrawerItemClickListener() {
+
+        @Override
+        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Integer identifier = (int) drawerItem.getIdentifier();
+
+            switch (identifier) {
+                case MENU_ITEM_CREATE_ORDER: {
+                    if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_CREATE_ORDER) != null) break;
+
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.main_content,
+                                    CreateOrderFragment.newInstance(mAccount),
+                                    FRAGMENT_TAG_CREATE_ORDER)
+                            .commit();
+                } break;
+                case MENU_ITEM_ORDERS: {
+                    if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null) break;
+
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.main_content,
+                                    UserOrdersFragment.newInstance(mAccount),
+                                    FRAGMENT_TAG_USER_ORDERS)
+                            .commit();
+                } break;
+                case MENU_ITEM_ABOUT: {
+                    if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null) break;
+
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.main_content,
+                                    AboutFragment.newInstance(),
+                                    FRAGMENT_TAG_ABOUT)
+                            .commit();
+                } break;
+                default: {
+                    Toast.makeText(getApplicationContext(), drawerItem.toString(), Toast.LENGTH_SHORT).show();
+                } break;
+            }
+
+            return false;
+        }
+
+    };
 
     private static final int ADD_ACCOUNT_ID = 100000;
     private static final int MANAGE_ACCOUNTS = 100001;
@@ -221,7 +230,7 @@ public abstract class TaxiActivity extends AppCompatActivity {
                             case MANAGE_ACCOUNTS: {
                                 Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
                                 intent.putExtra(Settings.EXTRA_AUTHORITIES, new String[] {
-                                        "name.peterbukhal.android.taxi.client"
+                                        TaxiClientAccount.ACCOUNT_AUTHORITY
                                 });
 
                                 startActivity(intent);
@@ -251,6 +260,11 @@ public abstract class TaxiActivity extends AppCompatActivity {
             return;
         }
 
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStackImmediate();
+            return;
+        }
+
         /**
          *   Если пользователь нажал на стрелку назад, то ждем повторного нажатия на
          *   стрелку прежде как выходим из приложения и выводим сообщение, то что,
@@ -272,7 +286,8 @@ public abstract class TaxiActivity extends AppCompatActivity {
                         }
                     }, 2, TimeUnit.SECONDS);
 
-            Toast.makeText(getApplicationContext(), R.string.app_exit, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.app_exit,
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

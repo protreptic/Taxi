@@ -28,7 +28,7 @@ import name.peterbukhal.android.taxi.client.server.api.json.JsonTaxikServiceImpl
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersRequest.OrderType;
 import name.peterbukhal.android.taxi.client.model.impl.OrdersImpl;
-import name.peterbukhal.android.taxi.client.service.OrderStateMonitoringService;
+import name.peterbukhal.android.taxi.client.service.OrderMonitoringService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -195,7 +195,7 @@ public class OrdersFragment extends Fragment {
         super.onStart();
 
         mBroadcastManager.registerReceiver(orderStateChangedReceiver,
-                new IntentFilter(OrderStateMonitoringService.ACTION_ORDER_STATE_CHANGED));
+                new IntentFilter(OrderMonitoringService.ACTION_ORDER_STATE_CHANGED));
     }
 
     @Override

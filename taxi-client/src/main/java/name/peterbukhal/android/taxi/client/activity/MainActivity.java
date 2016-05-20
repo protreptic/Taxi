@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
-import name.peterbukhal.android.taxi.client.service.OrderStateMonitoringService;
+import name.peterbukhal.android.taxi.client.service.OrderMonitoringService;
 import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmListenerService;
 import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmMessageBroadcastReceiver;
 import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmRegistrationBroadcastReceiver;
@@ -29,6 +29,11 @@ public class MainActivity extends TaxiActivity {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(EXTRA_ACCOUNT, mAccount);
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return super.onRetainCustomNonConfigurationInstance();
     }
 
     @Override
@@ -67,7 +72,7 @@ public class MainActivity extends TaxiActivity {
          */
         startService(new Intent(getApplicationContext(), NtpService.class));
 
-        Intent intent = new Intent(getApplicationContext(), OrderStateMonitoringService.class);
+        Intent intent = new Intent(getApplicationContext(), OrderMonitoringService.class);
         intent.putExtra(TaxiAccountManager.EXTRA_ACCOUNT, mAccount);
 
         startService(intent);
@@ -81,7 +86,7 @@ public class MainActivity extends TaxiActivity {
         mBroadcastManager.unregisterReceiver(gcmNewMessageReceiver);
 
         stopService(new Intent(getApplicationContext(), NtpService.class));
-        stopService(new Intent(getApplicationContext(), OrderStateMonitoringService.class));
+        stopService(new Intent(getApplicationContext(), OrderMonitoringService.class));
     }
 
 }

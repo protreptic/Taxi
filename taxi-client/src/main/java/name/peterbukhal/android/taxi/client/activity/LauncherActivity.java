@@ -36,9 +36,6 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     private void signIn(Account account) {
-        String accountToken = mAccountManager.peekAuthToken(account);
-
-        mAccountManager.invalidateAuthToken(accountToken);
         mAccountManager.getAuthToken(account, new AccountManagerCallback<Bundle>() {
 
             @Override
@@ -52,10 +49,25 @@ public class LauncherActivity extends AppCompatActivity {
                     if (keyIntent != null) {
                         signUp();
                     } else {
-                        String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
-                        String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
+                        if (bundle.containsKey(AccountManager.KEY_ACCOUNT_NAME)
+                                && bundle.containsKey(AccountManager.KEY_ACCOUNT_TYPE)) {
+                            String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
+                            String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
 
-                        runApplication(new Account(accountName, accountType));
+                            runApplication(new Account(accountName, accountType));
+                        } else {
+                            new AlertDialog.Builder(getApplicationContext())
+                                    .setTitle("Title")
+                                    .setMessage("Message")
+                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                                        @Override
+                                        public void onCancel(DialogInterface dialog) {
+                                            finish();
+                                        }
+                                    })
+                                    .show();
+                        }
                     }
                 } catch (OperationCanceledException e) {
                     pickUpAccountDialog();

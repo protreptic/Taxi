@@ -1,10 +1,13 @@
 package name.peterbukhal.android.taxi.client.fragment;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +15,6 @@ import android.view.ViewGroup;
 
 import name.peterbukhal.android.taxi.client.R;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersRequest.OrderType;
-import name.peterbukhal.android.taxi.client.unused.Fragment1;
 
 /**
  * Created by
@@ -40,24 +42,26 @@ public class UserOrdersFragment extends Fragment {
         setRetainInstance(true);
     }
 
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup contentView = (ViewGroup) inflater.inflate(R.layout.f_user_orders, container, false);
 
         if (contentView != null) {
-            ViewPager viewPager = (ViewPager) contentView.findViewById(R.id.fragment_user_orders_pager);
-            viewPager.setOffscreenPageLimit(2);
-            viewPager.setAdapter(new UserOrdersPagerAdapter());
+            mViewPager = (ViewPager) contentView.findViewById(R.id.fragment_user_orders_pager);
+            mViewPager.setOffscreenPageLimit(2);
 
-            TabLayout tabLayout = (TabLayout) contentView.findViewById(R.id.fragment_user_orders_pager_tabs);
-            tabLayout.setupWithViewPager(viewPager);
+            mTabLayout = (TabLayout) contentView.findViewById(R.id.fragment_user_orders_pager_tabs);
         }
 
         return contentView;
     }
 
     private Account mAccount;
+    private UserOrdersPagerAdapter mAdapter;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -71,16 +75,26 @@ public class UserOrdersFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ACCOUNT)) {
-            mAccount = savedInstanceState.getParcelable(ARG_ACCOUNT);
+            mAdapter = new UserOrdersPagerAdapter(getActivity(), getChildFragmentManager(), mAccount);
         } else if (getArguments() != null && getArguments().containsKey(ARG_ACCOUNT)) {
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
+            mAdapter = new UserOrdersPagerAdapter(getActivity(), getChildFragmentManager(), mAccount);
         }
+
+        mViewPager.setAdapter(mAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    public class UserOrdersPagerAdapter extends Fragment1 {
+    public static class UserOrdersPagerAdapter extends FragmentPagerAdapter {
 
-        public UserOrdersPagerAdapter() {
-            super(getChildFragmentManager());
+        private Context mContext;
+        private Account mAccount;
+
+        public UserOrdersPagerAdapter(Context context, FragmentManager fragmentManager, Account account) {
+            super(fragmentManager);
+
+            mContext = context;
+            mAccount = account;
         }
 
         @Override
@@ -108,13 +122,13 @@ public class UserOrdersFragment extends Fragment {
 
             switch (position) {
                 case 0: {
-                    pageTitle = getString(R.string.active_orders);
+                    pageTitle = mContext.getString(R.string.active_orders);
                 } break;
                 case 1: {
-                    pageTitle = getString(R.string.canceled_orders);
+                    pageTitle = mContext.getString(R.string.canceled_orders);
                 } break;
                 case 2: {
-                    pageTitle = getString(R.string.finished_orders);
+                    pageTitle = mContext.getString(R.string.finished_orders);
                 } break;
             }
 
