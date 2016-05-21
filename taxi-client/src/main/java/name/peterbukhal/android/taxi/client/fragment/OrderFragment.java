@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mikepenz.materialdrawer.Drawer;
+
 import java.util.Locale;
 
 import name.peterbukhal.android.taxi.client.R;
@@ -73,7 +75,7 @@ public final class OrderFragment extends Fragment {
             mOrder = new NullOrder();
         }
 
-        if (mOrder.isNull()) {
+        if (!mOrder.isNull()) {
             tvOrder.setText(String.format(new Locale("ru", "RU"), "%d", mOrder.getId()));
         }
     }
@@ -82,7 +84,16 @@ public final class OrderFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        mActivity.showBackArrow();
+        mActivity.showBackArrow(new Drawer.OnDrawerNavigationListener() {
+            @Override
+            public boolean onNavigationClickListener(View clickedView) {
+                mActivity
+                        .getSupportFragmentManager()
+                        .popBackStack();
+
+                return true;
+            }
+        });
     }
 
     @Override
@@ -91,4 +102,5 @@ public final class OrderFragment extends Fragment {
 
         mActivity.showHamburger();
     }
+
 }

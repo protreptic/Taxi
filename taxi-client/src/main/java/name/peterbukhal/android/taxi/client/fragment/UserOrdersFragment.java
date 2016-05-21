@@ -39,7 +39,7 @@ public final class UserOrdersFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setRetainInstance(true);
+        setRetainInstance(false);
     }
 
     private ViewPager mViewPager;

@@ -27,6 +27,7 @@ public final class TaxiAccountManager {
     public static final String EXTRA_ACCOUNT = "extra_account";
     public static final String EXTRA_ACCOUNT_TOKEN = "extra_account_token";
     public static final String EXTRA_ACCOUNT_GCM_TOKEN = "extra_account_gcm_token";
+    public static final String EXTRA_DEFAULT_ACCOUNT = "extra_default_account";
 
     private static TaxiAccountManager sInstance;
 
@@ -94,6 +95,23 @@ public final class TaxiAccountManager {
 
     public PickUpAccountAdapter getAccountAdapter() {
         return new PickUpAccountAdapter(mContext, mAccounts);
+    }
+
+    public void setDefaultAccount(Account account) {
+        mContext
+                .getSharedPreferences("main", Context.MODE_PRIVATE)
+                .edit()
+                .putString(EXTRA_DEFAULT_ACCOUNT, account.name)
+                .apply();
+    }
+
+    private Account getDefaultAccount() {
+        String accountName =
+                mContext
+                    .getSharedPreferences("main", Context.MODE_PRIVATE)
+                    .getString(EXTRA_DEFAULT_ACCOUNT, "#");
+
+        return new TaxiClientAccount(accountName);
     }
 
     private static final Object LOCK_OBJECT = new Object();

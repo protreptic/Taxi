@@ -163,16 +163,20 @@ public final class OrdersFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
-        TaxiAccountManager accountManager = TaxiAccountManager.get(getActivity());
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ORDER_TYPE)) {
             mAccount = savedInstanceState.getParcelable(ARG_ACCOUNT);
             mOrderType = (OrderType) savedInstanceState.getSerializable(ARG_ORDER_TYPE);
             mToken = savedInstanceState.getString(EXTRA_TOKEN);
             mOrders = savedInstanceState.getParcelable(EXTRA_ORDERS);
+
+            mRecyclerView.setAdapter(mOrdersAdapter);
+            mProgressBar.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
         } else if (getArguments() != null && getArguments().containsKey(ARG_ORDER_TYPE)) {
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
             mOrderType = (OrderType) getArguments().getSerializable(ARG_ORDER_TYPE);
+            TaxiAccountManager accountManager = TaxiAccountManager.get(getActivity());
             mToken = accountManager.peekAuthToken(mAccount);
             mRecyclerView.setAdapter(mOrdersAdapter);
 
@@ -225,7 +229,7 @@ public final class OrdersFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Orders> call, Throwable t) {
-                Toast.makeText(getActivity(), "QueryOrders error!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Query orders failed", Toast.LENGTH_LONG).show();
 
                 mProgressBar.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);

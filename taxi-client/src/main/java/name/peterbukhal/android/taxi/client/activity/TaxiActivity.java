@@ -49,7 +49,7 @@ import static name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment.F
 
 /**
  * Created by
- *      petronic on 15.05.16.
+ * petronic on 15.05.16.
  */
 public abstract class TaxiActivity extends AppCompatActivity {
 
@@ -65,6 +65,7 @@ public abstract class TaxiActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(EXTRA_ACCOUNT, mAccount);
+        outState.putLong("111", mSelectedItem);
     }
 
     @Override
@@ -77,6 +78,7 @@ public abstract class TaxiActivity extends AppCompatActivity {
         mFragmentManager = getSupportFragmentManager();
         mAccountManager = TaxiAccountManager.get(getApplicationContext());
         mAccount = getIntent().getParcelableExtra(TaxiAccountManager.EXTRA_ACCOUNT);
+        mAccountManager.setDefaultAccount(mAccount);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -95,20 +97,26 @@ public abstract class TaxiActivity extends AppCompatActivity {
                 .withActionBarDrawerToggleAnimated(true)
                 .build();
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState != null && savedInstanceState.containsKey("111")) {
+            mDrawer.setSelection(savedInstanceState.getLong("111"), false);
+        } else {
             mDrawer.setSelection(MENU_ITEM_CREATE_ORDER, true);
         }
     }
+
+    private long mSelectedItem;
 
     @SuppressWarnings("unused")
     private void requestSync() {
         ContentResolver.requestSync(mAccount, ACCOUNT_AUTHORITY, Bundle.EMPTY);
     }
 
-    public void showBackArrow() {
+    public void showBackArrow(Drawer.OnDrawerNavigationListener listener) {
         mDrawer
                 .getActionBarDrawerToggle()
                 .setDrawerIndicatorEnabled(false);
+        mDrawer
+                .setOnDrawerNavigationListener(listener);
         mActionBar
                 .setDisplayHomeAsUpEnabled(true);
     }
@@ -116,6 +124,8 @@ public abstract class TaxiActivity extends AppCompatActivity {
     public void showHamburger() {
         mActionBar
                 .setDisplayHomeAsUpEnabled(false);
+        mDrawer
+                .setOnDrawerNavigationListener(null);
         mDrawer
                 .getActionBarDrawerToggle()
                 .setDrawerIndicatorEnabled(true);
@@ -151,10 +161,12 @@ public abstract class TaxiActivity extends AppCompatActivity {
         @Override
         public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
             Integer identifier = (int) drawerItem.getIdentifier();
+            mSelectedItem = identifier;
 
             switch (identifier) {
                 case MENU_ITEM_CREATE_ORDER: {
-                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_CREATE_ORDER) != null) break;
+                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_CREATE_ORDER) != null)
+                        break;
 
                     mFragmentManager
                             .beginTransaction()
@@ -162,7 +174,8 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                     CreateOrderFragment.newInstance(mAccount),
                                     FRAGMENT_TAG_CREATE_ORDER)
                             .commit();
-                } break;
+                }
+                break;
                 case MENU_ITEM_ORDERS: {
                     if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null) break;
 
@@ -172,7 +185,8 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                     UserOrdersFragment.newInstance(mAccount),
                                     FRAGMENT_TAG_USER_ORDERS)
                             .commit();
-                } break;
+                }
+                break;
                 case MENU_ITEM_ABOUT: {
                     if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null) break;
 
@@ -182,10 +196,12 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                     AboutFragment.newInstance(),
                                     FRAGMENT_TAG_ABOUT)
                             .commit();
-                } break;
+                }
+                break;
                 default: {
                     Toast.makeText(getApplicationContext(), drawerItem.toString(), Toast.LENGTH_SHORT).show();
-                } break;
+                }
+                break;
             }
 
             return false;
@@ -205,18 +221,17 @@ public abstract class TaxiActivity extends AppCompatActivity {
     }
 
     private AccountHeader generateAccountHeader() {
-        TaxiAccountManager accountManager = TaxiAccountManager.get(getApplicationContext());
         List<IProfile> profiles = new ArrayList<>();
 
-        for (Account account : accountManager.getAccounts()) {
+        for (Account account : mAccountManager.getAccounts()) {
             profiles.add(new ProfileDrawerItem()
-                    .withName(account.name)
-                    .withEmail("peter.bukhal@gmail.com")
+                    //.withName("")
+                    .withEmail(account.name)
                     .withIdentifier(account.hashCode())
                     .withTag(account));
         }
 
-        return new AccountHeaderBuilder()
+        AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
                 .withHeaderBackground(R.color.colorPrimaryDark)
@@ -258,19 +273,24 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                     }
 
                                 });
-                            } break;
+                            }
+                            break;
                             case MANAGE_ACCOUNTS: {
                                 Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
-                                intent.putExtra(Settings.EXTRA_AUTHORITIES, new String[] {
+                                intent.putExtra(Settings.EXTRA_AUTHORITIES, new String[]{
                                         TaxiClientAccount.ACCOUNT_AUTHORITY
                                 });
 
                                 startActivity(intent);
-                            } break;
+                            }
+                            break;
                             default: {
                                 ProfileDrawerItem profileDrawerItem = (ProfileDrawerItem) profile;
+                                Account account = (Account) profileDrawerItem.getTag();
 
-                                runApplication((Account) profileDrawerItem.getTag());
+                                if (!account.equals(mAccount)) {
+                                    runApplication(account);
+                                }
                             }
                         }
 
@@ -278,6 +298,10 @@ public abstract class TaxiActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+
+        accountHeader.setActiveProfile(mAccount.hashCode());
+
+        return accountHeader;
     }
 
     private boolean isBackPressedOnce;
