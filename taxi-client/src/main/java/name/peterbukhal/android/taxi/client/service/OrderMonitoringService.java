@@ -31,7 +31,7 @@ import retrofit2.Response;
  * Created by
  *      petronic on 09.05.16.
  */
-public class OrderMonitoringService extends Service {
+public final class OrderMonitoringService extends Service {
 
     private static final String LOG_TAG = "OrderMonitoring";
 

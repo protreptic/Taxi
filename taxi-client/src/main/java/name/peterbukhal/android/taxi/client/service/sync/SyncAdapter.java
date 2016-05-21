@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by
- * petronic on 10.05.16.
+ *      petronic on 10.05.16.
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter {
+public final class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String LOG_TAG = "SyncAdapter";
 

@@ -20,7 +20,7 @@ import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersR
  * Created by
  *      petronic on 03.04.16.
  */
-public class UserOrdersFragment extends Fragment {
+public final class UserOrdersFragment extends Fragment {
 
     public static final String FRAGMENT_TAG_USER_ORDERS = "fragment_tag_user_orders";
     public static final String ARG_ACCOUNT = "arg_account";

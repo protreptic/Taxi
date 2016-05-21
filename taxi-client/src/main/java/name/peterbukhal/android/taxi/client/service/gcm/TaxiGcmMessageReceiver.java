@@ -11,11 +11,11 @@ import static name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmListenerSe
  * Created by
  *      petronic on 14.05.16.
  */
-public class TaxiGcmMessageBroadcastReceiver extends BroadcastReceiver {
+public final class TaxiGcmMessageReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(TaxiGcmListenerService.ACTION_GCM_NEW_MESSAGE)) {
+        if (intent.getAction().equals(TaxiGcmListenerService.ACTION_GCM_MESSAGE_RECEIVED)) {
             if (intent.getExtras() != null && intent.getExtras().containsKey(EXTRA_GCM_MESSAGE)) {
                 TaxiGcmMessage message = intent.getExtras().getParcelable(EXTRA_GCM_MESSAGE);
 

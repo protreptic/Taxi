@@ -3,10 +3,10 @@
     <string name="active_orders">АКТИВНЫЕ</string>
     <string name="canceled_orders">ОТМЕНЕННЫЕ</string>
     <string name="finished_orders">ЗАВЕРШЕННЫЕ</string>
-    <string name="server_sender_id">393067706009</string>
-
-    <string name="new_user">Новый пользователь</string>
-    <string name="new_user_description">Добавить новую учетную запись</string>
+    <string name="server_sender_id">1020419983862</string>
+    <!--AIzaSyBdC8vPcitKCHG4Mr_S0cxCHsPwcq6eEn0-->
+    <string name="add_account">Новый пользователь</string>
+    <string name="add_account_description">Добавить учетную запись</string>
 
     <string name="label_login">логин</string>
     <string name="label_password">пароль</string>

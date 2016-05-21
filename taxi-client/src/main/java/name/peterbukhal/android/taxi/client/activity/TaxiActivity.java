@@ -6,10 +6,13 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -39,6 +42,7 @@ import name.peterbukhal.android.taxi.client.fragment.CreateOrderFragment;
 import name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment;
 
 import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.EXTRA_ACCOUNT;
+import static name.peterbukhal.android.taxi.client.account.TaxiClientAccount.ACCOUNT_AUTHORITY;
 import static name.peterbukhal.android.taxi.client.fragment.AboutFragment.FRAGMENT_TAG_ABOUT;
 import static name.peterbukhal.android.taxi.client.fragment.CreateOrderFragment.FRAGMENT_TAG_CREATE_ORDER;
 import static name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment.FRAGMENT_TAG_USER_ORDERS;
@@ -49,9 +53,12 @@ import static name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment.F
  */
 public abstract class TaxiActivity extends AppCompatActivity {
 
+    protected LocalBroadcastManager mBroadcastManager;
+    private FragmentManager mFragmentManager;
     private Drawer mDrawer;
-    private TaxiAccountManager mAccountManager;
-    private Account mAccount;
+    protected TaxiAccountManager mAccountManager;
+    protected Account mAccount;
+    private ActionBar mActionBar;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -66,15 +73,20 @@ public abstract class TaxiActivity extends AppCompatActivity {
 
         setContentView(R.layout.a_main);
 
+        mBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        mFragmentManager = getSupportFragmentManager();
         mAccountManager = TaxiAccountManager.get(getApplicationContext());
         mAccount = getIntent().getParcelableExtra(TaxiAccountManager.EXTRA_ACCOUNT);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mActionBar = getSupportActionBar();
+
         mDrawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+                .withSavedInstance(savedInstanceState)
                 .withHasStableIds(true)
                 .withDrawerItems(generateDrawerItems())
                 .withOnDrawerItemClickListener(mDrawerItemClickListener)
@@ -86,6 +98,27 @@ public abstract class TaxiActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             mDrawer.setSelection(MENU_ITEM_CREATE_ORDER, true);
         }
+    }
+
+    @SuppressWarnings("unused")
+    private void requestSync() {
+        ContentResolver.requestSync(mAccount, ACCOUNT_AUTHORITY, Bundle.EMPTY);
+    }
+
+    public void showBackArrow() {
+        mDrawer
+                .getActionBarDrawerToggle()
+                .setDrawerIndicatorEnabled(false);
+        mActionBar
+                .setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void showHamburger() {
+        mActionBar
+                .setDisplayHomeAsUpEnabled(false);
+        mDrawer
+                .getActionBarDrawerToggle()
+                .setDrawerIndicatorEnabled(true);
     }
 
     private static final int MENU_ITEM_CREATE_ORDER = 41231;
@@ -117,14 +150,13 @@ public abstract class TaxiActivity extends AppCompatActivity {
 
         @Override
         public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
             Integer identifier = (int) drawerItem.getIdentifier();
 
             switch (identifier) {
                 case MENU_ITEM_CREATE_ORDER: {
-                    if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_CREATE_ORDER) != null) break;
+                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_CREATE_ORDER) != null) break;
 
-                    fragmentManager
+                    mFragmentManager
                             .beginTransaction()
                             .replace(R.id.main_content,
                                     CreateOrderFragment.newInstance(mAccount),
@@ -132,9 +164,9 @@ public abstract class TaxiActivity extends AppCompatActivity {
                             .commit();
                 } break;
                 case MENU_ITEM_ORDERS: {
-                    if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null) break;
+                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null) break;
 
-                    fragmentManager
+                    mFragmentManager
                             .beginTransaction()
                             .replace(R.id.main_content,
                                     UserOrdersFragment.newInstance(mAccount),
@@ -142,9 +174,9 @@ public abstract class TaxiActivity extends AppCompatActivity {
                             .commit();
                 } break;
                 case MENU_ITEM_ABOUT: {
-                    if (fragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null) break;
+                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null) break;
 
-                    fragmentManager
+                    mFragmentManager
                             .beginTransaction()
                             .replace(R.id.main_content,
                                     AboutFragment.newInstance(),
@@ -208,12 +240,12 @@ public abstract class TaxiActivity extends AppCompatActivity {
 
                                     @Override
                                     public void run(AccountManagerFuture<Bundle> future) {
-                                        //noinspection TryWithIdenticalCatches
+                                        //noinspection TryWithIdenticalCatches,EmptyCatchBlock
                                         try {
                                             Bundle bundle = future.getResult();
 
                                             String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
-                                            String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
+                                            //String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
 
                                             Toast.makeText(getApplicationContext(), accountName, Toast.LENGTH_SHORT).show();
                                         } catch (OperationCanceledException e) {

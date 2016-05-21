@@ -14,7 +14,7 @@ import name.peterbukhal.android.taxi.client.R;
  * Created by
  *      petronic on 17.05.16.
  */
-public class AboutFragment extends Fragment {
+public final class AboutFragment extends Fragment {
 
     public static final String FRAGMENT_TAG_ABOUT = "fragment_tag_about";
 

@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 /**
  * Created by
- * petronic on 10.05.16.
+ *      petronic on 10.05.16.
  */
 public final class TaxiGcmMessage implements Parcelable {
 
@@ -70,5 +70,15 @@ public final class TaxiGcmMessage implements Parcelable {
         }
 
     };
+
+    @Override
+    public String toString() {
+        return "TaxiGcmMessage{" +
+                "eventId=" + eventId +
+                ", orderId=" + orderId +
+                ", cityId=" + cityId +
+                ", body='" + body + '\'' +
+                '}';
+    }
 
 }

@@ -19,14 +19,13 @@ import name.peterbukhal.android.taxi.client.account.TaxiClientAccount;
 
 /**
  * Created by
- * petronic on 23.04.16.
+ *      petronic on 23.04.16.
  */
-public class RegistrationActivity extends AppCompatActivity {
+public final class RegistrationActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "RegistrationActivity";
 
     private TaxiAccountManager mAccountManager;
-
     private RegistrationTask mAuthTask;
 
     private TextView mMessageTextView;
@@ -97,7 +96,7 @@ public class RegistrationActivity extends AppCompatActivity {
             mAccountManager.setPassword(account, mPassword);
         } else {
             mAccountManager.addAccountExplicitly(account, mPassword);
-            mAccountManager.setAuthToken(account, authToken);
+            mAccountManager.setToken(account, authToken);
         }
 
         Intent intent = new Intent();

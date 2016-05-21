@@ -27,12 +27,12 @@ import retrofit2.Response;
  * Created by
  *      petronic on 10.05.16.
  */
-public class TaxiAuthenticator extends AbstractAccountAuthenticator {
+public final class TaxiAuthenticator extends AbstractAccountAuthenticator {
 
     public static final String LOG_TAG = "TaxiAuthenticator";
 
-    private Context mContext;
-    private TaxiAccountManager mAccountManager;
+    private final Context mContext;
+    private final TaxiAccountManager mAccountManager;
 
     public TaxiAuthenticator(Context context) {
         super(context);
@@ -92,7 +92,7 @@ public class TaxiAuthenticator extends AbstractAccountAuthenticator {
 
             Log.d(LOG_TAG, "New token obtained for user " + account.name);
 
-            mAccountManager.setAuthToken(account, response2.body().getToken());
+            mAccountManager.setToken(account, response2.body().getToken());
 
             Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);

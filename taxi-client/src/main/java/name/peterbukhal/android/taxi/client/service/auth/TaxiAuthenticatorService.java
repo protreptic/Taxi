@@ -4,11 +4,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
+
 /**
  * Created by
- * petronic on 10.05.16.
+ *      petronic on 10.05.16.
  */
-public class TaxiAuthenticatorService extends Service {
+public final class TaxiAuthenticatorService extends Service {
 
     private TaxiAuthenticator mAuthenticator;
 
@@ -21,4 +23,5 @@ public class TaxiAuthenticatorService extends Service {
     public IBinder onBind(Intent intent) {
         return mAuthenticator.getIBinder();
     }
+
 }

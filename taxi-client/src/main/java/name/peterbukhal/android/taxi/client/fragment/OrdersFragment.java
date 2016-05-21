@@ -24,21 +24,23 @@ import name.peterbukhal.android.taxi.client.R;
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 import name.peterbukhal.android.taxi.client.model.Order;
 import name.peterbukhal.android.taxi.client.model.Orders;
+import name.peterbukhal.android.taxi.client.model.impl.OrdersImpl;
 import name.peterbukhal.android.taxi.client.server.api.json.JsonTaxikServiceImpl;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersRequest;
 import name.peterbukhal.android.taxi.client.server.api.json.request.QueryOrdersRequest.OrderType;
-import name.peterbukhal.android.taxi.client.model.impl.OrdersImpl;
 import name.peterbukhal.android.taxi.client.service.OrderMonitoringService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static name.peterbukhal.android.taxi.client.fragment.OrderFragment.FRAGMENT_TAG_ORDER;
 
 /**
  * Created on 16/03/16 13:24 by
  *
  * @author Peter Bukhal (petr@taxik.ru)
  */
-public class OrdersFragment extends Fragment {
+public final class OrdersFragment extends Fragment {
 
     public static final String FRAGMENT_TAG_ORDERS = "fragment_tag_orders";
     public static final String ARG_ACCOUNT = "arg_account";
@@ -82,8 +84,8 @@ public class OrdersFragment extends Fragment {
                     getActivity()
                             .getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.main_content, OrderFragment.newInstance(order))
-                            .addToBackStack(null)
+                            .replace(R.id.main_content, OrderFragment.newInstance(order), FRAGMENT_TAG_ORDER)
+                            .addToBackStack(FRAGMENT_TAG_ORDER)
                             .commit();
                 }
             });
@@ -155,14 +157,13 @@ public class OrdersFragment extends Fragment {
     }
 
     private LocalBroadcastManager mBroadcastManager;
-    private TaxiAccountManager mAccountManager;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         mBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
-        mAccountManager = TaxiAccountManager.get(getActivity());
+        TaxiAccountManager accountManager = TaxiAccountManager.get(getActivity());
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ORDER_TYPE)) {
             mAccount = savedInstanceState.getParcelable(ARG_ACCOUNT);
@@ -172,7 +173,7 @@ public class OrdersFragment extends Fragment {
         } else if (getArguments() != null && getArguments().containsKey(ARG_ORDER_TYPE)) {
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
             mOrderType = (OrderType) getArguments().getSerializable(ARG_ORDER_TYPE);
-            mToken = mAccountManager.peekAuthToken(mAccount);
+            mToken = accountManager.peekAuthToken(mAccount);
             mRecyclerView.setAdapter(mOrdersAdapter);
 
             updateOrders();

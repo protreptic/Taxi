@@ -20,12 +20,13 @@ import name.peterbukhal.android.taxi.client.R;
 
 /**
  * Created by
- * petronic on 11.05.16.
+ *      petronic on 11.05.16.
  */
-public class TaxiAccountManager {
+public final class TaxiAccountManager {
 
     public static final String EXTRA_ACCOUNT = "extra_account";
     public static final String EXTRA_ACCOUNT_TOKEN = "extra_account_token";
+    public static final String EXTRA_ACCOUNT_GCM_TOKEN = "extra_account_gcm_token";
 
     private static TaxiAccountManager sInstance;
 
@@ -58,16 +59,24 @@ public class TaxiAccountManager {
         return mAccountManager.peekAuthToken(account, TaxiClientAccount.ACCOUNT_TYPE);
     }
 
-    public void invalidateAuthToken(String token) {
+    public void invalidateToken(String token) {
         mAccountManager.invalidateAuthToken(TaxiClientAccount.ACCOUNT_TYPE, token);
     }
 
-    public void getAuthToken(Account account, AccountManagerCallback<Bundle> callback) {
+    public void getToken(Account account, AccountManagerCallback<Bundle> callback) {
         mAccountManager.getAuthToken(account, TaxiClientAccount.ACCOUNT_TYPE, Bundle.EMPTY, true, callback, null);
     }
 
-    public void setAuthToken(Account account, String token) {
+    public void setToken(Account account, String token) {
         mAccountManager.setAuthToken(account, TaxiClientAccount.ACCOUNT_TYPE, token);
+    }
+
+    public String getGcmToken(Account account) {
+        return mAccountManager.getUserData(account, EXTRA_ACCOUNT_GCM_TOKEN);
+    }
+
+    public void setGcmToken(Account account, String gcmToken) {
+        mAccountManager.setUserData(account, EXTRA_ACCOUNT_GCM_TOKEN, gcmToken);
     }
 
     public boolean isExists(Account account) {
@@ -87,15 +96,10 @@ public class TaxiAccountManager {
         return new PickUpAccountAdapter(mContext, mAccounts);
     }
 
-    @SuppressWarnings({"unused", "deprecation"})
-    private void removeAccount(Account account, AccountManagerCallback<Boolean> callback) {
-        mAccountManager.removeAccount(account, callback, null);
-    }
-
-    private static final Object mLock = new Object();
+    private static final Object LOCK_OBJECT = new Object();
 
     public static TaxiAccountManager get(Context context) {
-        synchronized (mLock) {
+        synchronized (LOCK_OBJECT) {
             if (sInstance == null) {
                 sInstance = new TaxiAccountManager(context);
             }
@@ -150,8 +154,8 @@ public class TaxiAccountManager {
             }
 
             if (position == mAccounts.size()) {
-                holder.name.setText(R.string.new_user);
-                holder.type.setText(R.string.new_user_description);
+                holder.name.setText(R.string.add_account);
+                holder.type.setText(R.string.add_account_description);
             } else {
                 Account account = mAccounts.get(position);
 

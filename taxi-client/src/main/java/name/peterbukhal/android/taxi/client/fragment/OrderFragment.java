@@ -8,14 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import name.peterbukhal.android.taxi.client.R;
+import name.peterbukhal.android.taxi.client.activity.MainActivity;
 import name.peterbukhal.android.taxi.client.model.Order;
+import name.peterbukhal.android.taxi.client.model.impl.nil.NullOrder;
 
 /**
  * Created by
  *      petronic on 03.04.16.
  */
-public class OrderFragment extends Fragment {
+public final class OrderFragment extends Fragment {
 
     public static final String FRAGMENT_TAG_ORDER = "fragment_tag_order";
     public static final String ARG_ORDER = "arg_order";
@@ -53,19 +57,38 @@ public class OrderFragment extends Fragment {
         outState.putParcelable(ARG_ORDER, mOrder);
     }
 
+    private MainActivity mActivity;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mActivity = (MainActivity) getActivity();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ORDER)) {
             mOrder = savedInstanceState.getParcelable(ARG_ORDER);
         } else if (getArguments() != null && getArguments().containsKey(ARG_ORDER)) {
             mOrder = getArguments().getParcelable(ARG_ORDER);
+        } else {
+            mOrder = new NullOrder();
         }
 
-        if (mOrder != null) {
-            tvOrder.setText(mOrder.toString());
+        if (mOrder.isNull()) {
+            tvOrder.setText(String.format(new Locale("ru", "RU"), "%d", mOrder.getId()));
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mActivity.showBackArrow();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        mActivity.showHamburger();
+    }
 }

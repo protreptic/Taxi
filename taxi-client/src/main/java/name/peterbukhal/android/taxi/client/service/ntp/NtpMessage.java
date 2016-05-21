@@ -60,7 +60,7 @@ import java.util.Date;
  * 
  * @author Adam Buckley
  */
-public class NtpMessage implements Parcelable {
+public final class NtpMessage implements Parcelable {
 
 	/**
 	 * This is a two-bit code warning of an impending leap second to be

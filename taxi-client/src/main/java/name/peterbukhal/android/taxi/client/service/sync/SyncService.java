@@ -6,9 +6,9 @@ import android.os.IBinder;
 
 /**
  * Created by
- * petronic on 10.05.16.
+ *      petronic on 10.05.16.
  */
-public class SyncService extends Service {
+public final class SyncService extends Service {
 
     // Storage for an instance of the sync adapter
     private static SyncAdapter sSyncAdapter = null;

@@ -9,19 +9,19 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 /**
  * Created by
- * petronic on 10.05.16.
+ *      petronic on 10.05.16.
  */
-public class TaxiGcmListenerService extends GcmListenerService {
+public final class TaxiGcmListenerService extends GcmListenerService {
 
-    private static final String LOG_TAG = "TaxikGcmListener";
-    public static final String ACTION_GCM_NEW_MESSAGE =
-            "name.peterbukhal.android.taxi.client.service.gcm.action.ACTION_GCM_NEW_MESSAGE";
+    public static final String LOG_TAG = "TaxikGcmListener";
+    public static final String ACTION_GCM_MESSAGE_RECEIVED =
+            "name.peterbukhal.android.taxi.client.service.gcm.action.ACTION_GCM_MESSAGE_RECEIVED";
     public static final String EXTRA_GCM_MESSAGE = "extra_gcm_message";
 
     private final LocalBroadcastManager broadcastManager;
 
     public TaxiGcmListenerService() {
-        broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        broadcastManager = LocalBroadcastManager.getInstance(getBaseContext());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TaxiGcmListenerService extends GcmListenerService {
     }
 
     private void broadcastMessage(TaxiGcmMessage message) {
-        Intent intent = new Intent(ACTION_GCM_NEW_MESSAGE);
+        Intent intent = new Intent(ACTION_GCM_MESSAGE_RECEIVED);
         intent.putExtra(EXTRA_GCM_MESSAGE, message);
 
         broadcastManager.sendBroadcast(intent);

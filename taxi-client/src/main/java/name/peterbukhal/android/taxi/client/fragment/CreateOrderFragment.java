@@ -22,7 +22,7 @@ import retrofit2.Response;
  * Created by
  *      petronic on 16.05.16.
  */
-public class CreateOrderFragment extends Fragment {
+public final class CreateOrderFragment extends Fragment {
 
     public static final String FRAGMENT_TAG_CREATE_ORDER = "fragment_tag_create_order";
     public static final String ARG_ACCOUNT = "arg_account";

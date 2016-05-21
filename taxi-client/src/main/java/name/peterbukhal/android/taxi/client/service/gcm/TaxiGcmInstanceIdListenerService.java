@@ -6,9 +6,9 @@ import com.google.android.gms.iid.InstanceIDListenerService;
 
 /**
  * Created by
- * petronic on 10.05.16.
+ *      petronic on 10.05.16.
  */
-public class TaxiGcmInstanceIdListenerService extends InstanceIDListenerService {
+public final class TaxiGcmInstanceIdListenerService extends InstanceIDListenerService {
 
     @Override
     public void onTokenRefresh() {

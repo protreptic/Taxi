@@ -23,7 +23,7 @@ import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.Pi
  * Created by
  *      petronic on 23.04.16.
  */
-public class LauncherActivity extends AppCompatActivity {
+public final class LauncherActivity extends AppCompatActivity {
 
     private TaxiAccountManager mAccountManager;
 
@@ -36,7 +36,7 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     private void signIn(Account account) {
-        mAccountManager.getAuthToken(account, new AccountManagerCallback<Bundle>() {
+        mAccountManager.getToken(account, new AccountManagerCallback<Bundle>() {
 
             @Override
             public void run(AccountManagerFuture<Bundle> future) {
