@@ -4,6 +4,6 @@
     android:contentAuthority="name.peterbukhal.android.taxi.client"
     android:accountType="name.peterbukhal.android.taxi.client"
     android:userVisible="true"
-    android:supportsUploading="false"
-    android:allowParallelSyncs="false"
-    android:isAlwaysSyncable="true"/>
+    android:supportsUploading="true"
+    android:allowParallelSyncs="true"
+    android:isAlwaysSyncable="true" />

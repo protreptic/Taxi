@@ -13,7 +13,7 @@ import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmRegistrationRecei
 import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmRegistrationService;
 import name.peterbukhal.android.taxi.client.service.ntp.NtpService;
 
-public final class MainActivity extends TaxiActivity {
+public final class MainActivity extends TaxiBaseActivity {
 
     private final BroadcastReceiver mGcmRegistrationReceiver = new TaxiGcmRegistrationReceiver();
     private final BroadcastReceiver mGcmMessageReceiver = new TaxiGcmMessageReceiver();
@@ -36,6 +36,8 @@ public final class MainActivity extends TaxiActivity {
 
         startService(new Intent(getApplicationContext(), OrderMonitoringService.class)
                 .putExtra(TaxiAccountManager.EXTRA_ACCOUNT, mAccount));
+
+        requestSync();
     }
 
     @Override

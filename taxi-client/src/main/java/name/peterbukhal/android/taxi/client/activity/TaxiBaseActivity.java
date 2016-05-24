@@ -49,9 +49,9 @@ import static name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment.F
 
 /**
  * Created by
- * petronic on 15.05.16.
+ *      petronic on 15.05.16.
  */
-public abstract class TaxiActivity extends AppCompatActivity {
+public abstract class TaxiBaseActivity extends AppCompatActivity {
 
     protected LocalBroadcastManager mBroadcastManager;
     private FragmentManager mFragmentManager;
@@ -60,12 +60,14 @@ public abstract class TaxiActivity extends AppCompatActivity {
     protected Account mAccount;
     private ActionBar mActionBar;
 
+    private static final String EXTRA_LAST_SELECTED_MENU = "extra_last_selected_menu";
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(EXTRA_ACCOUNT, mAccount);
-        outState.putLong("111", mSelectedItem);
+        outState.putLong(EXTRA_LAST_SELECTED_MENU, mLastSelectedMenu);
     }
 
     @Override
@@ -97,17 +99,19 @@ public abstract class TaxiActivity extends AppCompatActivity {
                 .withActionBarDrawerToggleAnimated(true)
                 .build();
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("111")) {
-            mDrawer.setSelection(savedInstanceState.getLong("111"), false);
+        if (savedInstanceState != null
+                && savedInstanceState.containsKey(EXTRA_LAST_SELECTED_MENU)) {
+            mLastSelectedMenu = savedInstanceState.getLong(EXTRA_LAST_SELECTED_MENU);
+            mDrawer.setSelection(mLastSelectedMenu, false);
         } else {
             mDrawer.setSelection(MENU_ITEM_CREATE_ORDER, true);
         }
     }
 
-    private long mSelectedItem;
+    private long mLastSelectedMenu;
 
     @SuppressWarnings("unused")
-    private void requestSync() {
+    protected void requestSync() {
         ContentResolver.requestSync(mAccount, ACCOUNT_AUTHORITY, Bundle.EMPTY);
     }
 
@@ -131,27 +135,69 @@ public abstract class TaxiActivity extends AppCompatActivity {
                 .setDrawerIndicatorEnabled(true);
     }
 
+    private static final int MENU_ITEM_HOME = 41230;
     private static final int MENU_ITEM_CREATE_ORDER = 41231;
     private static final int MENU_ITEM_ORDERS = 41232;
-    private static final int MENU_ITEM_ABOUT = 41233;
+    private static final int MENU_ITEM_TARIFFS = 41233;
+    private static final int MENU_ITEM_PROFILE = 41234;
+    private static final int MENU_ITEM_FAVORITES = 41235;
+    private static final int MENU_ITEM_MESSAGES = 41236;
+    private static final int MENU_ITEM_SETTINGS = 41237;
+    private static final int MENU_ITEM_ABOUT = 41238;
+    private static final int MENU_ITEM_TRANSFERS = 41239;
 
     private List<IDrawerItem> generateDrawerItems() {
         List<IDrawerItem> items = new ArrayList<>();
 
         items.add(new PrimaryDrawerItem()
-                .withName("Создать заказ".toUpperCase())
-                .withIdentifier(MENU_ITEM_CREATE_ORDER)
-                .withIcon(android.R.drawable.ic_menu_add));
+                .withName("Домашний экран".toUpperCase())
+                .withIdentifier(MENU_ITEM_HOME)
+                .withIcon(R.drawable.ic_home_black_48dp));
 
         items.add(new PrimaryDrawerItem()
-                .withName("Заказы".toUpperCase())
+                .withName("Новая поездка".toUpperCase())
+                .withIdentifier(MENU_ITEM_CREATE_ORDER)
+                .withIcon(R.drawable.ic_add_box_black_48dp));
+
+        items.add(new PrimaryDrawerItem()
+                .withName("Мои поездки".toUpperCase())
                 .withIdentifier(MENU_ITEM_ORDERS)
-                .withIcon(android.R.drawable.ic_menu_agenda));
+                .withIcon(R.drawable.ic_archive_black_48dp));
+
+        items.add(new PrimaryDrawerItem()
+                .withName("Тарифы".toUpperCase())
+                .withIdentifier(MENU_ITEM_TARIFFS)
+                .withIcon(R.drawable.ic_monetization_on_black_48dp));
+
+        items.add(new PrimaryDrawerItem()
+                .withName("Трансферы".toUpperCase())
+                .withIdentifier(MENU_ITEM_TRANSFERS)
+                .withIcon(R.drawable.ic_swap_vertical_circle_black_48dp));
+
+        items.add(new PrimaryDrawerItem()
+                .withName("Профиль".toUpperCase())
+                .withIdentifier(MENU_ITEM_PROFILE)
+                .withIcon(R.drawable.ic_account_box_black_48dp));
+
+        items.add(new PrimaryDrawerItem()
+                .withName("Избранные места".toUpperCase())
+                .withIdentifier(MENU_ITEM_FAVORITES)
+                .withIcon(R.drawable.ic_favorite_black_48dp));
+
+        items.add(new PrimaryDrawerItem()
+                .withName("Сообщения".toUpperCase())
+                .withIdentifier(MENU_ITEM_MESSAGES)
+                .withIcon(R.drawable.ic_forum_black_48dp));
+
+        items.add(new PrimaryDrawerItem()
+                .withName("Настройки".toUpperCase())
+                .withIdentifier(MENU_ITEM_SETTINGS)
+                .withIcon(R.drawable.ic_settings_black_48dp));
 
         items.add(new PrimaryDrawerItem()
                 .withName("О приложении".toUpperCase())
                 .withIdentifier(MENU_ITEM_ABOUT)
-                .withIcon(android.R.drawable.ic_menu_agenda));
+                .withIcon(R.drawable.ic_help_black_48dp));
 
         return items;
     }
@@ -161,7 +207,7 @@ public abstract class TaxiActivity extends AppCompatActivity {
         @Override
         public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
             Integer identifier = (int) drawerItem.getIdentifier();
-            mSelectedItem = identifier;
+            mLastSelectedMenu = identifier;
 
             switch (identifier) {
                 case MENU_ITEM_CREATE_ORDER: {
@@ -174,8 +220,7 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                     CreateOrderFragment.newInstance(mAccount),
                                     FRAGMENT_TAG_CREATE_ORDER)
                             .commit();
-                }
-                break;
+                } break;
                 case MENU_ITEM_ORDERS: {
                     if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null) break;
 
@@ -185,8 +230,7 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                     UserOrdersFragment.newInstance(mAccount),
                                     FRAGMENT_TAG_USER_ORDERS)
                             .commit();
-                }
-                break;
+                } break;
                 case MENU_ITEM_ABOUT: {
                     if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null) break;
 
@@ -196,12 +240,10 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                     AboutFragment.newInstance(),
                                     FRAGMENT_TAG_ABOUT)
                             .commit();
-                }
-                break;
+                } break;
                 default: {
                     Toast.makeText(getApplicationContext(), drawerItem.toString(), Toast.LENGTH_SHORT).show();
-                }
-                break;
+                } break;
             }
 
             return false;
@@ -239,11 +281,11 @@ public abstract class TaxiActivity extends AppCompatActivity {
                 .addProfiles(
                         new ProfileSettingDrawerItem()
                                 .withName("Add account")
-                                .withIcon(android.R.drawable.ic_menu_add)
+                                .withIcon(R.drawable.ic_add_box_black_48dp)
                                 .withIdentifier(ADD_ACCOUNT_ID),
                         new ProfileSettingDrawerItem()
                                 .withName("Manage accounts")
-                                .withIcon(android.R.drawable.ic_menu_preferences)
+                                .withIcon(R.drawable.ic_settings_applications_black_48dp)
                                 .withIdentifier(MANAGE_ACCOUNTS)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -251,7 +293,7 @@ public abstract class TaxiActivity extends AppCompatActivity {
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         switch ((int) profile.getIdentifier()) {
                             case ADD_ACCOUNT_ID: {
-                                mAccountManager.addAccount(TaxiActivity.this, new AccountManagerCallback<Bundle>() {
+                                mAccountManager.addAccount(TaxiBaseActivity.this, new AccountManagerCallback<Bundle>() {
 
                                     @Override
                                     public void run(AccountManagerFuture<Bundle> future) {
@@ -288,8 +330,14 @@ public abstract class TaxiActivity extends AppCompatActivity {
                                 ProfileDrawerItem profileDrawerItem = (ProfileDrawerItem) profile;
                                 Account account = (Account) profileDrawerItem.getTag();
 
+                                /**
+                                 * При попытке выбрать уже активный заказ,
+                                 */
                                 if (!account.equals(mAccount)) {
+                                    mAccountManager.setDefaultAccount(mAccount);
                                     runApplication(account);
+                                } else {
+                                    return true;
                                 }
                             }
                         }

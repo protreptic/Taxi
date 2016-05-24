@@ -43,27 +43,4 @@ public final class CreateOrderFragment extends Fragment {
         return inflater.inflate(R.layout.f_create_order, container, false);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        Call<Cities> request = JsonTaxikServiceImpl.instance().service()
-                .queryCities();
-        request.enqueue(new Callback<Cities>() {
-
-            @Override
-            public void onResponse(Call<Cities> call, Response<Cities> response) {
-                for (City city : response.body().getCities()) {
-                    Log.d("", city.getName());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Cities> call, Throwable t) {
-                Toast.makeText(getActivity(), "Request cities failed", Toast.LENGTH_LONG).show();
-            }
-
-        });
-    }
-
 }

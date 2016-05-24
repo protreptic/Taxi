@@ -25,7 +25,6 @@ import name.peterbukhal.android.taxi.client.R;
 public final class TaxiAccountManager {
 
     public static final String EXTRA_ACCOUNT = "extra_account";
-    public static final String EXTRA_ACCOUNT_TOKEN = "extra_account_token";
     public static final String EXTRA_ACCOUNT_GCM_TOKEN = "extra_account_gcm_token";
     public static final String EXTRA_DEFAULT_ACCOUNT = "extra_default_account";
 
@@ -105,7 +104,7 @@ public final class TaxiAccountManager {
                 .apply();
     }
 
-    private Account getDefaultAccount() {
+    public Account getDefaultAccount() {
         String accountName =
                 mContext
                     .getSharedPreferences("main", Context.MODE_PRIVATE)

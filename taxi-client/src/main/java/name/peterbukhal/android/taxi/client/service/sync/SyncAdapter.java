@@ -8,7 +8,13 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import name.peterbukhal.android.taxi.client.model.City;
+import name.peterbukhal.android.taxi.client.server.api.json.JsonTaxikService;
+import name.peterbukhal.android.taxi.client.server.api.json.JsonTaxikServiceImpl;
 
 /**
  * Created by
@@ -18,36 +24,37 @@ public final class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String LOG_TAG = "SyncAdapter";
 
-    /**
-     * Set up the sync adapter
-     */
+    protected final JsonTaxikService mTaxiService;
+
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-    }
 
-    /**
-     * Set up the sync adapter. This form of the
-     * constructor maintains compatibility with Android 3.0
-     * and later platform versions
-     */
+        mTaxiService = JsonTaxikServiceImpl.instance().service();    }
+
     public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
+
+        mTaxiService = JsonTaxikServiceImpl.instance().service();
     }
 
-    /*
-     * Specify the code you want to run in the sync adapter. The entire
-     * sync adapter runs in a background thread, so you don't have to set
-     * up your own background processing.
-     */
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
         Log.d(LOG_TAG, "Sync started.");
 
+        //noinspection TryWithIdenticalCatches
         try {
-            TimeUnit.SECONDS.sleep(45);
-        } catch (InterruptedException ignored) {
+            List<City> cities = mTaxiService.queryCities().execute().body().getCities();
 
+            for (City city : cities) {
+                Log.d(LOG_TAG, city.getName());
+            }
+
+            TimeUnit.SECONDS.sleep(15);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         Log.d(LOG_TAG, "Sync finished.");

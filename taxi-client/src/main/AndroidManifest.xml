@@ -111,11 +111,12 @@
             </intent-filter>
             <meta-data android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
-        </service><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-    </application>
+        </service>
 
+        <provider
+            android:name=".service.sync.StubProvider"
+            android:authorities="name.peterbukhal.android.taxi.client"
+            android:exported="false"
+            android:syncable="true" />
+    </application>
 </manifest>

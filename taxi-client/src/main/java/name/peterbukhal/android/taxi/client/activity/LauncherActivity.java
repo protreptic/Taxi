@@ -136,7 +136,13 @@ public final class LauncherActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        pickUpAccountDialog();
+        Account defaultAccount = mAccountManager.getDefaultAccount();
+
+        if (defaultAccount.name.equals("#")) {
+            pickUpAccountDialog();
+        } else {
+            runApplication(defaultAccount);
+        }
     }
 
     @Override

@@ -7,10 +7,10 @@
     <!--AIzaSyBdC8vPcitKCHG4Mr_S0cxCHsPwcq6eEn0-->
     <string name="add_account">Новый пользователь</string>
     <string name="add_account_description">Добавить учетную запись</string>
-
     <string name="label_login">логин</string>
     <string name="label_password">пароль</string>
     <string name="button_login">Войти</string>
     <string name="error_message">Error</string>
     <string name="app_exit">Нажмите еще раз, чтобы выйти из приложения</string>
+    <string name="auth_label">Данные приложения</string>
 </resources>
