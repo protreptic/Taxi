@@ -7,14 +7,12 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -76,7 +74,7 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        Toast.makeText(getBaseContext(), "New intent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "New intent received", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -87,8 +85,8 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
 
         mBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
         mFragmentManager = getSupportFragmentManager();
-        mAccountManager = TaxiAccountManager.get(getApplicationContext());
         mAccount = getIntent().getParcelableExtra(TaxiAccountManager.EXTRA_ACCOUNT);
+        mAccountManager = TaxiAccountManager.get(getApplicationContext());
         mAccountManager.setDefaultAccount(mAccount);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -149,7 +147,7 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
 
             @Override
             public void run(AccountManagerFuture<Bundle> future) {
-                //noinspection TryWithIdenticalCatches
+                //noinspection TryWithIdenticalCatches,EmptyCatchBlock
                 try {
                     Bundle bundle = future.getResult();
 
@@ -160,22 +158,9 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
                     } else {
                         if (bundle.containsKey(AccountManager.KEY_ACCOUNT_NAME)
                                 && bundle.containsKey(AccountManager.KEY_ACCOUNT_TYPE)) {
-                            String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
-                            String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
 
-                            runApplication(new Account(accountName, accountType));
-                        } else {
-                            new AlertDialog.Builder(getApplicationContext())
-                                    .setTitle("Title")
-                                    .setMessage("Message")
-                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-                                        @Override
-                                        public void onCancel(DialogInterface dialog) {
-                                            finish();
-                                        }
-                                    })
-                                    .show();
+                            runApplication(new TaxiClientAccount(
+                                    bundle.getString(AccountManager.KEY_ACCOUNT_NAME)));
                         }
                     }
                 } catch (OperationCanceledException e) {
@@ -194,14 +179,12 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
 
             @Override
             public void run(AccountManagerFuture<Bundle> future) {
-                //noinspection TryWithIdenticalCatches
+                //noinspection TryWithIdenticalCatches,EmptyCatchBlock
                 try {
                     Bundle bundle = future.getResult();
 
-                    String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
-                    String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
-
-                    signIn(new Account(accountName, accountType));
+                    signIn(new TaxiClientAccount(
+                            bundle.getString(AccountManager.KEY_ACCOUNT_NAME)));
                 } catch (OperationCanceledException e) {
 
                 } catch (AuthenticatorException e) {
@@ -301,7 +284,8 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
                             .commit();
                 } break;
                 case MENU_ITEM_ORDERS: {
-                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null) break;
+                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_USER_ORDERS) != null)
+                        break;
 
                     mFragmentManager
                             .beginTransaction()
@@ -311,7 +295,8 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
                             .commit();
                 } break;
                 case MENU_ITEM_ABOUT: {
-                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null) break;
+                    if (mFragmentManager.findFragmentByTag(FRAGMENT_TAG_ABOUT) != null)
+                        break;
 
                     mFragmentManager
                             .beginTransaction()
@@ -344,6 +329,16 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
     private AccountHeader generateAccountHeader() {
         List<IProfile> profiles = new ArrayList<>();
 
+        profiles.add(new ProfileSettingDrawerItem()
+                .withName("Add account")
+                .withIcon(R.drawable.ic_add_box_black_48dp)
+                .withIdentifier(ADD_ACCOUNT_ID));
+
+        profiles.add(new ProfileSettingDrawerItem()
+                .withName("Manage accounts")
+                .withIcon(R.drawable.ic_settings_applications_black_48dp)
+                .withIdentifier(MANAGE_ACCOUNTS));
+
         for (Account account : mAccountManager.getAccounts()) {
             profiles.add(new ProfileDrawerItem()
                     .withName("Иванов Иван Иванович")
@@ -357,70 +352,34 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
                 .withTranslucentStatusBar(true)
                 .withHeaderBackground(R.color.colorPrimaryDark)
                 .withProfiles(profiles)
-                .addProfiles(
-                        new ProfileSettingDrawerItem()
-                                .withName("Add account")
-                                .withIcon(R.drawable.ic_add_box_black_48dp)
-                                .withIdentifier(ADD_ACCOUNT_ID),
-                        new ProfileSettingDrawerItem()
-                                .withName("Manage accounts")
-                                .withIcon(R.drawable.ic_settings_applications_black_48dp)
-                                .withIdentifier(MANAGE_ACCOUNTS)
-                )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         switch ((int) profile.getIdentifier()) {
                             case ADD_ACCOUNT_ID: {
-                                mAccountManager.addAccount(TaxiBaseActivity.this, new AccountManagerCallback<Bundle>() {
-
-                                    @Override
-                                    public void run(AccountManagerFuture<Bundle> future) {
-                                        //noinspection TryWithIdenticalCatches,EmptyCatchBlock
-                                        try {
-                                            Bundle bundle = future.getResult();
-
-                                            String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
-                                            //String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
-
-                                            Toast.makeText(getApplicationContext(), accountName, Toast.LENGTH_SHORT).show();
-                                        } catch (OperationCanceledException e) {
-
-                                        } catch (AuthenticatorException e) {
-
-                                        } catch (IOException e) {
-
-                                        }
-                                    }
-
-                                });
-                            }
-                            break;
+                                signUp();
+                            } break;
                             case MANAGE_ACCOUNTS: {
                                 Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
-                                intent.putExtra(Settings.EXTRA_AUTHORITIES, new String[]{
+                                intent.putExtra(Settings.EXTRA_AUTHORITIES, new String[] {
                                         TaxiClientAccount.ACCOUNT_AUTHORITY
                                 });
 
                                 startActivity(intent);
-                            }
-                            break;
+                            } break;
                             default: {
                                 ProfileDrawerItem profileDrawerItem = (ProfileDrawerItem) profile;
                                 Account account = (Account) profileDrawerItem.getTag();
 
                                 /**
-                                 * При попытке выбрать уже активный заказ,
+                                 *
                                  */
                                 if (!account.equals(mAccount)) {
-                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                    intent.putExtra(EXTRA_ACCOUNT, account);
-
-                                    startActivity(intent);
+                                    signIn(account);
                                 } else {
                                     return true;
                                 }
-                            }
+                            } break;
                         }
 
                         return false;

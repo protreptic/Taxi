@@ -3,10 +3,10 @@ package name.peterbukhal.android.taxi.client.account;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
-import android.accounts.OnAccountsUpdateListener;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,15 +36,6 @@ public final class TaxiAccountManager {
     private final AccountManager mAccountManager;
     private List<Account> mAccounts;
 
-    private OnAccountsUpdateListener mAccountsUpdateListener = new OnAccountsUpdateListener() {
-
-        @Override
-        public void onAccountsUpdated(Account[] accounts) {
-            mAccounts = getAccounts();
-        }
-
-    };
-
     private TaxiAccountManager(Context context) {
         mContext = context;
         mAccountManager = AccountManager.get(context);
@@ -60,7 +51,9 @@ public final class TaxiAccountManager {
     }
 
     public String peekAuthToken(Account account) {
-        return mAccountManager.peekAuthToken(account, TaxiClientAccount.ACCOUNT_TYPE);
+        String token = mAccountManager.peekAuthToken(account, TaxiClientAccount.ACCOUNT_TYPE);
+
+        return (TextUtils.isEmpty(token) ? "#" : token);
     }
 
     public void invalidateToken(String token) {
@@ -68,6 +61,12 @@ public final class TaxiAccountManager {
     }
 
     public void getToken(Account account, AccountManagerCallback<Bundle> callback) {
+        String token = peekAuthToken(account);
+
+        if (TextUtils.isEmpty(token) || token.equals("#")) {
+            invalidateToken(token);
+        }
+
         mAccountManager.getAuthToken(account, TaxiClientAccount.ACCOUNT_TYPE, Bundle.EMPTY, true, callback, null);
     }
 
@@ -97,7 +96,7 @@ public final class TaxiAccountManager {
     }
 
     public PickUpAccountAdapter getAccountAdapter() {
-        return new PickUpAccountAdapter(mContext, mAccounts);
+        return new PickUpAccountAdapter(mContext, getAccounts());
     }
 
     public void setDefaultAccount(Account account) {

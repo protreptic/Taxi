@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import name.peterbukhal.android.taxi.client.account.TaxiClientAccount;
  */
 public final class RegistrationActivity extends AppCompatActivity {
 
+    @SuppressWarnings("unused")
     private static final String LOG_TAG = "RegistrationActivity";
 
     private TaxiAccountManager mAccountManager;
@@ -109,12 +109,6 @@ public final class RegistrationActivity extends AppCompatActivity {
         finish();
     }
 
-    /**
-     * Called when the authentication process completes (see attemptLogin()).
-     *
-     * @param authToken the authentication token returned by the server, or NULL if
-     *            authentication failed.
-     */
     public void onAuthenticationResult(String authToken) {
         if (!TextUtils.isEmpty(authToken)) {
             finishLogin(authToken);
@@ -136,28 +130,16 @@ public final class RegistrationActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
-            try {
-                return "#";
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "RegistrationTask: failed to authenticate");
-                Log.i(LOG_TAG, e.toString());
-
-                return null;
-            }
+            return "#";
         }
 
         @Override
         protected void onPostExecute(String authToken) {
-            // On a successful authentication, call back into the Activity to
-            // communicate the authToken (or null for an error).
             onAuthenticationResult(authToken);
         }
 
         @Override
         protected void onCancelled() {
-            // If the action was canceled (by the user clicking the cancel
-            // button in the progress dialog), then call back into the
-            // activity to let it know.
             onAuthenticationCancel();
         }
 

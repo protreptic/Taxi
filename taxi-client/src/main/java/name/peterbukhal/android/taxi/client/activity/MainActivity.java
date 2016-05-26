@@ -36,8 +36,6 @@ public final class MainActivity extends TaxiBaseActivity {
 
         startService(new Intent(getApplicationContext(), OrderMonitoringService.class)
                 .putExtra(TaxiAccountManager.EXTRA_ACCOUNT, mAccount));
-
-        requestSync();
     }
 
     @Override

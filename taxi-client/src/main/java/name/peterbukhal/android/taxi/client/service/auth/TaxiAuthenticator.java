@@ -61,22 +61,22 @@ public final class TaxiAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account,
                                      Bundle options) throws NetworkErrorException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, final Account account,
                                String authTokenType, Bundle options) throws NetworkErrorException {
-//        String token = mAccountManager.peekAuthToken(account);
+        String token = mAccountManager.peekAuthToken(account);
 
-//        if (!token.equals("#")) {
-//            Bundle result = new Bundle();
-//            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-//            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-//            result.putString(AccountManager.KEY_AUTHTOKEN, token);
-//
-//            return result;
-//        }
+        if (!token.equals("#")) {
+            Bundle result = new Bundle();
+            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+            result.putString(AccountManager.KEY_AUTHTOKEN, token);
+
+            return result;
+        }
 
         JsonTaxikService taxikService = JsonTaxikServiceImpl.instance().service();
 

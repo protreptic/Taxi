@@ -14,7 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.io.IOException;
 
+import name.peterbukhal.android.taxi.client.R;
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
+import name.peterbukhal.android.taxi.client.account.TaxiClientAccount;
 
 import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.EXTRA_ACCOUNT;
 import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.PickUpAccountAdapter.ADD_ACCOUNT_ITEM_ID;
@@ -30,84 +32,16 @@ public final class LauncherActivity extends AppCompatActivity {
     private void runApplication(Account account) {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra(EXTRA_ACCOUNT, account);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         startActivity(intent);
     }
 
-    private void signIn(Account account) {
-        mAccountManager.invalidateToken("#");
-        mAccountManager.getToken(account, new AccountManagerCallback<Bundle>() {
-
-            @Override
-            public void run(AccountManagerFuture<Bundle> future) {
-                //noinspection TryWithIdenticalCatches
-                try {
-                    Bundle bundle = future.getResult();
-
-                    Intent keyIntent = bundle.getParcelable(AccountManager.KEY_INTENT);
-
-                    if (keyIntent != null) {
-                        signUp();
-                    } else {
-                        if (bundle.containsKey(AccountManager.KEY_ACCOUNT_NAME)
-                                && bundle.containsKey(AccountManager.KEY_ACCOUNT_TYPE)) {
-                            String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
-                            String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
-
-                            runApplication(new Account(accountName, accountType));
-                        } else {
-                            new AlertDialog.Builder(getApplicationContext())
-                                    .setTitle("Title")
-                                    .setMessage("Message")
-                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-                                        @Override
-                                        public void onCancel(DialogInterface dialog) {
-                                            finish();
-                                        }
-                                    })
-                                    .show();
-                        }
-                    }
-                } catch (OperationCanceledException e) {
-                    pickUpAccountDialog();
-                } catch (AuthenticatorException e) {
-                    pickUpAccountDialog();
-                } catch (IOException e) {
-                    pickUpAccountDialog();
-                }
-            }
-        });
-    }
-
-    private void signUp() {
-        mAccountManager.addAccount(this, new AccountManagerCallback<Bundle>() {
-
-            @Override
-            public void run(AccountManagerFuture<Bundle> future) {
-                //noinspection TryWithIdenticalCatches
-                try {
-                    Bundle bundle = future.getResult();
-
-                    String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
-                    String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
-
-                    signIn(new Account(accountName, accountType));
-                } catch (OperationCanceledException e) {
-                    pickUpAccountDialog();
-                } catch (AuthenticatorException e) {
-                    pickUpAccountDialog();
-                } catch (IOException e) {
-                    pickUpAccountDialog();
-                }
-            }
-
-        });
-    }
-
     private void pickUpAccountDialog() {
-        final TaxiAccountManager.PickUpAccountAdapter accountAdapter = mAccountManager.getAccountAdapter();
+        final TaxiAccountManager.PickUpAccountAdapter accountAdapter
+                = mAccountManager.getAccountAdapter();
 
         new AlertDialog.Builder(this)
                 .setSingleChoiceItems(accountAdapter, -1, new DialogInterface.OnClickListener() {
@@ -133,6 +67,61 @@ public final class LauncherActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void signIn(Account account) {
+        mAccountManager.getToken(account, new AccountManagerCallback<Bundle>() {
+
+            @Override
+            public void run(AccountManagerFuture<Bundle> future) {
+                //noinspection TryWithIdenticalCatches,EmptyCatchBlock
+                try {
+                    Bundle bundle = future.getResult();
+
+                    Intent keyIntent = bundle.getParcelable(AccountManager.KEY_INTENT);
+
+                    if (keyIntent != null) {
+                        signUp();
+                    } else {
+                        if (bundle.containsKey(AccountManager.KEY_ACCOUNT_NAME)
+                                && bundle.containsKey(AccountManager.KEY_ACCOUNT_TYPE)) {
+
+                            runApplication(new TaxiClientAccount(
+                                    bundle.getString(AccountManager.KEY_ACCOUNT_NAME)));
+                        }
+                    }
+                } catch (OperationCanceledException e) {
+
+                } catch (AuthenticatorException e) {
+
+                } catch (IOException e) {
+
+                }
+            }
+        });
+    }
+
+    private void signUp() {
+        mAccountManager.addAccount(this, new AccountManagerCallback<Bundle>() {
+
+            @Override
+            public void run(AccountManagerFuture<Bundle> future) {
+                //noinspection TryWithIdenticalCatches,EmptyCatchBlock
+                try {
+                    Bundle bundle = future.getResult();
+
+                    signIn(new TaxiClientAccount(
+                            bundle.getString(AccountManager.KEY_ACCOUNT_NAME)));
+                } catch (OperationCanceledException e) {
+
+                } catch (AuthenticatorException e) {
+
+                } catch (IOException e) {
+
+                }
+            }
+
+        });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -149,6 +138,8 @@ public final class LauncherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.a_launcher);
 
         mAccountManager = TaxiAccountManager.get(getApplicationContext());
     }
