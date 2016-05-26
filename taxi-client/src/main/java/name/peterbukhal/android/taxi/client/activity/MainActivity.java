@@ -27,13 +27,12 @@ public final class MainActivity extends TaxiBaseActivity {
         mBroadcastManager.registerReceiver(mGcmMessageReceiver,
                 new IntentFilter(TaxiGcmListenerService.ACTION_GCM_MESSAGE_RECEIVED));
 
-        startService(new Intent(getApplicationContext(), NtpService.class));
-
         if (TextUtils.isEmpty(mAccountManager.getGcmToken(mAccount))) {
             startService(new Intent(getApplicationContext(), TaxiGcmRegistrationService.class)
                     .putExtra(TaxiAccountManager.EXTRA_ACCOUNT, mAccount));
         }
 
+        startService(new Intent(getApplicationContext(), NtpService.class));
         startService(new Intent(getApplicationContext(), OrderMonitoringService.class)
                 .putExtra(TaxiAccountManager.EXTRA_ACCOUNT, mAccount));
     }

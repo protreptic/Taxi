@@ -27,9 +27,9 @@ public final class TaxiGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         TaxiGcmMessage message = new TaxiGcmMessage(
-                data.getLong("event_id", 0),
-                data.getLong("order_id", 0),
-                data.getLong("city_id", 0),
+                Long.valueOf(data.getString("event_id", "0")),
+                Long.valueOf(data.getString("order_id", "0")),
+                Long.valueOf(data.getString("city_id", "0")),
                 data.getString("body", ""));
 
         Log.d(LOG_TAG, "New gcm message received from " + from + " with body:\n'" + message + "'.");
