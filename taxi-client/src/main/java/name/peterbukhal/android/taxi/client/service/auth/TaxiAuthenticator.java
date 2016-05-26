@@ -8,7 +8,6 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
@@ -68,16 +67,16 @@ public final class TaxiAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, final Account account,
                                String authTokenType, Bundle options) throws NetworkErrorException {
-        String token = mAccountManager.peekAuthToken(account);
+//        String token = mAccountManager.peekAuthToken(account);
 
-        if (!TextUtils.isEmpty(token)) {
-            Bundle result = new Bundle();
-            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-            result.putString(AccountManager.KEY_AUTHTOKEN, token);
-
-            return result;
-        }
+//        if (!token.equals("#")) {
+//            Bundle result = new Bundle();
+//            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+//            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+//            result.putString(AccountManager.KEY_AUTHTOKEN, token);
+//
+//            return result;
+//        }
 
         JsonTaxikService taxikService = JsonTaxikServiceImpl.instance().service();
 

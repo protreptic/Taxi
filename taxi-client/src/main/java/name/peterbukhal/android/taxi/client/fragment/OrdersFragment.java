@@ -176,8 +176,9 @@ public final class OrdersFragment extends Fragment {
         } else if (getArguments() != null && getArguments().containsKey(ARG_ORDER_TYPE)) {
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
             mOrderType = (OrderType) getArguments().getSerializable(ARG_ORDER_TYPE);
-            TaxiAccountManager accountManager = TaxiAccountManager.get(getActivity());
-            mToken = accountManager.peekAuthToken(mAccount);
+            mToken = TaxiAccountManager
+                    .get(getActivity())
+                    .peekAuthToken(mAccount);
             mRecyclerView.setAdapter(mOrdersAdapter);
 
             updateOrders();
@@ -220,8 +221,12 @@ public final class OrdersFragment extends Fragment {
 
             @Override
             public void onResponse(Call<Orders> call, Response<Orders> response) {
-                mOrders = response.body();
-                mOrdersAdapter.notifyDataSetChanged();
+                if (response.isSuccessful()) {
+                    mOrders = response.body();
+                    mOrdersAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getActivity(), "Ошибка получения", Toast.LENGTH_SHORT).show();
+                }
 
                 mProgressBar.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);

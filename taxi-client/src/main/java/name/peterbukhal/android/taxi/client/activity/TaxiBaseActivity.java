@@ -7,12 +7,14 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -68,6 +70,13 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
 
         outState.putParcelable(EXTRA_ACCOUNT, mAccount);
         outState.putLong(EXTRA_LAST_SELECTED_MENU, mLastSelectedMenu);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        Toast.makeText(getBaseContext(), "New intent", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -133,6 +142,76 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
         mDrawer
                 .getActionBarDrawerToggle()
                 .setDrawerIndicatorEnabled(true);
+    }
+
+    private void signIn(Account account) {
+        mAccountManager.getToken(account, new AccountManagerCallback<Bundle>() {
+
+            @Override
+            public void run(AccountManagerFuture<Bundle> future) {
+                //noinspection TryWithIdenticalCatches
+                try {
+                    Bundle bundle = future.getResult();
+
+                    Intent keyIntent = bundle.getParcelable(AccountManager.KEY_INTENT);
+
+                    if (keyIntent != null) {
+                        signUp();
+                    } else {
+                        if (bundle.containsKey(AccountManager.KEY_ACCOUNT_NAME)
+                                && bundle.containsKey(AccountManager.KEY_ACCOUNT_TYPE)) {
+                            String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
+                            String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
+
+                            runApplication(new Account(accountName, accountType));
+                        } else {
+                            new AlertDialog.Builder(getApplicationContext())
+                                    .setTitle("Title")
+                                    .setMessage("Message")
+                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                                        @Override
+                                        public void onCancel(DialogInterface dialog) {
+                                            finish();
+                                        }
+                                    })
+                                    .show();
+                        }
+                    }
+                } catch (OperationCanceledException e) {
+
+                } catch (AuthenticatorException e) {
+
+                } catch (IOException e) {
+
+                }
+            }
+        });
+    }
+
+    private void signUp() {
+        mAccountManager.addAccount(this, new AccountManagerCallback<Bundle>() {
+
+            @Override
+            public void run(AccountManagerFuture<Bundle> future) {
+                //noinspection TryWithIdenticalCatches
+                try {
+                    Bundle bundle = future.getResult();
+
+                    String accountName = bundle.getString(AccountManager.KEY_ACCOUNT_NAME);
+                    String accountType = bundle.getString(AccountManager.KEY_ACCOUNT_TYPE);
+
+                    signIn(new Account(accountName, accountType));
+                } catch (OperationCanceledException e) {
+
+                } catch (AuthenticatorException e) {
+
+                } catch (IOException e) {
+
+                }
+            }
+
+        });
     }
 
     private static final int MENU_ITEM_HOME = 41230;
@@ -267,7 +346,7 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
 
         for (Account account : mAccountManager.getAccounts()) {
             profiles.add(new ProfileDrawerItem()
-                    //.withName("")
+                    .withName("Иванов Иван Иванович")
                     .withEmail(account.name)
                     .withIdentifier(account.hashCode())
                     .withTag(account));
@@ -334,8 +413,10 @@ public abstract class TaxiBaseActivity extends AppCompatActivity {
                                  * При попытке выбрать уже активный заказ,
                                  */
                                 if (!account.equals(mAccount)) {
-                                    mAccountManager.setDefaultAccount(mAccount);
-                                    runApplication(account);
+                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                    intent.putExtra(EXTRA_ACCOUNT, account);
+
+                                    startActivity(intent);
                                 } else {
                                     return true;
                                 }

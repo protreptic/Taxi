@@ -3,6 +3,8 @@ package name.peterbukhal.android.taxi.client.server.api.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
+
 import name.peterbukhal.android.taxi.client.model.Cities;
 import name.peterbukhal.android.taxi.client.model.City;
 import name.peterbukhal.android.taxi.client.model.Conditions;
@@ -71,6 +73,9 @@ import name.peterbukhal.android.taxi.client.server.api.json.response.SubmitSmsCo
 import name.peterbukhal.android.taxi.client.server.api.json.response.UnregisterDeviceResponse;
 import name.peterbukhal.android.taxi.client.server.api.json.response.UnregisterDeviceResponseDeserializer;
 import name.peterbukhal.android.taxi.client.server.api.json.response.UnregisterDeviceResponseSerializer;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -136,7 +141,8 @@ public final class JsonTaxikServiceImpl {
         mService = new Retrofit.Builder()
                 .baseUrl("http://beta.taxistock.ru/taxik/api/client/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .build().create(JsonTaxikService.class);
+                .build()
+                .create(JsonTaxikService.class);
     }
 
     public static JsonTaxikServiceImpl instance() {

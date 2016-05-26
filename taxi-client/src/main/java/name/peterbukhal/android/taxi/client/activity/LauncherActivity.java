@@ -36,6 +36,7 @@ public final class LauncherActivity extends AppCompatActivity {
     }
 
     private void signIn(Account account) {
+        mAccountManager.invalidateToken("#");
         mAccountManager.getToken(account, new AccountManagerCallback<Bundle>() {
 
             @Override
@@ -141,7 +142,7 @@ public final class LauncherActivity extends AppCompatActivity {
         if (defaultAccount.name.equals("#")) {
             pickUpAccountDialog();
         } else {
-            runApplication(defaultAccount);
+            signIn(defaultAccount);
         }
     }
 

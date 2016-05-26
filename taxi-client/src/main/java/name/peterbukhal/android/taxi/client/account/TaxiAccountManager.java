@@ -3,6 +3,7 @@ package name.peterbukhal.android.taxi.client.account;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
+import android.accounts.OnAccountsUpdateListener;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import name.peterbukhal.android.taxi.client.R;
 public final class TaxiAccountManager {
 
     public static final String EXTRA_ACCOUNT = "extra_account";
+    public static final String EXTRA_ACCOUNT_API_TOKEN = "extra_account_api_token";
     public static final String EXTRA_ACCOUNT_GCM_TOKEN = "extra_account_gcm_token";
     public static final String EXTRA_DEFAULT_ACCOUNT = "extra_default_account";
 
@@ -34,12 +36,14 @@ public final class TaxiAccountManager {
     private final AccountManager mAccountManager;
     private List<Account> mAccounts;
 
-    @SuppressWarnings("unused")
-    private TaxiAccountManager() {
-        mContext = null;
-        mAccountManager = null;
-        mAccounts = Collections.emptyList();
-    }
+    private OnAccountsUpdateListener mAccountsUpdateListener = new OnAccountsUpdateListener() {
+
+        @Override
+        public void onAccountsUpdated(Account[] accounts) {
+            mAccounts = getAccounts();
+        }
+
+    };
 
     private TaxiAccountManager(Context context) {
         mContext = context;

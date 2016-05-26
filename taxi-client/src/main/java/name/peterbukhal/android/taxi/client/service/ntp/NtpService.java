@@ -95,6 +95,8 @@ public final class NtpService extends Service {
                             new DecimalFormat("0.00").format(localClockOffset * 1000) + " ms");
 
                     broadcastTimeUpdated(msg);
+
+                    stopSelf();
                 } catch (SocketException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -114,8 +116,6 @@ public final class NtpService extends Service {
         intent.putExtra(EXTRA_NTP_MESSAGE, message);
 
         mBroadcastManager.sendBroadcast(intent);
-
-        Log.d(LOG_TAG, "");
     }
 
     @Override
