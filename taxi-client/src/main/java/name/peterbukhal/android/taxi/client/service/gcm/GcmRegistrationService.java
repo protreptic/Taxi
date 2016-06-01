@@ -19,7 +19,7 @@ import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
  * Created by
  *      petronic on 10.05.16.
  */
-public final class TaxiGcmRegistrationService extends IntentService {
+public final class GcmRegistrationService extends IntentService {
 
     public static final String LOG_TAG = "GcmRegistration";
     public static final String ACTION_GCM_REGISTRATION =
@@ -29,7 +29,7 @@ public final class TaxiGcmRegistrationService extends IntentService {
     private final LocalBroadcastManager mBroadcastManager;
     private final TaxiAccountManager mAccountManager;
 
-    public TaxiGcmRegistrationService() {
+    public GcmRegistrationService() {
         super(LOG_TAG);
 
         mBroadcastManager = LocalBroadcastManager.getInstance(getBaseContext());

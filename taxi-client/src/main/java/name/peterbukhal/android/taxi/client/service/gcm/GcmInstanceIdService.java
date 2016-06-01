@@ -8,11 +8,11 @@ import com.google.android.gms.iid.InstanceIDListenerService;
  * Created by
  *      petronic on 10.05.16.
  */
-public final class TaxiGcmInstanceIdListenerService extends InstanceIDListenerService {
+public final class GcmInstanceIdService extends InstanceIDListenerService {
 
     @Override
     public void onTokenRefresh() {
-        startService(new Intent(this, TaxiGcmRegistrationService.class));
+        startService(new Intent(this, GcmRegistrationService.class));
     }
 
 }

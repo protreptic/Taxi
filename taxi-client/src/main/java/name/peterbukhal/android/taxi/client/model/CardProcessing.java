@@ -9,8 +9,6 @@ import name.peterbukhal.android.taxi.client.unused.Nullable;
  *      petronic on 19.05.16.
  */
 public interface CardProcessing extends Parcelable, Nullable {
-
     Long getId();
     Boolean getManualPayment();
-
 }

@@ -3,6 +3,7 @@ package name.peterbukhal.android.taxi.client.service.ntp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -361,9 +362,8 @@ public final class NtpMessage implements Parcelable {
 	public static double decodeTimestamp(byte[] array, int pointer) {
 		double r = 0.0;
 		
-		for(int i=0; i<8; i++)
-		{
-			r += unsignedByteToShort(array[pointer+i]) * Math.pow(2, (3-i)*8);
+		for (int i = 0; i < 8; i++) {
+			r += unsignedByteToShort(array[pointer+i]) * Math.pow(2, ( 3 - i) * 8);
 		}
 		
 		return r;
@@ -374,23 +374,22 @@ public final class NtpMessage implements Parcelable {
 	 */
 	public static void encodeTimestamp(byte[] array, int pointer, double timestamp) {
 		// Converts a double into a 64-bit fixed point
-		for(int i=0; i<8; i++)
-		{
+		for (int i = 0; i < 8; i++) {
 			// 2^24, 2^16, 2^8, .. 2^-32
-			double base = Math.pow(2, (3-i)*8);
+			double base = Math.pow(2, (3 - i) * 8);
 			
 			// Capture byte value
 			array[pointer+i] = (byte) (timestamp / base);
 
 			// Subtract captured value from remaining total
-			timestamp = timestamp - (double) (unsignedByteToShort(array[pointer+i]) * base);
+			timestamp = timestamp - (unsignedByteToShort(array[pointer+i]) * base);
 		}
 		
 		// From RFC 2030: It is advisable to fill the non-significant
 		// low order bits of the timestamp with a random, unbiased
 		// bitstring, both to avoid systematic roundoff errors and as
 		// a means of loop detection and replay detection.
-		array[7] = (byte) (Math.random()*255.0);
+		array[7] = (byte) (Math.random() * 255.0);
 	}
 
 	/**
@@ -409,7 +408,7 @@ public final class NtpMessage implements Parcelable {
 		
 		// date/time
 		String date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(new Date(ms));
-		
+
 		// fraction
 		double fraction = timestamp - ((long) timestamp);
 		String fractionSting = new DecimalFormat(".000000").format(fraction);

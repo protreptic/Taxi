@@ -11,7 +11,7 @@ import com.google.android.gms.gcm.GcmListenerService;
  * Created by
  *      petronic on 10.05.16.
  */
-public final class TaxiGcmListenerService extends GcmListenerService {
+public final class GcmMessageService extends GcmListenerService {
 
     public static final String LOG_TAG = "TaxikGcmListener";
     public static final String ACTION_GCM_MESSAGE_RECEIVED =
@@ -20,13 +20,13 @@ public final class TaxiGcmListenerService extends GcmListenerService {
 
     private final LocalBroadcastManager broadcastManager;
 
-    public TaxiGcmListenerService() {
+    public GcmMessageService() {
         broadcastManager = LocalBroadcastManager.getInstance(getBaseContext());
     }
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        TaxiGcmMessage message = new TaxiGcmMessage(
+        GcmMessage message = new GcmMessage(
                 Long.valueOf(data.getString("event_id", "0")),
                 Long.valueOf(data.getString("order_id", "0")),
                 Long.valueOf(data.getString("city_id", "0")),
@@ -37,7 +37,7 @@ public final class TaxiGcmListenerService extends GcmListenerService {
         broadcastMessage(message);
     }
 
-    private void broadcastMessage(TaxiGcmMessage message) {
+    private void broadcastMessage(GcmMessage message) {
         Intent intent = new Intent(ACTION_GCM_MESSAGE_RECEIVED);
         intent.putExtra(EXTRA_GCM_MESSAGE, message);
 

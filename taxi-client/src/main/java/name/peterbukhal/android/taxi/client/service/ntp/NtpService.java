@@ -45,8 +45,9 @@ public final class NtpService extends Service {
         mExecutorService.schedule(new Runnable() {
             @Override
             public void run() {
-                String serverName = "ntp1.stratum1.ru";
+                String serverName = "ntp2.stratum2.ru";
 
+                //noinspection TryWithIdenticalCatches
                 try {
                     // Send request
                     DatagramSocket socket = new DatagramSocket();
@@ -87,8 +88,8 @@ public final class NtpService extends Service {
 
                     Log.d(LOG_TAG, "NTP server: " + serverName);
                     Log.d(LOG_TAG, msg.toString());
-                    Log.d(LOG_TAG, "Dest. timestamp:     " +
-                            NtpMessage.timestampToString(destinationTimestamp));
+                    Log.d(LOG_TAG, "Dest. timestamp: "
+                            + NtpMessage.timestampToString(destinationTimestamp));
                     Log.d(LOG_TAG, "Round-trip delay: " +
                             new DecimalFormat("0.00").format(roundTripDelay * 1000) + " ms");
                     Log.d(LOG_TAG, "Local clock offset: " +
@@ -98,9 +99,9 @@ public final class NtpService extends Service {
 
                     stopSelf();
                 } catch (SocketException e) {
-                    e.printStackTrace();
+                    Log.e(LOG_TAG, "Time update request failed.");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(LOG_TAG, "Time update request failed.");
                 }
             }
         }, 0, TimeUnit.SECONDS);
@@ -108,14 +109,11 @@ public final class NtpService extends Service {
 
     public static final String ACTION_TIME_UPDATED =
             "name.peterbukhal.android.taxi.client.service.ntp.action.ACTION_TIME_UPDATED";
-
     public static final String EXTRA_NTP_MESSAGE = "extra_ntp_message";
 
     private void broadcastTimeUpdated(NtpMessage message) {
-        Intent intent = new Intent(ACTION_TIME_UPDATED);
-        intent.putExtra(EXTRA_NTP_MESSAGE, message);
-
-        mBroadcastManager.sendBroadcast(intent);
+        mBroadcastManager.sendBroadcast(
+                new Intent(ACTION_TIME_UPDATED).putExtra(EXTRA_NTP_MESSAGE, message));
     }
 
     @Override

@@ -7,21 +7,21 @@ import android.os.Parcelable;
  * Created by
  *      petronic on 10.05.16.
  */
-public final class TaxiGcmMessage implements Parcelable {
+public final class GcmMessage implements Parcelable {
 
     private final Long eventId;
     private final Long orderId;
     private final Long cityId;
     private final String body;
 
-    public TaxiGcmMessage(Long eventId, Long orderId, Long cityId, String body) {
+    public GcmMessage(Long eventId, Long orderId, Long cityId, String body) {
         this.eventId = eventId;
         this.orderId = orderId;
         this.cityId = cityId;
         this.body = body;
     }
 
-    protected TaxiGcmMessage(Parcel in) {
+    protected GcmMessage(Parcel in) {
         eventId = in.readLong();
         orderId = in.readLong();
         cityId = in.readLong();
@@ -57,23 +57,23 @@ public final class TaxiGcmMessage implements Parcelable {
         dest.writeString(body);
     }
 
-    public static final Creator<TaxiGcmMessage> CREATOR = new Creator<TaxiGcmMessage>() {
+    public static final Creator<GcmMessage> CREATOR = new Creator<GcmMessage>() {
 
         @Override
-        public TaxiGcmMessage createFromParcel(Parcel in) {
-            return new TaxiGcmMessage(in);
+        public GcmMessage createFromParcel(Parcel in) {
+            return new GcmMessage(in);
         }
 
         @Override
-        public TaxiGcmMessage[] newArray(int size) {
-            return new TaxiGcmMessage[size];
+        public GcmMessage[] newArray(int size) {
+            return new GcmMessage[size];
         }
 
     };
 
     @Override
     public String toString() {
-        return "TaxiGcmMessage{" +
+        return "GcmMessage{" +
                 "eventId=" + eventId +
                 ", orderId=" + orderId +
                 ", cityId=" + cityId +

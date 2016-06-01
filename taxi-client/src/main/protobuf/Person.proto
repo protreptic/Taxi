@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package name.peterbukhal.android.taxi.client.server.api.protobuf;
+
+option java_package = "name.peterbukhal.android.taxi.client.server.api.protobuf";
+option java_outer_classname = "ProtobufPerson";
+
+message Person {
+    required int32 id = 1;
+    required string name = 2;
+}

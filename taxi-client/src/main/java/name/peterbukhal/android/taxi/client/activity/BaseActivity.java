@@ -51,7 +51,7 @@ import static name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment.F
  * Created by
  *      petronic on 15.05.16.
  */
-public abstract class TaxiBaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected LocalBroadcastManager mBroadcastManager;
     private FragmentManager mFragmentManager;

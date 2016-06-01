@@ -2,12 +2,13 @@ package name.peterbukhal.android.taxi.client.model;
 
 import android.os.Parcelable;
 
+import name.peterbukhal.android.taxi.client.unused.Nullable;
+
 /**
  * Created by
  *      petronic on 14.05.16.
  */
-public interface Conditions extends Parcelable {
-
+public interface Conditions extends Parcelable, Nullable {
     Long getCarCategory();
     Boolean getConditioner();
     Long getSmoking();
@@ -20,6 +21,4 @@ public interface Conditions extends Parcelable {
     Boolean getBonusPay();
     Boolean getYellowNumbers();
     Boolean getInAppPay();
-    Boolean isNull();
-
 }

@@ -7,28 +7,28 @@ import android.text.TextUtils;
 
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 import name.peterbukhal.android.taxi.client.service.OrderMonitoringService;
-import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmListenerService;
-import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmMessageReceiver;
-import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmRegistrationReceiver;
-import name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmRegistrationService;
+import name.peterbukhal.android.taxi.client.service.gcm.GcmMessageService;
+import name.peterbukhal.android.taxi.client.unused.GcmMessageReceiver;
+import name.peterbukhal.android.taxi.client.unused.GcmRegistrationReceiver;
+import name.peterbukhal.android.taxi.client.service.gcm.GcmRegistrationService;
 import name.peterbukhal.android.taxi.client.service.ntp.NtpService;
 
-public final class MainActivity extends TaxiBaseActivity {
+public final class MainActivity extends BaseActivity {
 
-    private final BroadcastReceiver mGcmRegistrationReceiver = new TaxiGcmRegistrationReceiver();
-    private final BroadcastReceiver mGcmMessageReceiver = new TaxiGcmMessageReceiver();
+    private final BroadcastReceiver mGcmRegistrationReceiver = new GcmRegistrationReceiver();
+    private final BroadcastReceiver mGcmMessageReceiver = new GcmMessageReceiver();
 
     @Override
     protected void onStart() {
         super.onStart();
 
         mBroadcastManager.registerReceiver(mGcmRegistrationReceiver,
-                new IntentFilter(TaxiGcmRegistrationService.ACTION_GCM_REGISTRATION));
+                new IntentFilter(GcmRegistrationService.ACTION_GCM_REGISTRATION));
         mBroadcastManager.registerReceiver(mGcmMessageReceiver,
-                new IntentFilter(TaxiGcmListenerService.ACTION_GCM_MESSAGE_RECEIVED));
+                new IntentFilter(GcmMessageService.ACTION_GCM_MESSAGE_RECEIVED));
 
         if (TextUtils.isEmpty(mAccountManager.getGcmToken(mAccount))) {
-            startService(new Intent(getApplicationContext(), TaxiGcmRegistrationService.class)
+            startService(new Intent(getApplicationContext(), GcmRegistrationService.class)
                     .putExtra(TaxiAccountManager.EXTRA_ACCOUNT, mAccount));
         }
 

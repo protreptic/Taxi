@@ -9,7 +9,7 @@ import android.net.Uri;
  * Created by
  *      petronic on 23.05.16.
  */
-public class StubProvider extends ContentProvider {
+public final class StubProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {

@@ -1,4 +1,4 @@
-package name.peterbukhal.android.taxi.client.service.gcm;
+package name.peterbukhal.android.taxi.client.unused;
 
 import android.accounts.Account;
 import android.accounts.AccountManagerCallback;
@@ -10,20 +10,22 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
+import name.peterbukhal.android.taxi.client.service.gcm.GcmMessage;
+import name.peterbukhal.android.taxi.client.service.gcm.GcmMessageService;
 
-import static name.peterbukhal.android.taxi.client.service.gcm.TaxiGcmListenerService.EXTRA_GCM_MESSAGE;
+import static name.peterbukhal.android.taxi.client.service.gcm.GcmMessageService.EXTRA_GCM_MESSAGE;
 
 /**
  * Created by
  *      petronic on 14.05.16.
  */
-public final class TaxiGcmMessageReceiver extends BroadcastReceiver {
+public final class GcmMessageReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(TaxiGcmListenerService.ACTION_GCM_MESSAGE_RECEIVED)) {
+        if (intent.getAction().equals(GcmMessageService.ACTION_GCM_MESSAGE_RECEIVED)) {
             if (intent.getExtras() != null && intent.getExtras().containsKey(EXTRA_GCM_MESSAGE)) {
-                TaxiGcmMessage message = intent.getExtras().getParcelable(EXTRA_GCM_MESSAGE);
+                GcmMessage message = intent.getExtras().getParcelable(EXTRA_GCM_MESSAGE);
 
                 if (message.getEventId() == 666) {
                     TaxiAccountManager accountManager = TaxiAccountManager.get(context);
