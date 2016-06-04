@@ -18,14 +18,13 @@ public class SubmitSmsCodeRequestDeserializer implements JsonDeserializer<Submit
     public SubmitSmsCodeRequest deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        SubmitSmsCodeRequest request = new SubmitSmsCodeRequest();
-        request.setName(object.get("name").getAsString());
-        request.setPhoneNumber(object.get("phone_number").getAsString());
-        request.setSource(object.get("source").getAsInt());
-        request.setSmsCode(object.get("sms_code").getAsInt());
-        request.setPromoCode(object.get("promo_code").getAsString());
-
-        return request;
+        return new SubmitSmsCodeRequest(
+                "",
+                object.get("name").getAsString(),
+                object.get("source").getAsInt(),
+                object.get("sms_code").getAsInt(),
+                object.get("phone_number").getAsString(),
+                object.get("promo_code").getAsString());
     }
 
 }

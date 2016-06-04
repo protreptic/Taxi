@@ -9,9 +9,9 @@ import java.lang.reflect.Type;
 
 /**
  * Created by
- * petronic on 09.05.16.
+ *      petronic on 09.05.16.
  */
-public class SubmitPromoCodeRequestDeserializer implements JsonDeserializer<SubmitPromoCodeRequest> {
+public final class SubmitPromoCodeRequestDeserializer implements JsonDeserializer<SubmitPromoCodeRequest> {
 
     @Override
     public SubmitPromoCodeRequest deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

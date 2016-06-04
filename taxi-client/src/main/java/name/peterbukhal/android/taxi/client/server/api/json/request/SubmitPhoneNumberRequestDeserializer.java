@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
  * Created by
  *      petronic on 21.03.16.
  */
-public class SubmitPhoneNumberRequestDeserializer implements JsonDeserializer<SubmitPhoneNumberRequest> {
+public final class SubmitPhoneNumberRequestDeserializer implements JsonDeserializer<SubmitPhoneNumberRequest> {
 
     @Override
     public SubmitPhoneNumberRequest deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

@@ -41,10 +41,32 @@ public final class AboutFragment extends Fragment {
         ViewGroup contentView = (ViewGroup) inflater.inflate(R.layout.f_about, container, false);
 
         if (contentView != null) {
+            mProgressBar = (ProgressBar) contentView.findViewById(R.id.progressBar);
+
             mWebView = (WebView) contentView.findViewById(R.id.browser);
             mWebView.getSettings().setJavaScriptEnabled(true);
+            mWebView.setWebViewClient(new WebViewClient() {
 
-            mProgressBar = (ProgressBar) contentView.findViewById(R.id.progressBar);
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mWebView.setVisibility(View.GONE);
+                }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+
+                    return true;
+                }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mWebView.setVisibility(View.VISIBLE);
+                }
+
+            });
         }
 
         return contentView;
@@ -54,29 +76,7 @@ public final class AboutFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mWebView.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                mWebView.setVisibility(View.GONE);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-
-                return true;
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                mProgressBar.setVisibility(View.GONE);
-                mWebView.setVisibility(View.VISIBLE);
-            }
-
-        });
-        mWebView.loadUrl("http://ya.ru/");
+        mWebView.loadUrl("http://beta.taxistock.ru/taxik/api/client/query_about");
     }
 
 }

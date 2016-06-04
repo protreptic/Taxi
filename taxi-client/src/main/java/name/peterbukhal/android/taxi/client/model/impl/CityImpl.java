@@ -5,8 +5,8 @@ import android.os.Parcel;
 import name.peterbukhal.android.taxi.client.model.City;
 import name.peterbukhal.android.taxi.client.model.Point;
 import name.peterbukhal.android.taxi.client.model.SpnPoint;
-import name.peterbukhal.android.taxi.client.model.impl.mut.MutableCity;
-import name.peterbukhal.android.taxi.client.unused.Mutable;
+import name.peterbukhal.android.taxi.client.model.mut.MutableCity;
+import name.peterbukhal.android.taxi.client.model.Mutable;
 
 /**
  * Created by

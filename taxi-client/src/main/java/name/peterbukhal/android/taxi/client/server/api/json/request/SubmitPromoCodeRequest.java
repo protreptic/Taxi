@@ -4,30 +4,18 @@ package name.peterbukhal.android.taxi.client.server.api.json.request;
  * Created by
  *      petronic on 21.03.16.
  */
-public class SubmitPromoCodeRequest {
+public final class SubmitPromoCodeRequest extends EmptyRequest {
 
-    private String token;
-    private String promoCode;
+    private final String promoCode;
 
     public SubmitPromoCodeRequest(String token, String promoCode) {
-        this.token = token;
+        super(token);
+
         this.promoCode = promoCode;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getPromoCode() {
         return promoCode;
-    }
-
-    public void setPromoCode(String promoCode) {
-        this.promoCode = promoCode;
     }
 
 }

@@ -3,8 +3,8 @@ package name.peterbukhal.android.taxi.client.model.impl;
 import android.os.Parcel;
 
 import name.peterbukhal.android.taxi.client.model.SpnPoint;
-import name.peterbukhal.android.taxi.client.model.impl.mut.MutableSpnPoint;
-import name.peterbukhal.android.taxi.client.unused.Mutable;
+import name.peterbukhal.android.taxi.client.model.mut.MutableSpnPoint;
+import name.peterbukhal.android.taxi.client.model.Mutable;
 
 /**
  * Created by

@@ -15,7 +15,7 @@ import java.util.Locale;
 import name.peterbukhal.android.taxi.client.R;
 import name.peterbukhal.android.taxi.client.activity.MainActivity;
 import name.peterbukhal.android.taxi.client.model.Order;
-import name.peterbukhal.android.taxi.client.model.impl.nil.NullOrder;
+import name.peterbukhal.android.taxi.client.model.nil.NullOrder;
 
 /**
  * Created by

@@ -4,7 +4,7 @@ import name.peterbukhal.android.taxi.client.model.Order;
 
 /**
  * Created by
- * petronic on 07.05.16.
+ *      petronic on 07.05.16.
  */
 public class QueryOrderDetailsRequest {
 
@@ -31,4 +31,5 @@ public class QueryOrderDetailsRequest {
     public void setOrder(Order order) {
         this.order = order;
     }
+
 }

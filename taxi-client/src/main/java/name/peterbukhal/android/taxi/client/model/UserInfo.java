@@ -4,8 +4,6 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-import name.peterbukhal.android.taxi.client.unused.Nullable;
-
 /**
  * Created by
  *      petronic on 25.03.16.

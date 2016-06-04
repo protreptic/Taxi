@@ -14,7 +14,7 @@ import name.peterbukhal.android.taxi.client.model.Cities;
 import name.peterbukhal.android.taxi.client.model.City;
 import name.peterbukhal.android.taxi.client.model.impl.CitiesImpl;
 import name.peterbukhal.android.taxi.client.model.impl.CityImpl;
-import name.peterbukhal.android.taxi.client.model.impl.nil.NullCities;
+import name.peterbukhal.android.taxi.client.model.nil.NullCities;
 
 /**
  * Created by

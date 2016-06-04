@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 
 import name.peterbukhal.android.taxi.client.model.Point;
 import name.peterbukhal.android.taxi.client.model.RoutePoint;
-import name.peterbukhal.android.taxi.client.model.impl.nil.NullPoint;
+import name.peterbukhal.android.taxi.client.model.nil.NullPoint;
 import name.peterbukhal.android.taxi.client.model.impl.RoutePointImpl;
 
 /**

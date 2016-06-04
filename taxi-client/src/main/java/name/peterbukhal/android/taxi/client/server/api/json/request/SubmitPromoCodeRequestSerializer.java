@@ -9,9 +9,9 @@ import java.lang.reflect.Type;
 
 /**
  * Created by
- * petronic on 09.05.16.
+ *      petronic on 09.05.16.
  */
-public class SubmitPromoCodeRequestSerializer implements JsonSerializer<SubmitPromoCodeRequest> {
+public final class SubmitPromoCodeRequestSerializer implements JsonSerializer<SubmitPromoCodeRequest> {
 
     @Override
     public JsonElement serialize(SubmitPromoCodeRequest src, Type typeOfSrc, JsonSerializationContext context) {

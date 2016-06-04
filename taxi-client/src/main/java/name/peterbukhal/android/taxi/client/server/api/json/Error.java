@@ -63,4 +63,12 @@ public final class Error implements Parcelable {
         dest.writeString(messageHuman);
     }
 
+    @Override
+    public String toString() {
+        return "Error{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                ", messageHuman='" + messageHuman + '\'' +
+                '}';
+    }
 }

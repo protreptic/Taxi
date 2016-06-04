@@ -8,6 +8,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
@@ -54,10 +55,11 @@ import static name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment.F
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected LocalBroadcastManager mBroadcastManager;
-    private FragmentManager mFragmentManager;
-    private Drawer mDrawer;
     protected TaxiAccountManager mAccountManager;
     protected Account mAccount;
+
+    private FragmentManager mFragmentManager;
+    private Drawer mDrawer;
     private ActionBar mActionBar;
 
     private static final String EXTRA_LAST_SELECTED_MENU = "extra_last_selected_menu";
@@ -75,6 +77,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         Toast.makeText(getBaseContext(), "New intent received", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        Toast.makeText(getApplicationContext(), "Configuration changed", Toast.LENGTH_SHORT).show();
     }
 
     @Override

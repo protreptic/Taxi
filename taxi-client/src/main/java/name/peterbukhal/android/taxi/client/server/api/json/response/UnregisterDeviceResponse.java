@@ -2,11 +2,11 @@ package name.peterbukhal.android.taxi.client.server.api.json.response;
 
 /**
  * Created by
- * petronic on 12.05.16.
+ *      petronic on 12.05.16.
  */
-public class UnregisterDeviceResponse {
+public final class UnregisterDeviceResponse {
 
-    private Boolean status;
+    private final Boolean status;
 
     public UnregisterDeviceResponse(Boolean status) {
         this.status = status;
@@ -14,10 +14,6 @@ public class UnregisterDeviceResponse {
 
     public Boolean getStatus() {
         return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
     }
 
 }

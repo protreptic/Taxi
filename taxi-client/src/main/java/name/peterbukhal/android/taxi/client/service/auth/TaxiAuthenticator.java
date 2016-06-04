@@ -28,7 +28,7 @@ import retrofit2.Response;
  */
 public final class TaxiAuthenticator extends AbstractAccountAuthenticator {
 
-    public static final String LOG_TAG = "TaxiAuthenticator";
+    public static final String LOG_TAG = "Authenticator";
 
     private final Context mContext;
     private final TaxiAccountManager mAccountManager;
@@ -82,12 +82,12 @@ public final class TaxiAuthenticator extends AbstractAccountAuthenticator {
 
         try {
             Response<SubmitPhoneNumberResponse> response1 =
-                    taxikService.querySubmitPhoneNumber(
+                    taxikService.submitPhoneNumber(
                             new SubmitPhoneNumberRequest(account.name, "")).execute();
 
             Response<SubmitSmsCodeResponse> response2 =
-                    taxikService.querySubmitSmsCode(
-                            new SubmitSmsCodeRequest("", 1, Integer.valueOf(response1.body().getSmsCode()), account.name, null)).execute();
+                    taxikService.submitSmsCode(
+                            new SubmitSmsCodeRequest("", "", 1, Integer.valueOf(response1.body().getSmsCode()), account.name, null)).execute();
 
             Log.d(LOG_TAG, "New token obtained for user " + account.name);
 

@@ -3,8 +3,8 @@ package name.peterbukhal.android.taxi.client.model.impl;
 import android.os.Parcel;
 
 import name.peterbukhal.android.taxi.client.model.CardProcessing;
-import name.peterbukhal.android.taxi.client.model.impl.mut.MutableCardProcessing;
-import name.peterbukhal.android.taxi.client.unused.Mutable;
+import name.peterbukhal.android.taxi.client.model.mut.MutableCardProcessing;
+import name.peterbukhal.android.taxi.client.model.Mutable;
 
 /**
  * Created by
