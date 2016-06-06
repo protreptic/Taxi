@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -217,6 +218,7 @@ public class TaximeterService extends Service {
         super.onCreate();
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        mBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
     }
 
     private static final long UPDATE_INTERVAL = 5000;
@@ -224,20 +226,20 @@ public class TaximeterService extends Service {
     private void updateNotification() {
         float gpsDistance = calculateDistance(Collections.unmodifiableList(mGpsTrack));
         float networkDistance = calculateDistance(Collections.unmodifiableList(mNetworkTrack));
-        float avgSpeed = calculateAvgSpeed(Collections.unmodifiableList(mGpsTrack), 5);
-        float price = gpsDistance * 11.67F;
+        float avgSpeed = calculateAvgSpeed(Collections.unmodifiableList(mGpsTrack), 3);
+        float price = gpsDistance * 19.0F;
 
         String message = "";
         message += (gpsDistance == 0.0F) ?
                 "Waiting" : String.format(Locale.US, "Moving %.2f km", gpsDistance);
         message += (price == 0.0F) ?
-                "" : String.format(Locale.US, " (%.2f$)", price);
+                "" : String.format(Locale.US, " (%.2f rub.)", price);
         message += (avgSpeed == 0.0F) ?
                 "" : String.format(Locale.US, " (%.2f km/h)", avgSpeed);
 
         Notification notification =
                 new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(R.drawable.ic_monetization_on_black_48dp)
+                        .setSmallIcon(R.drawable.ic_directions_car_white_48dp)
                         .setContentTitle("Taximeter")
                         .setContentText(message)
                         .build();
@@ -247,13 +249,23 @@ public class TaximeterService extends Service {
         Log.d(LOG_TAG, String.format(Locale.US, "gps distance %.2f km", gpsDistance));
         Log.d(LOG_TAG, String.format(Locale.US, "net distance %.2f km", networkDistance));
 
-        long updateInterval = (avgSpeed == 0.0F) ?
-                UPDATE_INTERVAL : (UPDATE_INTERVAL / (long) avgSpeed) * 100;
+        broadcastData();
+    }
 
-        if (updateInterval != UPDATE_INTERVAL) {
-            requestGpsUpdates(updateInterval);
-            Log.d(LOG_TAG, String.format(Locale.US, "Update interval changed: %d", updateInterval));
-        }
+    private LocalBroadcastManager mBroadcastManager;
+
+    public static final String ACTION_DATA = "name.peterbukhal.android.taxi.partner.taximeter.action.ACTION_DATA";
+    public static final String EXTRA_GPS_TRACK = "extra_gps_track";
+    public static final String EXTRA_NETWORK_TRACK = "extra_network_track";
+
+    private void broadcastData() {
+        if (mGpsTrack.isEmpty() || mGpsTrack.size() < 2) return;
+        if (mNetworkTrack.isEmpty() || mNetworkTrack.size() < 2) return;
+
+        mBroadcastManager.sendBroadcast(
+                new Intent(ACTION_DATA)
+                        .putExtra(EXTRA_GPS_TRACK, new ArrayList<>(mGpsTrack))
+                        .putExtra(EXTRA_NETWORK_TRACK, new ArrayList<>(mNetworkTrack)));
     }
 
     private ScheduledExecutorService mExecutorService = Executors.newScheduledThreadPool(1);
@@ -275,7 +287,7 @@ public class TaximeterService extends Service {
             public void run() {
                 updateNotification();
             }
-        }, 0, 10, TimeUnit.SECONDS);
+        }, 0, 15, TimeUnit.SECONDS);
 
         return super.onStartCommand(intent, flags, startId);
     }

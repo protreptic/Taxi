@@ -19,7 +19,7 @@
     <uses-feature android:name="android.hardware.touchscreen" android:required="true" />
 
     <application
-        android:name=".TaxiClientApplication"
+        android:name=".TaxiClient"
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"

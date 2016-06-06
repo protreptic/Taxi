@@ -6,5 +6,5 @@ import android.app.Application;
  * Created by
  *      petronic on 22.03.16.
  */
-public class TaxiClientApplication extends Application {
+public class TaxiClient extends Application {
 }
