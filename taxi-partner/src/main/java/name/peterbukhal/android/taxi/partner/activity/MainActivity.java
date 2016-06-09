@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import name.peterbukhal.android.taxi.partner.OsmMapFragment;
+import name.peterbukhal.android.taxi.partner.fragment.OsmFragment;
 import name.peterbukhal.android.taxi.partner.R;
 import name.peterbukhal.android.taxi.partner.service.TaximeterService;
 
@@ -21,7 +21,7 @@ public final class MainActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.main_content,
-                            OsmMapFragment.newInstance(), OsmMapFragment.FRAGMENT_TAG)
+                            OsmFragment.newInstance(), OsmFragment.FRAGMENT_TAG)
                     .commit();
         }
 

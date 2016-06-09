@@ -1,4 +1,4 @@
-package name.peterbukhal.android.taxi.partner;
+package name.peterbukhal.android.taxi.partner.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,20 +25,21 @@ import org.osmdroid.views.overlay.Polyline;
 import java.util.ArrayList;
 import java.util.List;
 
+import name.peterbukhal.android.taxi.partner.R;
 import name.peterbukhal.android.taxi.partner.service.TaximeterService;
 
 /**
  * Created by
  *      petronic on 05.06.16.
  */
-public class OsmMapFragment extends Fragment {
+public class OsmFragment extends Fragment {
 
-    public static final String FRAGMENT_TAG = "fragment_tag_osm_map";
+    public static final String FRAGMENT_TAG = "fragment_tag_osm";
 
     public static Fragment newInstance() {
         Bundle arguments = new Bundle();
 
-        Fragment fragment = new OsmMapFragment();
+        Fragment fragment = new OsmFragment();
         fragment.setArguments(arguments);
 
         return fragment;

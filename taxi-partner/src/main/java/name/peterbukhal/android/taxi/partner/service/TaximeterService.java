@@ -25,6 +25,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import name.peterbukhal.android.taxi.partner.R;
+import name.peterbukhal.android.taxi.partner.data.storage.sqlite.SqliteDatabaseHelper;
+import name.peterbukhal.android.taxi.partner.model.impl.TrackPointImpl;
 
 /**
  * Created by
@@ -131,10 +133,14 @@ public class TaximeterService extends Service {
             }
         }
 
+        mDatabaseHelper.addTrackPoint(TrackPointImpl.fromLocation(trackId, location));
+
         synchronized (mBestTrack) {
             mBestTrack.offer(location);
         }
     }
+
+    private final Long trackId = System.currentTimeMillis();
 
     private String formatLocation(Location location) {
         return String.format(
@@ -150,6 +156,7 @@ public class TaximeterService extends Service {
     private final List<Location> mGpsTrack = new ArrayList<>();
     private final List<Location> mNetworkTrack = new ArrayList<>();
 
+    @Deprecated
     private float calculateDistance(List<Location> track) {
         if (track == null || track.size() < 2) return 0.0F;
 
@@ -182,6 +189,7 @@ public class TaximeterService extends Service {
         return transform(avgSpeed / points);
     }
 
+    @SuppressWarnings("unused")
     private float calculateAvgSpeed(List<Location> track) {
         return calculateAvgSpeed(track, track.size());
     }
@@ -269,10 +277,13 @@ public class TaximeterService extends Service {
     }
 
     private ScheduledExecutorService mExecutorService = Executors.newScheduledThreadPool(1);
+    private SqliteDatabaseHelper mDatabaseHelper;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "Service started.");
+
+        mDatabaseHelper = new SqliteDatabaseHelper(getApplicationContext());
 
         try {
             requestGpsUpdates(UPDATE_INTERVAL);
@@ -319,6 +330,8 @@ public class TaximeterService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        mDatabaseHelper.close();
 
         try {
             mLocationManager.removeUpdates(mGpsLocationListener);
