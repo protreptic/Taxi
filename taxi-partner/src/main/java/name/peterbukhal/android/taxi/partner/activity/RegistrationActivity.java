@@ -4,7 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by
- * petronic on 13.05.16.
+ *      petronic on 13.05.16.
  */
-public class RegistrationActivity extends AppCompatActivity {
+public final class RegistrationActivity extends AppCompatActivity {
+
 }

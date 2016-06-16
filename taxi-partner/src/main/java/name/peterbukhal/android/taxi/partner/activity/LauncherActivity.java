@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
  * Created by
  *      petronic on 13.05.16.
  */
-public class LauncherActivity extends AppCompatActivity {
+public final class LauncherActivity extends AppCompatActivity {
 
     private void runApplication(Account account) {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);

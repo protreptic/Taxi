@@ -32,7 +32,7 @@ import name.peterbukhal.android.taxi.partner.service.TaximeterService;
  * Created by
  *      petronic on 05.06.16.
  */
-public class OsmFragment extends Fragment {
+public final class OsmFragment extends Fragment {
 
     public static final String FRAGMENT_TAG = "fragment_tag_osm";
 

@@ -1,4 +1,4 @@
-package name.peterbukhal.android.taxi.partner.data.storage.sqlite;
+package name.peterbukhal.android.taxi.partner.storage;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -25,14 +25,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import name.peterbukhal.android.taxi.partner.R;
-import name.peterbukhal.android.taxi.partner.data.storage.sqlite.SqliteDatabaseHelper;
+import name.peterbukhal.android.taxi.partner.storage.SqliteDatabaseHelper;
 import name.peterbukhal.android.taxi.partner.model.impl.TrackPointImpl;
 
 /**
  * Created by
  *      petronic on 04.06.16.
  */
-public class TaximeterService extends Service {
+public final class TaximeterService extends Service {
 
     public static final String LOG_TAG = "Taximeter";
 
@@ -262,7 +262,8 @@ public class TaximeterService extends Service {
 
     private LocalBroadcastManager mBroadcastManager;
 
-    public static final String ACTION_DATA = "name.peterbukhal.android.taxi.partner.taximeter.action.ACTION_DATA";
+    public static final String ACTION_DATA =
+            "name.peterbukhal.android.taxi.partner.taximeter.action.ACTION_DATA";
     public static final String EXTRA_GPS_TRACK = "extra_gps_track";
     public static final String EXTRA_NETWORK_TRACK = "extra_network_track";
 
