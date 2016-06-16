@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/taxi-client" />
+            <option value="$PROJECT_DIR$/taxi-dispatcher" />
             <option value="$PROJECT_DIR$/taxi-partner" />
           </set>
         </option>
@@ -16,6 +17,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/taxi-client" />
+            <option value="$PROJECT_DIR$/taxi-dispatcher" />
             <option value="$PROJECT_DIR$/taxi-partner" />
           </set>
         </option>

@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import name.peterbukhal.android.taxi.partner.model.Track;
 import name.peterbukhal.android.taxi.partner.model.TrackPoint;
 
 /**
