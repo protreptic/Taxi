@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "1020419983862",
+    "project_id": "api-project-1020419983862"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020419983862:android:fb52676b95a3a8c5",
+        "android_client_info": {
+          "package_name": "name.peterbukhal.android.taxi.client"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFPk8adzJw5lAP9S3zZos3C4qnmR9IW4U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

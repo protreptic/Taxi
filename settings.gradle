@@ -1,1 +1,1 @@
-include ':taxi-client', ':taxi-partner', ':taxi-dispatcher'
+include ':taxi-client', ':taxi-partner', ':taxi-dispatcher', ':taxi-server'
