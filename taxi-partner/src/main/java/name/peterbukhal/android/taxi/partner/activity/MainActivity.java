@@ -7,8 +7,14 @@ import android.os.Bundle;
 
 import name.peterbukhal.android.taxi.partner.fragment.MapFragment;
 import name.peterbukhal.android.taxi.partner.R;
+import name.peterbukhal.android.taxi.partner.service.NetworkService;
 import name.peterbukhal.android.taxi.partner.service.TaximeterService;
 
+/**
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
+ */
 public final class MainActivity extends AppCompatActivity {
 
     @Override
@@ -26,6 +32,7 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         startService(new Intent(getApplicationContext(), TaximeterService.class));
+        startService(new Intent(getApplicationContext(), NetworkService.class));
     }
 
     @Override
@@ -54,5 +61,6 @@ public final class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         stopService(new Intent(getApplicationContext(), TaximeterService.class));
+        stopService(new Intent(getApplicationContext(), NetworkService.class));
     }
 }

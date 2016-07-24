@@ -29,8 +29,9 @@ import name.peterbukhal.android.taxi.partner.storage.SqliteDatabaseHelper;
 import name.peterbukhal.android.taxi.partner.model.impl.TrackPointImpl;
 
 /**
- * Created by
- *      petronic on 04.06.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public final class TaximeterService extends Service {
 

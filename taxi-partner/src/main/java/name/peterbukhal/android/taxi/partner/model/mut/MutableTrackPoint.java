@@ -5,8 +5,9 @@ import name.peterbukhal.android.taxi.partner.model.TrackPoint;
 import name.peterbukhal.android.taxi.partner.model.impl.TrackPointImpl;
 
 /**
- * Created by
- *      petronic on 08.06.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public final class MutableTrackPoint implements TrackPoint, Immutable<TrackPoint> {
 

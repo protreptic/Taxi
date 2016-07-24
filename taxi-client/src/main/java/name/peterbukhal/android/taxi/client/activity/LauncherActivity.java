@@ -18,6 +18,8 @@ import name.peterbukhal.android.taxi.client.R;
 import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 import name.peterbukhal.android.taxi.client.account.TaxiClientAccount;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.EXTRA_ACCOUNT;
 import static name.peterbukhal.android.taxi.client.account.TaxiAccountManager.PickUpAccountAdapter.ADD_ACCOUNT_ITEM_ID;
 
@@ -30,11 +32,9 @@ public final class LauncherActivity extends AppCompatActivity {
     private TaxiAccountManager mAccountManager;
 
     private void runApplication(Account account) {
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(EXTRA_ACCOUNT, account);
-        intent.setFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
 
         startActivity(intent);
     }

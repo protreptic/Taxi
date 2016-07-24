@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">TaxiPartner</string>
     <string name="follow_the_track">Follow the track</string>
+    <string name="show_gps_track">Show GPS track</string>
+    <string name="show_network_track">Show Network track</string>
+    <string name="add_account">Новый пользователь</string>
+    <string name="add_account_description">Добавить учетную запись</string>
+    <string name="server_sender_id">1020419983862</string>
+    <string name="label_login">логин</string>
+    <string name="label_password">пароль</string>
+    <string name="button_login">Войти</string>
+    <string name="error_message">Error</string>
 </resources>

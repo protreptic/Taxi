@@ -6,5 +6,11 @@ import android.app.Application;
  * Created by
  *      petronic on 22.03.16.
  */
-public class TaxiClient extends Application {
+public final class TaxiClient extends Application implements Thread.UncaughtExceptionHandler {
+
+    @Override
+    public void uncaughtException(Thread thread, Throwable throwable) {
+
+    }
+
 }

@@ -17,8 +17,9 @@ import name.peterbukhal.android.taxi.client.account.TaxiAccountManager;
 import name.peterbukhal.android.taxi.client.account.TaxiClientAccount;
 
 /**
- * Created by
- *      petronic on 23.04.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public final class RegistrationActivity extends AppCompatActivity {
 

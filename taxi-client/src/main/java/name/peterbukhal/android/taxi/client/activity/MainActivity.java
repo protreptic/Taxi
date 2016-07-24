@@ -13,6 +13,11 @@ import name.peterbukhal.android.taxi.client.unused.GcmRegistrationReceiver;
 import name.peterbukhal.android.taxi.client.service.gcm.GcmRegistrationService;
 import name.peterbukhal.android.taxi.client.service.ntp.NtpService;
 
+/**
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
+ */
 public final class MainActivity extends BaseActivity {
 
     private final BroadcastReceiver mGcmRegistrationReceiver = new GcmRegistrationReceiver();

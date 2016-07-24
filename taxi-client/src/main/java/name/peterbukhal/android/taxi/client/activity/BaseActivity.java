@@ -49,8 +49,9 @@ import static name.peterbukhal.android.taxi.client.fragment.CreateOrderFragment.
 import static name.peterbukhal.android.taxi.client.fragment.UserOrdersFragment.FRAGMENT_TAG_USER_ORDERS;
 
 /**
- * Created by
- *      petronic on 15.05.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public abstract class BaseActivity extends AppCompatActivity {
 

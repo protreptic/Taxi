@@ -1,8 +1,9 @@
 package name.peterbukhal.android.taxi.partner.model;
 
 /**
- * Created by
- *      petronic on 19.05.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public interface Mutable<T> {
     T toMutable();

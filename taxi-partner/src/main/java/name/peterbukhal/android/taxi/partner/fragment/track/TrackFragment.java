@@ -1,11 +1,12 @@
-package name.peterbukhal.android.taxi.partner.fragment;
+package name.peterbukhal.android.taxi.partner.fragment.track;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 /**
- * Created by
- *      petronic on 16.06.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public final class TrackFragment extends Fragment {
 

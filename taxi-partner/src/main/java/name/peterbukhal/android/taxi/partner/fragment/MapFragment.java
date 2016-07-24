@@ -29,8 +29,9 @@ import name.peterbukhal.android.taxi.partner.R;
 import name.peterbukhal.android.taxi.partner.service.TaximeterService;
 
 /**
- * Created by
- *      petronic on 05.06.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public final class MapFragment extends Fragment {
 
@@ -47,6 +48,8 @@ public final class MapFragment extends Fragment {
 
     private MapView mMapView;
     private CheckBox mTrack;
+    private CheckBox mCbShowGps;
+    private CheckBox mCbShowNetwork;
 
     @Nullable
     @Override
@@ -60,6 +63,9 @@ public final class MapFragment extends Fragment {
             mMapView.setMultiTouchControls(true);
 
             mTrack = (CheckBox) content.findViewById(R.id.track);
+
+            mCbShowGps = (CheckBox) content.findViewById(R.id.show_gps);
+            mCbShowNetwork = (CheckBox) content.findViewById(R.id.show_network);
         }
 
         return content;
@@ -98,45 +104,53 @@ public final class MapFragment extends Fragment {
 
             if (intent.getExtras() != null
                     && intent.getExtras().containsKey(TaximeterService.EXTRA_GPS_TRACK)) {
-                List<Location> gpsTrack = intent.getParcelableArrayListExtra(TaximeterService.EXTRA_GPS_TRACK);
-                List<Location> networkTrack = intent.getParcelableArrayListExtra(TaximeterService.EXTRA_NETWORK_TRACK);
-
-                Polyline polyline1 = new Polyline(context);
-                polyline1.setColor(Color.RED);
-                polyline1.setWidth(3.5F);
-                polyline1.setPoints(convert(gpsTrack));
-
-                Location startPoint = gpsTrack.get(0);
-                Location finishPoint = gpsTrack.get(gpsTrack.size() - 1);
-
-                Marker startMarker = new Marker(mMapView, context);
-                startMarker.setPosition(
-                        new GeoPoint(startPoint.getLatitude(), startPoint.getLongitude()));
-                startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-                Marker finishMarker = new Marker(mMapView, context);
-                finishMarker.setPosition(
-                        new GeoPoint(finishPoint.getLatitude(), finishPoint.getLongitude()));
-                finishMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-                Polyline polyline2 = new Polyline(context);
-                polyline2.setColor(Color.BLUE);
-                polyline2.setWidth(3.5F);
-                polyline2.setPoints(convert(networkTrack));
-
                 mMapView.getOverlays().clear();
-                mMapView.getOverlays().add(startMarker);
-                mMapView.getOverlays().add(polyline1);
-                mMapView.getOverlays().add(polyline2);
-                mMapView.getOverlays().add(finishMarker);
-                mMapView.invalidate();
 
-                if (mTrack.isChecked()) {
-                    mMapView.getController()
-                            .animateTo(new GeoPoint(
-                                    finishPoint.getLatitude(), finishPoint.getLongitude()));
-                    mMapView.getController().setZoom(16);
+                if (mCbShowGps.isChecked()) {
+                    List<Location> gpsTrack = intent.getParcelableArrayListExtra(
+                            TaximeterService.EXTRA_GPS_TRACK);
+
+                    Polyline polyline1 = new Polyline(context);
+                    polyline1.setColor(Color.RED);
+                    polyline1.setWidth(3.5F);
+                    polyline1.setPoints(convert(gpsTrack));
+
+                    mMapView.getOverlays().add(polyline1);
+
+                    Location startPoint = gpsTrack.get(0);
+                    Location finishPoint = gpsTrack.get(gpsTrack.size() - 1);
+
+                    Marker startMarker = new Marker(mMapView, context);
+                    startMarker.setPosition(
+                            new GeoPoint(startPoint.getLatitude(), startPoint.getLongitude()));
+                    startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+                    Marker finishMarker = new Marker(mMapView, context);
+                    finishMarker.setPosition(
+                            new GeoPoint(finishPoint.getLatitude(), finishPoint.getLongitude()));
+                    finishMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+                    if (mTrack.isChecked()) {
+                        mMapView.getController()
+                                .animateTo(new GeoPoint(
+                                        finishPoint.getLatitude(), finishPoint.getLongitude()));
+                        mMapView.getController().setZoom(16);
+                    }
                 }
+
+                if (mCbShowNetwork.isChecked()) {
+                    List<Location> networkTrack = intent.getParcelableArrayListExtra(
+                            TaximeterService.EXTRA_NETWORK_TRACK);
+
+                    Polyline polyline2 = new Polyline(context);
+                    polyline2.setColor(Color.BLUE);
+                    polyline2.setWidth(3.5F);
+                    polyline2.setPoints(convert(networkTrack));
+
+                    mMapView.getOverlays().add(polyline2);
+                }
+
+                mMapView.invalidate();
             }
         }
 

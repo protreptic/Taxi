@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/taxi-client" />
             <option value="$PROJECT_DIR$/taxi-dispatcher" />
             <option value="$PROJECT_DIR$/taxi-partner" />
+            <option value="$PROJECT_DIR$/taxi-protocol" />
             <option value="$PROJECT_DIR$/taxi-server" />
           </set>
         </option>
@@ -20,6 +21,7 @@
             <option value="$PROJECT_DIR$/taxi-client" />
             <option value="$PROJECT_DIR$/taxi-dispatcher" />
             <option value="$PROJECT_DIR$/taxi-partner" />
+            <option value="$PROJECT_DIR$/taxi-protocol" />
             <option value="$PROJECT_DIR$/taxi-server" />
           </set>
         </option>

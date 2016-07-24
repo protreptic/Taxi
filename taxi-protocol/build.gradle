@@ -1,0 +1,6 @@
+apply plugin: 'java'
+
+dependencies {
+    compile 'com.google.protobuf:protobuf-java:2.4.1'
+    compile 'com.squareup.wire:wire-runtime:2.0.1'
+}

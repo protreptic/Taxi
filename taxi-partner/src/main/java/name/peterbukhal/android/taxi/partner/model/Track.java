@@ -3,8 +3,9 @@ package name.peterbukhal.android.taxi.partner.model;
 import java.util.List;
 
 /**
- * Created by
- *      petronic on 08.06.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public interface Track extends Nullable {
     Long getId();

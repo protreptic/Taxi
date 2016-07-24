@@ -4,41 +4,45 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Locale;
 
 import name.peterbukhal.android.taxi.partner.model.TrackPoint;
 
 /**
- * Created by
- *      petronic on 08.06.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
-public class SqliteDatabaseHelper extends SQLiteOpenHelper {
+public final class SqliteDatabaseHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "taxi-partner";
 
-    private Context mContext;
+    private final Context mContext;
 
-    public SqliteDatabaseHelper(Context context) {
+    public SqliteDatabaseHelper(@NonNull final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         mContext = context;
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(@NonNull final SQLiteDatabase db) {
         db.execSQL(schemaScript(DATABASE_VERSION));
     }
 
-    private String schemaScript(int version) {
+    private @NonNull String schemaScript(int version) {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
             BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(mContext.getAssets().open("schema_v" + version + ".sql")));
+                    new InputStreamReader(mContext.getAssets()
+                            .open(String.format(Locale.getDefault(), "schema_v%d.sql", version))));
 
             String string;
 
@@ -55,13 +59,13 @@ public class SqliteDatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(@NonNull final SQLiteDatabase db, int oldVersion, int newVersion) {
         for (int version = oldVersion; oldVersion < newVersion; version++) {
             db.execSQL(schemaUpdateScript(version));
         }
     }
 
-    private String schemaUpdateScript(int version) {
+    private @NonNull String schemaUpdateScript(int version) {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
@@ -84,8 +88,8 @@ public class SqliteDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_TRACK_POINT = "track_point";
 
-    public long addTrackPoint(TrackPoint trackPoint) {
-        ContentValues contentValues = new ContentValues();
+    public long addTrackPoint(@NonNull final TrackPoint trackPoint) {
+        final ContentValues contentValues = new ContentValues();
         contentValues.put("track_id", trackPoint.getTrackId());
         contentValues.put("provider", trackPoint.getProvider());
         contentValues.put("latitude", trackPoint.getLatitude());
@@ -93,7 +97,7 @@ public class SqliteDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("speed", trackPoint.getSpeed());
         contentValues.put("accuracy", trackPoint.getAccuracy());
 
-        SQLiteDatabase db = getWritableDatabase();
+        final SQLiteDatabase db = getWritableDatabase();
 
         //noinspection TryFinallyCanBeTryWithResources
         try {

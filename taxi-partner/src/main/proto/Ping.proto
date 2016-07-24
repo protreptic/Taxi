@@ -1,0 +1,14 @@
+package name.peterbukhal.android.taxi.protocol;
+
+option java_package = "name.peterbukhal.android.taxi.protocol";
+option java_outer_classname = "Ping";
+
+message Ping {
+    required string provider = 1;
+    required int64 time = 2;
+    required float latitude = 3;
+    required float longitude = 4;
+    required int32 accuracy = 5;
+    required int32 bearing = 6;
+    required int32 speed = 7;
+}

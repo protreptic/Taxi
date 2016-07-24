@@ -1,0 +1,8 @@
+package name.peterbukhal.android.taxi.protocol;
+
+option java_package = "name.peterbukhal.android.taxi.protocol";
+option java_outer_classname = "Pong";
+
+message Pong {
+    required int64 timestamp = 1;
+}

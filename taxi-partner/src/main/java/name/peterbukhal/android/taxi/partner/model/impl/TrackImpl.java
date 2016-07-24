@@ -11,8 +11,9 @@ import name.peterbukhal.android.taxi.partner.model.TrackPoint;
 import name.peterbukhal.android.taxi.partner.model.mut.MutableTrack;
 
 /**
- * Created by
- *      petronic on 08.06.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public final class TrackImpl implements Track, Mutable<Track> {
 
