@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Taxi.iml" filepath="$PROJECT_DIR$/Taxi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/format-gpx/format-gpx.iml" filepath="$PROJECT_DIR$/format-gpx/format-gpx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taxi-chat/taxi-chat.iml" filepath="$PROJECT_DIR$/taxi-chat/taxi-chat.iml" />
       <module fileurl="file://$PROJECT_DIR$/taxi-client/taxi-client.iml" filepath="$PROJECT_DIR$/taxi-client/taxi-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/taxi-dispatcher/taxi-dispatcher.iml" filepath="$PROJECT_DIR$/taxi-dispatcher/taxi-dispatcher.iml" />
       <module fileurl="file://$PROJECT_DIR$/taxi-partner/taxi-partner.iml" filepath="$PROJECT_DIR$/taxi-partner/taxi-partner.iml" />

@@ -8,6 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/format-gpx" />
+            <option value="$PROJECT_DIR$/taxi-chat" />
             <option value="$PROJECT_DIR$/taxi-client" />
             <option value="$PROJECT_DIR$/taxi-dispatcher" />
             <option value="$PROJECT_DIR$/taxi-partner" />
@@ -18,6 +20,8 @@
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/format-gpx" />
+            <option value="$PROJECT_DIR$/taxi-chat" />
             <option value="$PROJECT_DIR$/taxi-client" />
             <option value="$PROJECT_DIR$/taxi-dispatcher" />
             <option value="$PROJECT_DIR$/taxi-partner" />

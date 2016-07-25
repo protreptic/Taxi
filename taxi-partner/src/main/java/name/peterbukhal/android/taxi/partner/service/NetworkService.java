@@ -19,8 +19,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import name.peterbukhal.android.taxi.protocol.Ping;
-import name.peterbukhal.android.taxi.protocol.Pong;
+import name.peterbukhal.android.taxi.partner.protocol.Ping;
+import name.peterbukhal.android.taxi.partner.protocol.Pong;
 
 /**
  * TODO Доработать документацию

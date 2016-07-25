@@ -2,11 +2,10 @@ package name.peterbukhal.android.taxi.partner.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import name.peterbukhal.android.taxi.partner.fragment.MapFragment;
 import name.peterbukhal.android.taxi.partner.R;
+import name.peterbukhal.android.taxi.partner.fragment.MapFragment;
 import name.peterbukhal.android.taxi.partner.service.NetworkService;
 import name.peterbukhal.android.taxi.partner.service.TaximeterService;
 
@@ -15,7 +14,7 @@ import name.peterbukhal.android.taxi.partner.service.TaximeterService;
  *
  * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
-public final class MainActivity extends AppCompatActivity {
+public final class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

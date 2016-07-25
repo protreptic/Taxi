@@ -1,6 +1,6 @@
-package name.peterbukhal.android.taxi.protocol;
+package name.peterbukhal.android.taxi.partner.protocol;
 
-option java_package = "name.peterbukhal.android.taxi.protocol";
+option java_package = "name.peterbukhal.android.taxi.partner.protocol";
 option java_outer_classname = "Ping";
 
 message Ping {
