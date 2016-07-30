@@ -9,8 +9,9 @@ import name.peterbukhal.android.taxi.protocol.Ping;
 import name.peterbukhal.android.taxi.protocol.Pong;
 
 /**
- * Created by
- *      petronic on 12.07.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public class ClientThread implements Runnable {
 

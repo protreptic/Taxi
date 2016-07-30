@@ -7,19 +7,34 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by
- *      petronic on 12.07.16.
+ * TODO Доработать документацию
+ *
+ * @author Peter Bukhal (peter.bukhal@gmail.com)
  */
 public class TaximeterServer {
 
     private ServerSocket serverSocket;
 
     public static void main(String[] args) {
-        TaximeterServer taximeterServer = new TaximeterServer(7342);
+        final TaximeterServer taximeterServer = new TaximeterServer(7342);
         taximeterServer.startServer();
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+
+            @Override
+            public void run() {
+                taximeterServer.stopServer();
+            }
+
+        });
     }
 
-    private TaximeterServer(int port) {
+    /**
+     *
+     *
+     * @param port сетевой порт
+     */
+    private TaximeterServer(final int port) {
         executorService = Executors.newCachedThreadPool();
 
         try {
@@ -30,7 +45,7 @@ public class TaximeterServer {
     }
 
     private void startServer() {
-        System.out.println("Taximeter server started");
+        System.out.println("Taximeter server started.");
 
         try {
             //noinspection InfiniteLoopStatement
@@ -43,7 +58,7 @@ public class TaximeterServer {
     }
 
     private void stopServer() {
-        System.out.println("Taximeter server stopped");
+        System.out.println("Taximeter server stopped.");
 
         try {
             serverSocket.close();
@@ -56,7 +71,7 @@ public class TaximeterServer {
 
     private ExecutorService executorService;
 
-    private void fork(Socket socket) {
+    private void fork(final Socket socket) {
         executorService.submit(new ClientThread(socket));
     }
 

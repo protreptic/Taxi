@@ -1,0 +1,5 @@
+inet_aton.lo: inet_aton.c /usr/include/stdc-predef.h ../config.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:

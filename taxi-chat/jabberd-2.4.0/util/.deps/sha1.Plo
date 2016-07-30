@@ -1,0 +1,5 @@
+sha1.lo: sha1.c /usr/include/stdc-predef.h ../config.h
+
+/usr/include/stdc-predef.h:
+
+../config.h:
